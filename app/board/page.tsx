@@ -14,13 +14,20 @@ import {
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import { Mode } from "../page";
 
-const modeToLabel = (mode: Mode) => {
+enum EMode {
+  "ADVICE" = "advice",
+  "FEEDBACK" = "feedback",
+  "SUGGESTION" = "suggestion",
+  "OTHER" = "other",
+  "TOPIC" = "topic",
+}
+
+const modeToLabel = (mode: any) => {
   switch (mode) {
-    case Mode.ADVICE:
+    case EMode.ADVICE:
       return "ขอคำปรึกษา";
-    case Mode.TOPIC:
+    case EMode.TOPIC:
       return "ต้องการให้พูดในหัวข้อ";
   }
 };
@@ -66,7 +73,7 @@ export default function BoardPage() {
           ) : (
             <div className="w-full grid grid-cols-4 gap-6">
               {data.length > 0 ? (
-                data.map((item) => (
+                data.map((item:any) => (
                   <Card className="max-w-[400px]" key={item.id}>
                     <CardHeader className="flex gap-3">
                       {/* <Image

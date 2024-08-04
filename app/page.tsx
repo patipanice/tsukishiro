@@ -7,7 +7,7 @@ import { db } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import AdviceForm from "@/components/form/advice-form";
 
-export enum Mode {
+enum EMode {
   "ADVICE" = "advice",
   "FEEDBACK" = "feedback",
   "SUGGESTION" = "suggestion",
@@ -17,17 +17,17 @@ export enum Mode {
 
 const modeOptions = [
   {
-    key: Mode.ADVICE,
+    key: EMode.ADVICE,
     label: "ขอคำปรึกษา",
   },
   {
-    key: Mode.TOPIC,
+    key: EMode.TOPIC,
     label: "อยากให้พูดคุยในหัวข้อ",
   },
 ];
 
 export default function Home() {
-  const [mode, setMode] = useState<Mode | undefined>(undefined);
+  const [mode, setMode] = useState<any | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,13 +63,13 @@ export default function Home() {
         label="ต้องการ ?"
         className="max-w-xs"
         labelPlacement="outside"
-        onChange={(e) => setMode(e.target.value as Mode)}
+        onChange={(e) => setMode(e.target.value)}
       >
         {modeOptions.map((option) => (
           <SelectItem key={option.key}>{option.label}</SelectItem>
         ))}
       </Select>
-      {mode === Mode.ADVICE && <AdviceForm formik={formik} />}
+      {mode === EMode.ADVICE && <AdviceForm formik={formik} />}
       {mode !== undefined && (
         <Button
           color="primary"
