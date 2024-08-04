@@ -6,9 +6,11 @@ import clsx from "clsx";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontKanit } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import '../config/firebase'
+
+import { Inter, Kanit } from 'next/font/google'
 
 export const metadata: Metadata = {
   title: {
@@ -20,6 +22,12 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
 };
+
+const kanit = Kanit({
+    subsets: ['latin','thai','latin-ext'],
+    display: 'swap',
+    weight: "300"
+})
 
 export const viewport: Viewport = {
   themeColor: [
@@ -34,12 +42,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang="en" className={kanit.className}>
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          "min-h-screen bg-background font-kanit antialiased",
+          fontKanit.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>

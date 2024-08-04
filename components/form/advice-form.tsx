@@ -53,8 +53,12 @@ const genderOptions = [
 
 interface IAdviceFormProps {
   formik: any;
+  isDetailPage?: boolean;
 }
-const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
+const AdviceForm: React.FC<IAdviceFormProps> = ({
+  formik,
+  isDetailPage = false,
+}) => {
   return (
     <section className="flex flex-col gap-6 w-full py-6">
       <Textarea
@@ -64,6 +68,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
+        isDisabled={isDetailPage}
       />
       <Slider
         label="ความรู้สึกที่มีต่อปัญหานี้"
@@ -76,6 +81,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
         formatOptions={{ style: "decimal" }}
         maxValue={5}
         minValue={1}
+        isDisabled={isDetailPage}
         classNames={{
           base: "max-w-md gap-3",
           track: "border-s-danger-100",
@@ -148,6 +154,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
         name="period"
         onChange={formik.handleChange}
         value={formik.values.period}
+        isDisabled={isDetailPage}
       />
       <div className="flex gap-4">
         <Input
@@ -157,12 +164,14 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
           name="name"
           onChange={formik.handleChange}
           value={formik.values.name}
+          isDisabled={isDetailPage}
         />
         <Select
           label="อายุ"
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("age", e.target.value)}
           value={formik.values.age}
+          isDisabled={isDetailPage}
         >
           {ageOptions.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -173,6 +182,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("gender", e.target.value)}
           value={formik.values.gender}
+          isDisabled={isDetailPage}
         >
           {genderOptions.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -182,31 +192,34 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
       <Checkbox
         value={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
+        isDisabled={isDetailPage}
       >
         ต้องการให้แสดงปัญหานี้ลงในบอร์ด
       </Checkbox>
-      <Button
-        color="primary"
-        className="w-full max-w-md mt-5"
-        onClick={formik.handleSubmit}
-        isDisabled={!formik.isValid}
-        // variant="light"
-        startContent={
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 1024 1023"
-          >
-            <path
-              fill="currentColor"
-              d="m896 800l128 223l-224-128l-1-6l-168-167l-152 151q-42 42-95-10V684L126 416l-13 12q-19 20-46.5 20t-47-19.5t-19.5-47T19 334L335 19q20-19 47.5-19t47 19T449 65.5T429 113l-13 13l269 258l179 1q52 52 9 94L722 630l168 168z"
-            />
-          </svg>
-        }
-      >
-        ติดปัญหาลงบอร์ด
-      </Button>
+      {!isDetailPage && (
+        <Button
+          color="primary"
+          className="w-full max-w-md mt-5"
+          onClick={formik.handleSubmit}
+          isDisabled={!formik.isValid}
+          // variant="light"
+          startContent={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 1024 1023"
+            >
+              <path
+                fill="currentColor"
+                d="m896 800l128 223l-224-128l-1-6l-168-167l-152 151q-42 42-95-10V684L126 416l-13 12q-19 20-46.5 20t-47-19.5t-19.5-47T19 334L335 19q20-19 47.5-19t47 19T449 65.5T429 113l-13 13l269 258l179 1q52 52 9 94L722 630l168 168z"
+              />
+            </svg>
+          }
+        >
+          ติดปัญหาลงบอร์ด
+        </Button>
+      )}
     </section>
   );
 };

@@ -34,7 +34,6 @@ export default function Home() {
   const [mode, setMode] = useState<any | undefined>(undefined);
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [id, setId] = useState<string | undefined>(undefined);
   const [quote, setQuote] = useState<any | undefined>(undefined);
 
@@ -96,7 +95,6 @@ export default function Home() {
     },
   });
 
-  const onClickSubmitFormHandler = () => formik.handleSubmit();
 
   return (
     <section className="flex flex-col items-center justify-items-center  justify-center text-left h-full -mt-[40px] gap-y-5">
@@ -141,8 +139,12 @@ export default function Home() {
       {step === 3 && id !== undefined && quote !== undefined && (
         <blockquote className="text-center font-mono font-light">
           <p className="text-lg">{quote?.quote}</p>
-          <footer className="text-sm mt-3 text-gray-500">- {quote?.author}</footer>
-          <footer className="text-xs mt-3 text-right text-gray-400">id : {id.substring(0, 5)}</footer>
+          <footer className="text-sm mt-3 text-gray-500">
+            - {quote?.author}
+          </footer>
+          <footer className="text-xs mt-3 text-right text-gray-400">
+            id : {id.substring(0, 5)}
+          </footer>
         </blockquote>
       )}
     </section>

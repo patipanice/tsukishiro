@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { db } from "../../../config/firebase";
 import { collection, getDoc, getDocs, doc } from "firebase/firestore";
+import { useFormik } from "formik";
+import AdviceForm from "@/components/form/advice-form";
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const [data, setData] = useState<any>([]);
   const fetchData = async () => {
     try {
       const docRef = doc(db, "inbox", params.slug);
@@ -12,25 +13,44 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        setData(docSnap.data());
+        const data = docSnap.data();
+        formik.setFieldValue("message", data?.message);
+        formik.setFieldValue("feeling", data?.feeling);
+        formik.setFieldValue("period", data?.period);
+        formik.setFieldValue("age", data?.age);
+        formik.setFieldValue("name", data?.name);
+        formik.setFieldValue("gender", data?.gender);
+        formik.setFieldValue("isPublish", data?.isPublish);
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
     } catch (error) {
-      //   res.status(500).json({ message: "Internal Server Error" });
+      console.error("Error fetching data: ", error);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      id: "",
+      message: "",
+      feeling: 1,
+      period: "",
+      age: "",
+      name: "",
+      gender: undefined,
+      isPublish: false,
+    },
+    onSubmit: async (values) => {},
+  });
   return (
-    <section className="text-left w-full overflow-auto">
-      <p>id: {params.slug}</p>
-      <p>ชื่อ: {data?.name}</p>
-      <p className="">ปัญหาที่ปรึกษา: {data?.message}</p>
-      <p>id: {params.slug}</p>
+    <section className="flex flex-col items-center justify-items-center  justify-center text-left h-full -mt-[40px] gap-y-5">
+      <p className="text-xl">id: {params.slug.substring(0, 5)}</p>
+      <AdviceForm formik={formik} isDetailPage/>
     </section>
   );
 }

@@ -7,13 +7,11 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Divider,
-  Link,
-  Image,
+  CircularProgress,
 } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 enum EMode {
@@ -32,6 +30,25 @@ const modeToLabel = (mode: any) => {
       return "ต้องการให้พูดในหัวข้อ";
   }
 };
+
+// Function to generate random hex color
+// Function to generate random hex color
+const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+  
+  // Function to create solid color with opacity
+  const getRandomColorWithOpacity = () => {
+    const color = getRandomColor();
+    const opacity = Math.random(); // Opacity between 0 and 1
+    return `${color}${Math.round(opacity * 50).toString(16).padStart(2, '0')}`;
+  };
+  
 
 export default function BoardPage() {
   const [data, setData] = useState<any>([]);
@@ -72,7 +89,7 @@ export default function BoardPage() {
       <h1 className={title()}>
         <div>
           {loading ? (
-            <p>โหลดข้อมูล...</p>
+            <CircularProgress/>
           ) : error ? (
             <div>
               <p>{error}</p>
@@ -89,31 +106,34 @@ export default function BoardPage() {
                     onPress={() => {
                       onClickCardItemHandler(item.id);
                     }}
+                    style={{
+                        background: getRandomColorWithOpacity(), // Apply random gradient background
+                        color: '#fff', // Text color to ensure contrast
+                      }}
                   >
                     <CardHeader className="flex gap-3">
-                      {/* <Image
-                        alt="nextui logo"
-                        height={40}
-                        radius="sm"
-                        src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                        width={40}
-                      /> */}
-                      <div className="flex flex-col">
-                        <p className="text-2xl font-semibold">
-                          {modeToLabel(item.mode) || "ขอคำปรึกษา"}
-                        </p>
+                      <div className="flex gap-2 items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="15"
+                          height="15"
+                          viewBox="0 0 1024 1023"
+                        >
+                          <path
+                            fill="red"
+                            d="m896 800l128 223l-224-128l-1-6l-168-167l-152 151q-42 42-95-10V684L126 416l-13 12q-19 20-46.5 20t-47-19.5t-19.5-47T19 334L335 19q20-19 47.5-19t47 19T449 65.5T429 113l-13 13l269 258l179 1q52 52 9 94L722 630l168 168z"
+                          />
+                        </svg>
                       </div>
                     </CardHeader>
-                    <Divider />
-                    <CardBody className="px-3 py-2 text-small text-default-400">
-                      <p>{item.message}</p>
+                    <CardBody className="p-3 text-sm text-default-500">
+                      <p className="font-light text-gray-800">{item.message}</p>
                     </CardBody>
-                    <Divider />
-                    {/* <CardFooter>
-                      <Link isExternal showAnchorIcon>
-                        แสดงความคิดเห็น
-                      </Link>
-                    </CardFooter> */}
+                    <CardFooter>
+                      <p className="text-end font-light text-xs text-gray-500">
+                        {item.name || "ไม่ระบุตัวตน"}
+                      </p>
+                    </CardFooter>
                   </Card>
                 ))
               ) : (
