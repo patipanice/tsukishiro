@@ -71,7 +71,7 @@ export default function BoardPage() {
               <Button onClick={fetchData}>อีกครั้ง</Button>
             </div>
           ) : (
-            <div className="w-full grid grid-cols-4 gap-6">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {data.length > 0 ? (
                 data.map((item:any) => (
                   <Card className="max-w-[400px]" key={item.id}>
