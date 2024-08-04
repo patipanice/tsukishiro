@@ -14,6 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 enum EMode {
   "ADVICE" = "advice",
@@ -36,6 +37,7 @@ export default function BoardPage() {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const fetchData = async () => {
     setLoading(true);
@@ -46,7 +48,8 @@ export default function BoardPage() {
         id: doc.id,
         ...doc.data(),
       }));
-      setData(dataArray);
+      console.log(dataArray);
+      setData(dataArray.filter((item: any) => item?.isPublish));
     } catch (error) {
       console.error("Error fetching data: ", error);
       setError("Failed to load data. Please try again later.");
@@ -58,6 +61,11 @@ export default function BoardPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const onClickCardItemHandler = (id: string) => {
+    console.log(id);
+    router.push("/board" + "/" + id);
+  };
 
   return (
     <section className="w-full h-full">
@@ -71,10 +79,17 @@ export default function BoardPage() {
               <Button onClick={fetchData}>อีกครั้ง</Button>
             </div>
           ) : (
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {data.length > 0 ? (
-                data.map((item:any) => (
-                  <Card className="max-w-[400px]" key={item.id}>
+                data.map((item: any) => (
+                  <Card
+                    isPressable
+                    className="w-full cursor-pointer"
+                    key={item.id}
+                    onPress={() => {
+                      onClickCardItemHandler(item.id);
+                    }}
+                  >
                     <CardHeader className="flex gap-3">
                       {/* <Image
                         alt="nextui logo"
@@ -84,24 +99,21 @@ export default function BoardPage() {
                         width={40}
                       /> */}
                       <div className="flex flex-col">
-                        <p className="text-2xl">
+                        <p className="text-2xl font-semibold">
                           {modeToLabel(item.mode) || "ขอคำปรึกษา"}
-                        </p>
-                        <p className="text-small text-default-500">
-                          {item.name || "ไม่ระบุตัวตน"}
                         </p>
                       </div>
                     </CardHeader>
                     <Divider />
-                    <CardBody>
-                      <p className="text-base">{item.message}</p>
+                    <CardBody className="px-3 py-2 text-small text-default-400">
+                      <p>{item.message}</p>
                     </CardBody>
                     <Divider />
-                    <CardFooter>
+                    {/* <CardFooter>
                       <Link isExternal showAnchorIcon>
                         แสดงความคิดเห็น
                       </Link>
-                    </CardFooter>
+                    </CardFooter> */}
                   </Card>
                 ))
               ) : (
