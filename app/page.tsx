@@ -1,9 +1,8 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import { Input, Textarea } from "@nextui-org/input";
-import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+import { Select, SelectItem } from "@nextui-org/select";
 import { useState, useEffect } from "react";
-import { HeartIcon } from "./HeartIcon";
 import { useFormik } from "formik";
 import { db } from "../config/firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
@@ -30,7 +29,6 @@ export default function Home() {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [id, setId] = useState<string | undefined>(undefined);
 
   const fetchData = async () => {
     setLoading(true);
@@ -70,9 +68,8 @@ export default function Home() {
           message: values.message,
         });
         if (res.id) {
-          setId(res.id);
           formik.resetForm();
-          fetchData(); // Refetch data after submission
+          fetchData();
           console.log("Document written with ID: ", res.id);
           alert(`ส่งข้อความเรียบร้อยแล้ว รหัส: ${res.id}`);
         }
