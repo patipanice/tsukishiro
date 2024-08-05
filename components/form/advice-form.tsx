@@ -170,7 +170,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           label="อายุ"
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("age", e.target.value)}
-          value={formik.values.age}
+          selectedKeys={[formik.values.age]}
           isDisabled={isDetailPage}
         >
           {ageOptions.map((option) => (
@@ -181,7 +181,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           label="เพศ"
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("gender", e.target.value)}
-          value={formik.values.gender}
+          selectedKeys={[formik.values.gender]}
           isDisabled={isDetailPage}
         >
           {genderOptions.map((option) => (
@@ -190,7 +190,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         </Select>
       </div>
       <Checkbox
-        value={formik.values.isPublish}
+        isSelected={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
         isDisabled={isDetailPage}
       >

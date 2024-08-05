@@ -5,7 +5,7 @@ export default function BoardLayout({
 }) {
   return (
     <section className="">
-      <div className="">
+      <div className="py-6">
         {children}
       </div>
     </section>
