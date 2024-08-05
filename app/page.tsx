@@ -3,12 +3,12 @@ import { Button } from "@nextui-org/button";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { db } from "../config/firebase";
+import { db, app } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import AdviceForm from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
-
+import { Timestamp, serverTimestamp } from "firebase/firestore";
 enum EMode {
   "ADVICE" = "advice",
   "FEEDBACK" = "feedback",
@@ -84,6 +84,7 @@ export default function Home() {
           ...values,
           age: Number(values.age),
           gender: Number(values.gender),
+          createdAt: serverTimestamp(),
         });
         if (res.id) {
           setId(res.id);
@@ -94,8 +95,7 @@ export default function Home() {
       }
     },
   });
-
-
+  
   return (
     <section className="flex flex-col items-center justify-items-center  justify-center text-left h-full -mt-[40px] gap-y-5">
       {step === 1 && (
