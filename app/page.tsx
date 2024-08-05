@@ -9,6 +9,8 @@ import AdviceForm from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
 import { Timestamp, serverTimestamp } from "firebase/firestore";
+import { PostStatus } from "@/enums/post.enum";
+
 enum EMode {
   "ADVICE" = "advice",
   "FEEDBACK" = "feedback",
@@ -84,6 +86,7 @@ export default function Home() {
           ...values,
           age: Number(values.age),
           gender: Number(values.gender),
+          status: PostStatus.PENDING,
           createdAt: serverTimestamp(),
         });
         if (res.id) {
@@ -95,7 +98,7 @@ export default function Home() {
       }
     },
   });
-  
+
   return (
     <section className="flex flex-col items-center justify-items-center  justify-center text-left h-full -mt-[40px] gap-y-5">
       {step === 1 && (

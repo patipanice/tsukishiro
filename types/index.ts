@@ -1,3 +1,4 @@
+import { PostStatus } from "@/enums/post.enum";
 import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
@@ -12,4 +13,7 @@ export interface IAdviceForm {
   gender: number;
   feeling: number;
   period: number;
+  status: PostStatus
+  isPublish: boolean;
+  createdAt: Date;
 }
