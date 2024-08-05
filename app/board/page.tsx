@@ -77,6 +77,7 @@ export default function BoardPage() {
               <PostItCard
                 item={item}
                 onClickCardItemHandler={onClickCardItemHandler}
+                key={item.id}
               />
             ))
           ) : (
