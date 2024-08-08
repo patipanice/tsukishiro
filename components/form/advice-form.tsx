@@ -215,7 +215,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           ))}
         </Select>
       </div>
-      <label>สีโพส</label>
+      <p>สีโพส</p>
       <CirclePicker
         colors={colors}
         color={formik.values.postColor}
