@@ -13,21 +13,21 @@ const getRandomColor = () => {
 };
 
 // Function to create solid color with opacity
-const getRandomColorWithOpacity = () => {
-  const color = getRandomColor();
-  const opacity = Math.random(); // Opacity between 0 and 1
-  return `${color}${Math.round(opacity * 50)
-    .toString(16)
-    .padStart(2, "0")}`;
+export const getRandomColorWithOpacity = (_color: string) => {
+  const color = _color ? _color : getRandomColor();
+  // const opacity = Math.random(); // Opacity between 0 and 1
+  return `${color}${Math.round(60).toString(16).padStart(2, "0")}`;
 };
 
 interface IPostItCardProps {
-  item: IAdviceForm;
+  item: Pick<IAdviceForm,'name'|'id'|'message'| 'postColor'>;
+  width?: number;
   onClickCardItemHandler: (id: string) => void;
 }
 
 const PostItCard: React.FC<IPostItCardProps> = ({
   item,
+  width,
   onClickCardItemHandler,
 }) => {
   return (
@@ -39,20 +39,21 @@ const PostItCard: React.FC<IPostItCardProps> = ({
         onClickCardItemHandler(item.id);
       }}
       style={{
-        background: getRandomColorWithOpacity(),
+        background: getRandomColorWithOpacity(item.postColor),
+        width: width,
       }}
     >
       <CardHeader className="flex gap-3">
         <PinIcon />
       </CardHeader>
-      <CardBody className="p-3 text-sm text-default-500">
-        <p className="font-light text-gray-800 dark:text-white">
+      <CardBody className="p-3 text-sm text-default-500 h-[150px]">
+        <p className="font-light text-gray-800 dark:text-white line-clamp-8">
           {item.message}
         </p>
       </CardBody>
       <CardFooter>
         <p className="text-end font-light text-xs text-gray-500">
-          {item.name || "ไม่ระบุตัวตน"} | {item.id.substring(0,5)}
+          {item.name || "ไม่ระบุตัวตน"} | {item.id.substring(0, 5)}
         </p>
       </CardFooter>
     </Card>

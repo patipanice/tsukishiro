@@ -2,16 +2,38 @@
 
 import { useEffect, useState } from "react";
 import { db } from "../../../config/firebase";
-import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useFormik } from "formik";
 import AdviceForm from "@/components/form/advice-form";
 import { PostStatus } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import { IAdviceForm } from "@/types";
-import { Spinner } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+
+async function deleteDocument(id: string) {
+  try {
+    // Get a reference to the document
+    const docRef = doc(db, "inbox", id);
+
+    // Optionally, check if the document exists
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      console.log("No such document!");
+      return;
+    }
+
+    // Delete the document
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+  }
+}
 
 export default function Page({ params }: { params: { slug: string } }) {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
+
   const fetchData = async () => {
     try {
       const docRef = doc(db, "inbox", params.slug);
@@ -19,6 +41,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
+        console.log(data)
         formik.setFieldValue("message", data?.message);
         formik.setFieldValue("feeling", data?.feeling);
         formik.setFieldValue("period", data?.period);
@@ -47,6 +70,13 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   };
 
+  const onClickDeletePostButtonHandler = async () => {
+    await deleteDocument(params.slug);
+    alert("ลบสำเร็จ");
+    router.push("/board");
+  };
+
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -63,6 +93,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       isPublish: false,
       status: PostStatus.PENDING,
       createdAt: new Date(),
+      postColor: ''
     },
     onSubmit: async (values) => {},
   });
@@ -81,10 +112,15 @@ export default function Page({ params }: { params: { slug: string } }) {
               : ""}
           </p>
         </div>
-        <PostStatusSelect
-          value={formik.values.status as PostStatus}
-          onChange={updateStatusHandler}
-        />
+        <div className="flex gap-2">
+          <PostStatusSelect
+            value={formik.values.status as PostStatus}
+            onChange={updateStatusHandler}
+          />
+          <Button size="sm" onClick={onClickDeletePostButtonHandler}>
+            ลบ
+          </Button>
+        </div>
       </div>
       <AdviceForm formik={formik} isDetailPage />
     </section>

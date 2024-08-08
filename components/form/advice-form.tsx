@@ -8,6 +8,31 @@ import {
 } from "@nextui-org/react";
 import { SadButRelievedFace } from "../icons/SadButRelievedFace";
 import Link from "next/link";
+import {
+  SketchPicker,
+  SwatchesPicker,
+  GithubPicker,
+  CirclePicker,
+  TwitterPicker,
+} from "react-color";
+import PostItCard from "../post-it-card";
+
+export const colors = [
+  "#FF6F61", // Coral
+  "#FFCCBC", // Peach
+  "#FFD54F", // Amber
+  "#A5D6A7", // Light Green
+  "#81D4FA", // Light Blue
+  "#B39DDB", // Light Purple
+  "#FFAB91", // Light Salmon
+  "#C5E1A5", // Pale Green
+  "#B3E5FC", // Light Cyan
+  "#DCE775", // Lime
+  "#F48FB1", // Light Pink
+  "#C5CAE9", // Light Blue Grey
+  // "#E57373", // Red
+  // "#F06292"  // Pink
+];
 
 const ageOptions = [
   {
@@ -165,6 +190,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           onChange={formik.handleChange}
           value={formik.values.name}
           isDisabled={isDetailPage}
+          maxLength={20}
         />
         <Select
           label="อายุ"
@@ -189,19 +215,35 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           ))}
         </Select>
       </div>
+      <label>สีโพส</label>
+      <CirclePicker
+        colors={colors}
+        color={formik.values.postColor}
+        onChange={(color) => formik.setFieldValue("postColor", color.hex)}
+      />
+      <PostItCard
+        item={{
+          id: "your id",
+          postColor: formik.values.postColor,
+          name: formik.values.name,
+          message: formik.values.message,
+        }}
+        width={260}
+        onClickCardItemHandler={() => {}}
+      />
       <Checkbox
         isSelected={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
         isDisabled={isDetailPage}
       >
-        ต้องการให้แสดงปัญหานี้ลงในบอร์ด
+       <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
       </Checkbox>
       {!isDetailPage && (
         <Button
           color="primary"
           className="w-full max-w-md mt-5"
           onClick={formik.handleSubmit}
-          isDisabled={!formik.isValid}
+          isDisabled={!formik.isValid|| formik.values.message === ''}
           // variant="light"
           startContent={
             <svg

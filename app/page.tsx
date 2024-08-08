@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { db, app } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
-import AdviceForm from "@/components/form/advice-form";
+import AdviceForm, { colors } from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
 import { Timestamp, serverTimestamp } from "firebase/firestore";
@@ -24,13 +24,39 @@ const modeOptions = [
     key: EMode.ADVICE,
     label: "ขอคำปรึกษา",
     icon: <SadButRelievedFace />,
+    disabled: false
   },
   {
     key: EMode.TOPIC,
     label: "อยากให้พูดคุยในหัวข้อ",
     icon: <Topic />,
+    disabled: true
   },
 ];
+
+const getQuotes = async () => {
+  const category = "happiness";
+  const res = await fetch(
+    "https://api.api-ninjas.com/v1/quotes?category=" + category,
+    {
+      headers: {
+        "X-Api-Key": String(process.env.NEXT_PUBLIC_NINJA_API_KEY),
+      },
+    }
+  );
+  if (res.status !== 200) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+  // .then((res) => {
+  //   if (res.length > 0) {
+  //     setQuote(res[0]);
+  //     setLoading(false);
+  //     increaseStep();
+  //     formik.resetForm();
+  //   }
+  // });
+};
 
 export default function Home() {
   const [mode, setMode] = useState<any | undefined>(undefined);
@@ -38,31 +64,6 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [id, setId] = useState<string | undefined>(undefined);
   const [quote, setQuote] = useState<any | undefined>(undefined);
-
-  const getQuotes = async () => {
-    try {
-      const category = "happiness";
-      const apiKey = "CUh5f4YO5Z5u+o3XFyModA==8vObfZmlMPEjo9m9";
-      await fetch("https://api.api-ninjas.com/v1/quotes?category=" + category, {
-        headers: {
-          "X-Api-Key": apiKey,
-        },
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((res) => {
-          if (res.length > 0) {
-            setQuote(res[0]);
-            setLoading(false);
-            increaseStep();
-            formik.resetForm();
-          }
-        });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-  };
 
   const increaseStep = () => {
     setStep(step + 1);
@@ -76,7 +77,8 @@ export default function Home() {
       age: "",
       name: "",
       gender: undefined,
-      isPublish: false,
+      isPublish: true,
+      postColor: colors[0]
     },
     onSubmit: async (values) => {
       try {
@@ -91,7 +93,13 @@ export default function Home() {
         });
         if (res.id) {
           setId(res.id);
-          getQuotes();
+          const responseGetQuotes = await getQuotes();
+          if (responseGetQuotes.length > 0) {
+            setQuote(responseGetQuotes[0]);
+            setLoading(false);
+            increaseStep();
+            formik.resetForm();
+          }
         }
       } catch (error) {
         console.error("Error adding document: ", error);
@@ -109,7 +117,7 @@ export default function Home() {
             onChange={(e) => setMode(e.target.value)}
           >
             {modeOptions.map((option) => (
-              <SelectItem startContent={option.icon} key={option.key}>
+              <SelectItem startContent={option.icon} key={option.key} isReadOnly={option.disabled}>
                 {option.label}
               </SelectItem>
             ))}

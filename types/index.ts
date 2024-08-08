@@ -16,4 +16,5 @@ export interface IAdviceForm {
   status: PostStatus
   isPublish: boolean;
   createdAt: Date;
+  postColor: string
 }
