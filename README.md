@@ -1,4 +1,4 @@
-# Next.js & NextUI Template
+# Next.js & NextUI Template test
 
 This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
 
