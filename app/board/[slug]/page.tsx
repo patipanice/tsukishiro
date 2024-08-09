@@ -11,6 +11,7 @@ import { Button, Spinner } from "@nextui-org/react";
 import { IAdviceForm } from "@/types";
 import { useAuthContext } from "@/contexts/auth-context";
 import { db } from "@/config/firebase";
+import { formattedDate } from "@/components/post-it-card";
 
 async function deleteDocument(id: string) {
   try {
@@ -52,7 +53,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         formik.setFieldValue("gender", String(data?.gender));
         formik.setFieldValue("isPublish", data?.isPublish);
         formik.setFieldValue("status", data?.status || PostStatus.PENDING);
-        formik.setFieldValue("createdAt", data?.createdAt?.toDate());
+        formik.setFieldValue("createdAt", data?.createdAt);
         setLoading(false);
       }
     } catch (error) {
@@ -109,8 +110,8 @@ export default function Page({ params }: { params: { slug: string } }) {
           <p className="text-sm">
             วันที่ติดปัญหาลงบอร์ด:{" "}
             {formik.values.createdAt
-              ? formik.values.createdAt.toLocaleDateString()
-              : ""}
+              ? formattedDate(formik.values.createdAt)
+              : "-"}
           </p>
         </div>
         {user && (

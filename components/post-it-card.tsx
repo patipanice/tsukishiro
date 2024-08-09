@@ -18,10 +18,10 @@ export const getRandomColorWithOpacity = (_color: string) => {
   return `${color}${Math.round(60).toString(16).padStart(2, "0")}`;
 };
 
-const formattedDate = (date: any) => {
+export const formattedDate = (date: any) => {
   if (!date) return "";
 
-  const d = date.toDate();
+  const d = date?.toDate();
 
   // Helper function to pad single-digit numbers with leading zero
   const pad = (num: number) => num.toString().padStart(2, "0");
