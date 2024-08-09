@@ -8,9 +8,9 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontKanit } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-import '../config/firebase'
+import "../config/firebase";
 
-import { Inter, Kanit } from 'next/font/google'
+import { Kanit } from "next/font/google";
 
 export const metadata: Metadata = {
   title: {
@@ -24,10 +24,10 @@ export const metadata: Metadata = {
 };
 
 const kanit = Kanit({
-    subsets: ['latin','thai','latin-ext'],
-    display: 'swap',
-    weight: "300"
-})
+  subsets: ["latin", "thai", "latin-ext"],
+  display: "swap",
+  weight: "300",
+});
 
 export const viewport: Viewport = {
   themeColor: [
@@ -47,7 +47,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-kanit antialiased",
-          fontKanit.variable,
+          fontKanit.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>

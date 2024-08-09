@@ -12,6 +12,10 @@ export const siteConfig = {
       label: "Board",
       href: "/board",
     },
+    {
+      label: "Signin",
+      href: "/signin",
+    },
   ],
   navMenuItems: [
     {
@@ -21,6 +25,10 @@ export const siteConfig = {
     {
       label: "Board",
       href: "/board",
+    },
+    {
+      label: "Signin",
+      href: "/signin",
     },
   ],
   links: {

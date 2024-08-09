@@ -6,15 +6,7 @@ import {
   SelectItem,
   Slider,
 } from "@nextui-org/react";
-import { SadButRelievedFace } from "../icons/SadButRelievedFace";
-import Link from "next/link";
-import {
-  SketchPicker,
-  SwatchesPicker,
-  GithubPicker,
-  CirclePicker,
-  TwitterPicker,
-} from "react-color";
+import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
 
 export const colors = [
@@ -76,13 +68,38 @@ const genderOptions = [
   },
 ];
 
+const markValues = [
+  {
+    value: 1,
+    label: "1",
+  },
+  {
+    value: 2,
+    label: "2",
+  },
+  {
+    value: 3,
+    label: "3",
+  },
+  {
+    value: 4,
+    label: "4",
+  },
+  {
+    value: 5,
+    label: "5",
+  },
+];
+
 interface IAdviceFormProps {
   formik: any;
   isDetailPage?: boolean;
+  isLoadingSubmit?: boolean;
 }
 const AdviceForm: React.FC<IAdviceFormProps> = ({
   formik,
   isDetailPage = false,
+  isLoadingSubmit = false,
 }) => {
   return (
     <section className="flex flex-col gap-6 w-full py-6">
@@ -96,81 +113,61 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         isDisabled={isDetailPage}
       />
       <Slider
+        color="success"
         label="ความรู้สึกที่มีต่อปัญหานี้"
         showTooltip={true}
-        color="danger"
         hideValue={true}
         step={1}
         value={formik.values.feeling}
-        onChange={(value) => formik.setFieldValue("feeling", value)}
         formatOptions={{ style: "decimal" }}
         maxValue={5}
         minValue={1}
         isDisabled={isDetailPage}
         classNames={{
           base: "max-w-md gap-3",
-          track: "border-s-danger-100",
-          filler: "bg-gradient-to-r from-danger-100 to-danger-500",
+          track: "border-s-green-100",
+          filler: "bg-gradient-to-r from-green-100 to-green-500",
         }}
         startContent={
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 16 16"
           >
             <path
               fill="currentColor"
               fillRule="evenodd"
               d="M13.5 8a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0M6.67 9.665a.75.75 0 0 0-1.34.67c.403.809 1.452 1.415 2.67 1.415s2.267-.606 2.67-1.415a.75.75 0 1 0-1.34-.67c-.097.191-.548.585-1.33.585s-1.233-.394-1.33-.585M10 8a.75.75 0 0 1-.75-.75v-1a.75.75 0 0 1 1.5 0v1A.75.75 0 0 1 10 8m-4.75-.75a.75.75 0 0 0 1.5 0v-1a.75.75 0 0 0-1.5 0z"
               clipRule="evenodd"
-            />
+              />
           </svg>
         }
         endContent={
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 16 16"
           >
             <path
               fill="currentColor"
               fillRule="evenodd"
               d="M13.5 8a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0m-5.67 2.835a.75.75 0 1 0 1.34-.67C10.268 9.356 9.219 8.75 8 8.75s-2.267.606-2.67 1.415a.75.75 0 1 0 1.34.67c.097-.191.548-.585 1.33-.585s1.233.394 1.33.585M10 8a.75.75 0 0 1-.75-.75v-1a.75.75 0 0 1 1.5 0v1A.75.75 0 0 1 10 8m-4.75-.75a.75.75 0 0 0 1.5 0v-1a.75.75 0 0 0-1.5 0z"
               clipRule="evenodd"
-            />
+              />
           </svg>
         }
-        marks={[
-          {
-            value: 1,
-            label: "1",
-          },
-          {
-            value: 2,
-            label: "2",
-          },
-          {
-            value: 3,
-            label: "3",
-          },
-          {
-            value: 4,
-            label: "4",
-          },
-          {
-            value: 5,
-            label: "5",
-          },
-        ]}
+        marks={markValues}
         defaultValue={0}
         className="max-w-md"
+        onChange={(value) => formik.setFieldValue("feeling", value)}
       />
       <p className="text-sm text-gray-500">
         <span>1 = เฉยๆคิดว่าไม่กังวลมาก</span> <br /> 2 = มีความกังวลเล็กน้อย
-        <br /> 3 = กังวลและคิดถึงมันบ่อย <br /> 4 = เครียดมาเป็นระยะเวลาหนึ่ง
-        <br /> 5 = มีความเหนื่อยมากและกระทบกับสุขภาพจิต
+        <br /> 3 = กังวลและคิดถึงมันบ่อย <br /> 4 =
+        มีความเครียดมาเป็นระยะเวลาหนึ่ง
+        <br /> 5 = มีความเครียดกับปัญหาและกระทบกับสุขภาพจิต
       </p>
       <Input
         label="ระยะเวลาที่เกิดปัญหา"
@@ -181,23 +178,24 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         value={formik.values.period}
         isDisabled={isDetailPage}
       />
+      <Input
+        label="คุณคือใคร"
+        placeholder="ถ้าไม่ต้องการระบุชื่อข้ามไปได้เลย"
+        type="text"
+        name="name"
+        onChange={formik.handleChange}
+        value={formik.values.name}
+        isDisabled={isDetailPage}
+        maxLength={20}
+      />
       <div className="flex gap-4">
-        <Input
-          label="คุณคือใคร"
-          placeholder="ถ้าไม่ต้องการระบุชื่อข้ามไปได้เลยย"
-          type="text"
-          name="name"
-          onChange={formik.handleChange}
-          value={formik.values.name}
-          isDisabled={isDetailPage}
-          maxLength={20}
-        />
         <Select
           label="อายุ"
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("age", e.target.value)}
           selectedKeys={[formik.values.age]}
           isDisabled={isDetailPage}
+          placeholder="ไม่จำเป็นต้องระบุ"
         >
           {ageOptions.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -209,6 +207,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           onChange={(e) => formik.setFieldValue("gender", e.target.value)}
           selectedKeys={[formik.values.gender]}
           isDisabled={isDetailPage}
+          placeholder="ไม่จำเป็นต้องระบุ"
         >
           {genderOptions.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -223,10 +222,11 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
       />
       <PostItCard
         item={{
-          id: "your id",
+          id: "id",
           postColor: formik.values.postColor,
           name: formik.values.name,
           message: formik.values.message,
+          createdAt: formik.values.createdAt,
         }}
         width={260}
         onClickCardItemHandler={() => {}}
@@ -236,15 +236,15 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
         isDisabled={isDetailPage}
       >
-       <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
+        <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
       </Checkbox>
       {!isDetailPage && (
         <Button
           color="primary"
           className="w-full max-w-md mt-5"
           onClick={formik.handleSubmit}
-          isDisabled={!formik.isValid|| formik.values.message === ''}
-          // variant="light"
+          isDisabled={!formik.isValid || formik.values.message === ""}
+          isLoading={isLoadingSubmit}
           startContent={
             <svg
               xmlns="http://www.w3.org/2000/svg"

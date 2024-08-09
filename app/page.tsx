@@ -3,13 +3,18 @@ import { Button } from "@nextui-org/button";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { db, app } from "../config/firebase";
+import { db, app, collectionName } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import AdviceForm, { colors } from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
 import { Timestamp, serverTimestamp } from "firebase/firestore";
 import { PostStatus } from "@/enums/post.enum";
+import { getCollectionRef } from "@/utils/filebase-util";
+import BlockQuote from "@/components/block-quote";
+import NextLink from "next/link";
+import { Link } from "@nextui-org/link";
+import { PinIcon } from "@/components/icons/PinIcon";
 
 enum EMode {
   "ADVICE" = "advice",
@@ -24,13 +29,13 @@ const modeOptions = [
     key: EMode.ADVICE,
     label: "ขอคำปรึกษา",
     icon: <SadButRelievedFace />,
-    disabled: false
+    disabled: false,
   },
   {
     key: EMode.TOPIC,
     label: "อยากให้พูดคุยในหัวข้อ",
     icon: <Topic />,
-    disabled: true
+    disabled: true,
   },
 ];
 
@@ -48,20 +53,12 @@ const getQuotes = async () => {
     throw new Error("Failed to fetch data");
   }
   return res.json();
-  // .then((res) => {
-  //   if (res.length > 0) {
-  //     setQuote(res[0]);
-  //     setLoading(false);
-  //     increaseStep();
-  //     formik.resetForm();
-  //   }
-  // });
 };
 
 export default function Home() {
   const [mode, setMode] = useState<any | undefined>(undefined);
   const [step, setStep] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [id, setId] = useState<string | undefined>(undefined);
   const [quote, setQuote] = useState<any | undefined>(undefined);
 
@@ -78,12 +75,12 @@ export default function Home() {
       name: "",
       gender: undefined,
       isPublish: true,
-      postColor: colors[0]
+      postColor: colors[0],
     },
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        const docRef = collection(db, "inbox");
+        const docRef = getCollectionRef(collectionName.advice);
         const res = await addDoc(docRef, {
           ...values,
           age: Number(values.age),
@@ -117,7 +114,11 @@ export default function Home() {
             onChange={(e) => setMode(e.target.value)}
           >
             {modeOptions.map((option) => (
-              <SelectItem startContent={option.icon} key={option.key} isReadOnly={option.disabled}>
+              <SelectItem
+                startContent={option.icon}
+                key={option.key}
+                isReadOnly={option.disabled}
+              >
                 {option.label}
               </SelectItem>
             ))}
@@ -146,17 +147,14 @@ export default function Home() {
           </Button>
         </div>
       )}
-      {step === 2 && <AdviceForm formik={formik} />}
+      {step === 2 && <AdviceForm formik={formik} isLoadingSubmit={loading} />}
       {step === 3 && id !== undefined && quote !== undefined && (
-        <blockquote className="text-center font-mono font-light">
-          <p className="text-lg">{quote?.quote}</p>
-          <footer className="text-sm mt-3 text-gray-500">
-            - {quote?.author}
-          </footer>
-          <footer className="text-xs mt-3 text-right text-gray-400">
-            id : {id.substring(0, 5)}
-          </footer>
-        </blockquote>
+        <div className="flex flex-col w-full gap-y-14">
+          <BlockQuote quote={quote.quote} author={quote.author} id={id} />
+          <div className="">
+          <Link href="/board"><p className="text-sm text-secondary-500 flex gap-2 items-center"><PinIcon/>ไปดูบอร์ด</p></Link>
+          </div>
+        </div>
       )}
     </section>
   );

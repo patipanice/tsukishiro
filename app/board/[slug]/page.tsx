@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "../../../config/firebase";
-import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import AdviceForm from "@/components/form/advice-form";
 import { PostStatus } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
-import { IAdviceForm } from "@/types";
 import { Button, Spinner } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { IAdviceForm } from "@/types";
+import { useAuthContext } from "@/contexts/auth-context";
+import { db } from "@/config/firebase";
 
 async function deleteDocument(id: string) {
   try {
@@ -32,6 +33,7 @@ async function deleteDocument(id: string) {
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = async () => {
@@ -41,7 +43,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(data)
+        console.log(data);
         formik.setFieldValue("message", data?.message);
         formik.setFieldValue("feeling", data?.feeling);
         formik.setFieldValue("period", data?.period);
@@ -76,7 +78,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     router.push("/board");
   };
 
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -93,9 +94,9 @@ export default function Page({ params }: { params: { slug: string } }) {
       isPublish: false,
       status: PostStatus.PENDING,
       createdAt: new Date(),
-      postColor: ''
+      postColor: "",
     },
-    onSubmit: async (values) => {},
+    onSubmit: async () => {},
   });
 
   if (loading) return <Spinner />;
@@ -112,17 +113,19 @@ export default function Page({ params }: { params: { slug: string } }) {
               : ""}
           </p>
         </div>
-        <div className="flex gap-2">
-          <PostStatusSelect
-            value={formik.values.status as PostStatus}
-            onChange={updateStatusHandler}
-          />
-          <Button size="sm" onClick={onClickDeletePostButtonHandler}>
-            ลบ
-          </Button>
-        </div>
+        {user && (
+          <div className="flex flex-col gap-2 max-w-72">
+            <PostStatusSelect
+              value={formik.values.status as PostStatus}
+              onChange={updateStatusHandler}
+            />
+            <Button size="sm" onClick={onClickDeletePostButtonHandler}>
+              ลบ
+            </Button>
+          </div>
+         )} 
       </div>
-      <AdviceForm formik={formik} isDetailPage />
+      <AdviceForm isDetailPage formik={formik} />
     </section>
   );
 }

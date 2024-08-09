@@ -1,46 +1,48 @@
 "use client";
+
 import React from "react";
 import { Select, SelectItem } from "@nextui-org/select";
-import { PostStatus } from "@/enums/post.enum";
+
+import { PostPublishStatus } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
 
 const postStatusOptions = [
   {
-    key: PostStatus.PENDING,
-    label: "ยังไม่ได้ให้คำปรึกษา",
+    key: PostPublishStatus.PUBLISH,
+    label: "เผยแพร่",
     icon: <HourglassDone />,
   },
   {
-    key: PostStatus.DONE,
-    label: "ให้คำปรึกษาแล้ว",
+    key: PostPublishStatus.UNPUBLISHED,
+    label: "ไม่เผยแพร่",
     icon: <Topic />,
   },
 ];
 
 interface IPostStatusSelectProps {
-  value?: PostStatus;
-  onChange: (value: PostStatus) => void;
+  value?: PostPublishStatus;
+  onChange: (value: "1" | "0" | string) => void;
   isFilter?: boolean;
 }
 
-const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
+const PostPublishSelect: React.FC<IPostStatusSelectProps> = ({
   value,
   onChange,
   isFilter = false,
 }) => {
   return (
     <Select
-    className="w-full md:max-w-56"
+      className="w-full md:max-w-44"
       label="สถานะ"
       size="sm"
       selectedKeys={value ? [value] : []}
       onChange={(e) => {
         if (e.target.value && !isFilter) {
-          onChange(e.target.value as PostStatus);
+          onChange(e.target.value as PostPublishStatus);
         }
         if (isFilter) {
-          onChange(e.target.value as PostStatus);
+          onChange(e.target.value as PostPublishStatus);
         }
       }}
     >
@@ -53,4 +55,4 @@ const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
   );
 };
 
-export default PostStatusSelect;
+export default PostPublishSelect;
