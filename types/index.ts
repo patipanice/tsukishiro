@@ -17,4 +17,5 @@ export interface IAdviceForm {
   isPublish: boolean;
   createdAt: Date;
   postColor: string
+  userId?: string
 }

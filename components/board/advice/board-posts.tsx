@@ -4,11 +4,13 @@ import React from "react";
 
 interface BoardPostsProps {
   data?: IAdviceForm[];
+  userId?: string
   onClickCardItemHandler: (id: string) => void
 }
 
 const BoardPosts: React.FC<BoardPostsProps> = ({
   data = [],
+  userId,
   onClickCardItemHandler,
 }) => {
   return (
@@ -19,6 +21,7 @@ const BoardPosts: React.FC<BoardPostsProps> = ({
             item={item}
             onClickCardItemHandler={onClickCardItemHandler}
             key={item.id}
+            isYourPost={item.userId === userId}
           />
         ))
       ) : (

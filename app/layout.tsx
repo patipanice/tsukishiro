@@ -11,6 +11,7 @@ import { Navbar } from "@/components/navbar";
 import "../config/firebase";
 
 import { Kanit } from "next/font/google";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -52,10 +53,12 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-              {children}
-            </main>
+            <Suspense fallback={<p>Loading...</p>}>
+              <Navbar />
+              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+                {children}
+              </main>
+            </Suspense>
             {/* <footer className="w-full flex items-center justify-center py-3">
               <Link
                 isExternal

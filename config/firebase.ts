@@ -32,6 +32,7 @@ const auth = getAuth();
 
 const collectionName = {
   advice: "inbox",
+  users: "users"
 };
 
 export {
@@ -39,8 +40,4 @@ export {
   app,
   auth,
   collectionName,
-  signInAnonymously,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
 };

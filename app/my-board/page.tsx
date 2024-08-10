@@ -9,7 +9,7 @@ import PostStatusSelect from "@/components/selects/post-status-select";
 import { PostPublishStatus, PostStatus } from "@/enums/post.enum";
 import BoardPosts from "@/components/board/advice/board-posts";
 import PostPublishSelect from "@/components/selects/post-publish-select";
-import { Role, useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { collectionName, db } from "@/config/firebase";
 import { getCollectionRef } from "@/utils/filebase-util";
 
@@ -27,9 +27,13 @@ const fieldMatchesSearch = (fieldValue: string, searchValue?: string) => {
   );
 };
 
-const fetchPost = async (filterValue: IFilterValue) => {
+const fetchPost = async (filterValue: IFilterValue, userId?: string) => {
   try {
     let queryRef = query(getCollectionRef(collectionName.advice));
+
+    if (userId) {
+      queryRef = query(queryRef, where("userId", "==", userId));
+    }
 
     if (filterValue.status) {
       queryRef = query(queryRef, where("status", "==", filterValue.status));
@@ -61,7 +65,7 @@ const fetchPost = async (filterValue: IFilterValue) => {
   }
 };
 export default function BoardPage() {
-  const { user, role } = useAuthContext();
+  const { user } = useAuthContext();
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -78,7 +82,7 @@ export default function BoardPage() {
       setLoading(true);
       setError(null);
       try {
-        const posts = await fetchPost(filterValue);
+        const posts = await fetchPost(filterValue, user?.uid);
         setData(posts);
       } catch (err: any) {
         setError(err.message);
@@ -88,7 +92,12 @@ export default function BoardPage() {
     };
 
     loadPosts();
-  }, [filterValue.search, filterValue.status, filterValue.isPublish]);
+  }, [
+    filterValue.search,
+    filterValue.status,
+    filterValue.isPublish,
+    user?.uid,
+  ]);
 
   const onClickCardItemHandler = (id: string) => {
     router.push("/board" + "/" + id);
@@ -97,7 +106,7 @@ export default function BoardPage() {
   const boardItemData = useMemo(() => {
     const searchValue = filterValue.search || "";
 
-    return data.filter((item: { id: any; name: any }) => {
+    return data?.filter((item: { id: any; name: any }) => {
       const idMatches = fieldMatchesSearch(item?.id || "", searchValue);
       const nameMatches = fieldMatchesSearch(item?.name || "", searchValue);
 
@@ -144,7 +153,7 @@ export default function BoardPage() {
             }));
           }}
         />
-        {role === Role.SUPER_ADMIN && (
+        {user && (
           <PostPublishSelect
             isFilter
             value={filterValue.isPublish}

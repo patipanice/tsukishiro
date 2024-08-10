@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { IAdviceForm } from "@/types";
+import { PinIcon } from "./icons/PinIcon";
 
 // Function to generate random hex color
 const getRandomColor = () => {
@@ -39,12 +40,14 @@ interface IPostItCardProps {
     "name" | "id" | "message" | "postColor" | "createdAt"
   >;
   width?: number;
+  isYourPost: boolean;
   onClickCardItemHandler: (id: string) => void;
 }
 
 const PostItCard: React.FC<IPostItCardProps> = ({
   item,
   width,
+  isYourPost,
   onClickCardItemHandler,
 }) => {
   return (
@@ -60,7 +63,9 @@ const PostItCard: React.FC<IPostItCardProps> = ({
         onClickCardItemHandler(item.id);
       }}
     >
-      <CardHeader className="flex gap-3"></CardHeader>
+      <CardHeader className="flex gap-3">
+       {isYourPost &&  <PinIcon/>}
+      </CardHeader>
       <CardBody className="p-3 text-sm text-default-500 h-[150px]">
         <p className="font-light text-gray-800 dark:text-white line-clamp-8">
           {item.message}

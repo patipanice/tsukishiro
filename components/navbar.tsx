@@ -27,9 +27,15 @@ import {
   Logo,
 } from "@/components/icons";
 import { useAuthContext } from "@/contexts/auth-context";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { Avatar, CircularProgress } from "@nextui-org/react";
+import AuthSection from "./auth-section";
 
 export const Navbar = () => {
-  const { logout, user } = useAuthContext();
+  const { logout, user, loading } = useAuthContext();
+  const pathname = usePathname();
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -60,15 +66,15 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">TSUKISHIRO</p>
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
+        <ul className="hidden sm:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
                 className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  pathname === item.href
+                    ? "text-primary-500 border-b-2 border-primary-500 pb-1"
+                    : "foreground"
                 )}
-                color="foreground"
                 href={item.href}
               >
                 {item.label}
@@ -82,18 +88,22 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
+        <NavbarItem className="hidden sm:flex gap-4">
           {/* <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
             <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
+          </Link> */}
+          {/* <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal aria-label="Github" href={siteConfig.links.github}>
+          </Link> */}
+          {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
+            <GithubIcon className="text-default-500" />
+          </Link> */}
+          {/* <Link isExternal aria-label="Tiktok" href={siteConfig.links.tiktok}>
             <GithubIcon className="text-default-500" />
           </Link> */}
           <ThemeSwitch />
-          {user && <Button onClick={logout}>ออกจากระบบ</Button>}
+          {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
+          {loading ? <CircularProgress /> : <AuthSection />}
         </NavbarItem>
         {/* <NavbarItem className="hidden  lg:flex">{searchInput}</NavbarItem> */}
         {/* <NavbarItem className="hidden md:flex">
@@ -115,6 +125,7 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link> */}
         <ThemeSwitch />
+        {loading ? <CircularProgress /> : <AuthSection />}
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -124,13 +135,7 @@ export const Navbar = () => {
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-                }
+                color={pathname === item.href ? "primary" : "foreground"}
                 href={item.href}
                 size="lg"
               >

@@ -15,12 +15,24 @@ import {
 import { auth } from "@/config/firebase";
 import { User as FirebaseUser } from "firebase/auth";
 
+const isAdmin = (user: FirebaseUser | null) => {
+  return user?.uid === process.env.NEXT_PUBLIC_FIREBASE_AUTH_ADMIN_UUID;
+};
+
+//TODO: enum file
+export enum Role {
+  SUPER_ADMIN = 1,
+  MEMBER = 2,
+}
+
 interface AuthContextType {
   user: FirebaseUser | null;
+  role: Role;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
+  onChangeUser: (user: FirebaseUser | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,17 +41,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [role, setRole] = useState<Role>(Role.MEMBER);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (isAdmin(user)) {
+        setRole(Role.SUPER_ADMIN);
+      } else {
+        setRole(Role.MEMBER);
+      }
       setUser(user);
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
+
+  const onChangeUser = (user: FirebaseUser | null) => {
+    setUser(user);
+  };
 
   const login = async (email: string, password: string) => {
     try {
@@ -69,7 +91,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup }}>
+    <AuthContext.Provider
+      value={{ user, role, loading, login, logout, signup, onChangeUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

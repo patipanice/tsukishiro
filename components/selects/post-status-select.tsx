@@ -31,7 +31,7 @@ const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
 }) => {
   return (
     <Select
-    className="w-full md:max-w-56"
+      className="w-full md:max-w-56"
       label="สถานะ"
       size="sm"
       selectedKeys={value ? [value] : []}

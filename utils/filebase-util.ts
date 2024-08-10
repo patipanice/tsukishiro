@@ -2,7 +2,13 @@ import { db } from "@/config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 // Utility function to get a collection reference
-export const getCollectionRef = (collectionName: string) => {
+export const getCollectionRef = (
+  collectionName: string,
+  pathSegments?: any
+) => {
+  if (pathSegments) {
+    return collection(db, collectionName, pathSegments);
+  }
   return collection(db, collectionName);
 };
 
@@ -20,7 +26,7 @@ export const fetchDocuments = async (
 
     const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));

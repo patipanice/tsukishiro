@@ -9,7 +9,7 @@ import { PostStatus } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import { Button, Spinner } from "@nextui-org/react";
 import { IAdviceForm } from "@/types";
-import { Role, useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { db } from "@/config/firebase";
 import { formattedDate } from "@/components/post-it-card";
 
@@ -34,7 +34,7 @@ async function deleteDocument(id: string) {
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
-  const { user, role } = useAuthContext();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = async () => {
@@ -54,7 +54,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         formik.setFieldValue("isPublish", data?.isPublish);
         formik.setFieldValue("status", data?.status || PostStatus.PENDING);
         formik.setFieldValue("createdAt", data?.createdAt);
-        formik.setFieldValue("userId", data?.userId);
         setLoading(false);
       }
     } catch (error) {
@@ -68,24 +67,11 @@ export default function Page({ params }: { params: { slug: string } }) {
       const docRef = doc(db, "inbox", params.slug);
       await updateDoc(docRef, { status });
       formik.setFieldValue("status", status);
-      alert("อัพเดทสำเร็จ");
+      alert('อัพเดทสำเร็จ')
       console.log("Document status updated to 'done'");
     } catch (error) {
       console.error("Error updating document status: ", error);
-      alert("อัพเดทไมสำเร็จ");
-    }
-  };
-
-  //?? Temporary function for add userId to post
-  const updateIsMyPost = async () => {
-    try {
-      const docRef = doc(db, "inbox", params.slug);
-      await updateDoc(docRef, { userId: user?.uid });
-      alert("เพิ่มสำเร็จ");
-      console.log("Document status updated to 'done'");
-    } catch (error) {
-      console.error("Error updating document status: ", error);
-      alert("อัพเดทไมสำเร็จ");
+      alert('อัพเดทไมสำเร็จ')
     }
   };
 
@@ -114,14 +100,9 @@ export default function Page({ params }: { params: { slug: string } }) {
       status: PostStatus.PENDING,
       createdAt: new Date(),
       postColor: "",
-      userId: undefined,
     },
     onSubmit: async () => {},
   });
-
-  const canDeletePost =
-    role === Role.SUPER_ADMIN ||
-    (role === Role.MEMBER && user?.uid === formik.values.userId);
 
   if (loading) return <Spinner />;
 
@@ -136,40 +117,22 @@ export default function Page({ params }: { params: { slug: string } }) {
               ? formattedDate(formik.values.createdAt)
               : "-"}
           </p>
-          {user && (formik.values.userId === "" || !formik.values.userId) && (
-            <div>
-              <Button
-                onClick={updateIsMyPost}
-                className="mt-5"
-                color="secondary"
-              >
-                เพิ่มเข้าโพสของฉัน
-              </Button>
-              <p className="text-xs text-gray-500 pt-1">
-                (ระบบจะทำการเพิ่มโพสนี้เป็นโพสของคุณ
-                และจะไปแสดงที่หน้าบอร์ดของฉัน)
-              </p>
-            </div>
-          )}
         </div>
-
-        <div className="flex items-center gap-2 ">
-          {canDeletePost && (
+        {user && (
+          <div className="flex items-center gap-2 w-[300px]">
             <Button
+              size="lg"
               onClick={onClickDeletePostButtonHandler}
               color="danger"
-              variant="ghost"
             >
               ลบ
             </Button>
-          )}
-          {role === Role.SUPER_ADMIN && (
             <PostStatusSelect
               value={formik.values.status as PostStatus}
               onChange={updateStatusHandler}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <AdviceForm isDetailPage formik={formik} />
     </section>
