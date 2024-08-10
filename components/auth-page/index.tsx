@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { useAuthContext } from "@/contexts/auth-context";
 import { createUserWithEmailAndPassword, User } from "firebase/auth";
 import { auth, collectionName, db } from "@/config/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { AuthFormValue } from "@/types/auth";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +32,8 @@ const saveNewUserToFireStoreCollection = async (user: User) => {
     email: user.email,
     phoneNumber: user.phoneNumber,
     displayName: user.displayName,
+    creationTime: user.metadata.creationTime,
+    createdAt: serverTimestamp()
   });
 };
 
