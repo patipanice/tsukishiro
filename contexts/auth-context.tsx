@@ -78,6 +78,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       router.push("/signin");
     } catch (error: any) {
       console.error("Logout failed:", error.message);
+      alert(String(error?.message));
     }
   };
 
