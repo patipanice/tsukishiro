@@ -14,8 +14,8 @@ import BlockQuote from "@/components/block-quote";
 import { Link } from "@nextui-org/link";
 import { PinIcon } from "@/components/icons/PinIcon";
 import { useAuthContext } from "@/contexts/auth-context";
-// import { getFirebaseAuthStateChanged } from "./actions";
 import { collectionName } from "@/config/firebase";
+import { getQuotes } from "./action";
 
 enum EMode {
   "ADVICE" = "advice",
@@ -40,34 +40,13 @@ const modeOptions = [
   },
 ];
 
-const getQuotes = async () => {
-  const category = "happiness";
-  const res = await fetch(
-    "https://api.api-ninjas.com/v1/quotes?category=" + category,
-    {
-      headers: {
-        "X-Api-Key": String(process.env.NEXT_PUBLIC_NINJA_API_KEY),
-      },
-    }
-  );
-  if (res.status !== 200) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-};
-
 export default function Home() {
-  const { user, onChangeUser } = useAuthContext();
+  const { user } = useAuthContext();
   const [mode, setMode] = useState<any | undefined>(undefined);
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [id, setId] = useState<string | undefined>(undefined);
   const [quote, setQuote] = useState<any | undefined>(undefined);
-
-  // useEffect(() => {
-  //   const user = getFirebaseAuthStateChanged();
-  //   onChangeUser(user!);
-  // }, []);
 
   const increaseStep = () => {
     setStep(step + 1);
@@ -90,7 +69,7 @@ export default function Home() {
         const docRef = getCollectionRef(collectionName.advice);
         const res = await addDoc(docRef, {
           ...values,
-          userId: user?.uid || "",
+          userId: user?.uid || "", // if user is auth send userId : send empty string
           age: Number(values.age),
           gender: Number(values.gender),
           status: PostStatus.PENDING,
@@ -106,7 +85,8 @@ export default function Home() {
             formik.resetForm();
           }
         }
-      } catch (error) {
+      } catch (error: any) {
+        alert(String(error?.message));
         console.error("Error adding document: ", error);
       }
     },
@@ -160,7 +140,7 @@ export default function Home() {
         <div className="flex flex-col w-full gap-y-14">
           <BlockQuote quote={quote.quote} author={quote.author} id={id} />
           <div className="">
-            <Link href="/board">
+            <Link href="/board-advice">
               <p className="text-sm text-secondary-500 flex gap-2 items-center">
                 <PinIcon />
                 ไปดูบอร์ด

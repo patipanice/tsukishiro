@@ -91,7 +91,7 @@ export default function BoardPage() {
   }, [filterValue.search, filterValue.status, filterValue.isPublish]);
 
   const onClickCardItemHandler = (id: string) => {
-    router.push("/board" + "/" + id);
+    router.push("/board-advice" + "/" + id);
   };
 
   const boardItemData = useMemo(() => {

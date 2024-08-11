@@ -2,10 +2,6 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInAnonymously,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 import { getFirestore, Timestamp } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";

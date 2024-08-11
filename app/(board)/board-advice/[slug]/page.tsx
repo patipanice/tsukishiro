@@ -93,7 +93,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (window.confirm("ยืนยันการลบ")) {
       await deleteDocument(params.slug);
       alert("ลบสำเร็จ");
-      router.push("/board");
+      router.push("/board-advice");
     }
   };
 

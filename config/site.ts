@@ -9,8 +9,13 @@ export const siteConfig = {
       href: "/home",
     },
     {
-      label: "บอร์ด",
-      href: "/board",
+      label: "บอร์ดปัญหา",
+      href: "/board-advice",
+    },
+    {
+      label: "บอร์ดของฉัน",
+      href: "/my-board",
+      isAuth: true
     },
   ],
   navMenuItems: [
@@ -19,8 +24,13 @@ export const siteConfig = {
       href: "/home",
     },
     {
-      label: "บอร์ด",
-      href: "/board",
+      label: "บอร์ดปัญหา",
+      href: "/board-advice",
+    },
+    {
+      label: "บอร์ดของฉัน",
+      href: "/my-board",
+      isAuth: true
     },
   ],
   links: {
