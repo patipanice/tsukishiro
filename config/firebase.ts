@@ -28,7 +28,9 @@ const auth = getAuth();
 
 const collectionName = {
   advice: "inbox",
-  users: "users"
+  users: "users",
+  topic: 'topic',
+  qa: 'qa'
 };
 
 export {

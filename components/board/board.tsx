@@ -8,18 +8,14 @@ import { SearchIcon } from "@/components/icons";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import { PostPublishStatus, PostStatus, PostType } from "@/enums/post.enum";
 import PostPublishSelect from "@/components/selects/post-publish-select";
-import { useAuthContext } from "@/contexts/auth-context";
-import { collectionName, db } from "@/config/firebase";
+import { Role, useAuthContext } from "@/contexts/auth-context";
 import { getCollectionRef } from "@/utils/firebase-util";
-import BoardPosts from "@/components/board/board-posts";
-import PostTypeSelect from "@/components/selects/post-type-select";
 import { getCollectionNameByPostType } from "@/utils";
-import { getCurrentBoardPathnameByType } from "@/components/board/board";
+import BoardPosts from "./board-posts";
 
 interface IFilterValue {
   search?: string;
   status?: PostStatus;
-  type: PostType;
   isPublish?: PostPublishStatus;
 }
 
@@ -31,50 +27,53 @@ const fieldMatchesSearch = (fieldValue: string, searchValue?: string) => {
   );
 };
 
-const fetchPost = async (
-  type: PostType,
-  filterValue: IFilterValue,
-  userId?: string
-) => {
-  try {
-    console.log(getCollectionNameByPostType(type))
-    let queryRef = query(getCollectionRef(getCollectionNameByPostType(type)));
-
-    if (userId) {
-      queryRef = query(queryRef, where("userId", "==", userId));
-    }
-
-    if (filterValue.status) {
-      queryRef = query(queryRef, where("status", "==", filterValue.status));
-    }
-
-    if (filterValue.isPublish) {
-      queryRef = query(
-        queryRef,
-        where(
-          "isPublish",
-          "==",
-          filterValue.isPublish === PostPublishStatus.PUBLISH ? true : false
-        )
-      );
-    }
-
-    // Fetch the documents
-    const querySnapshot = await getDocs(queryRef);
-
-    // Map the documents to an array
-    const dataArray = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    return dataArray;
-  } catch (error) {
-    console.error("Error fetching data: ", error);
+export const getCurrentBoardPathnameByType = (type: PostType) => {
+  switch (type) {
+    case PostType.ADVICE:
+      return "/board-advice";
+    case PostType.TOPIC:
+      return "/board-topic";
+    default:
+      return "/home";
   }
 };
-export default function BoardPage() {
-  const { user } = useAuthContext();
+
+const fetchPost = async (type: PostType, filterValue: IFilterValue) => {
+  let queryRef = query(getCollectionRef(getCollectionNameByPostType(type)));
+
+  if (filterValue.status) {
+    queryRef = query(queryRef, where("status", "==", filterValue.status));
+  }
+
+  if (filterValue.isPublish) {
+    queryRef = query(
+      queryRef,
+      where(
+        "isPublish",
+        "==",
+        filterValue.isPublish === PostPublishStatus.PUBLISH ? true : false
+      )
+    );
+  }
+
+  // Fetch the documents
+  const querySnapshot = await getDocs(queryRef);
+
+  // Map the documents to an array
+  const dataArray = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return dataArray;
+};
+
+interface BoardProps {
+  type: PostType;
+}
+
+export const Board: React.FC<BoardProps> = ({ type }) => {
+  const { user, role } = useAuthContext();
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -83,7 +82,6 @@ export default function BoardPage() {
   const [filterValue, setFilterValue] = useState<IFilterValue>({
     search: undefined,
     status: undefined,
-    type: PostType.ADVICE,
     isPublish: PostPublishStatus.PUBLISH,
   });
 
@@ -92,7 +90,7 @@ export default function BoardPage() {
       setLoading(true);
       setError(null);
       try {
-        const posts = await fetchPost(filterValue.type, filterValue, user?.uid);
+        const posts = await fetchPost(type, filterValue);
         setData(posts);
       } catch (err: any) {
         setError(err.message);
@@ -102,22 +100,16 @@ export default function BoardPage() {
     };
 
     loadPosts();
-  }, [
-    filterValue.search,
-    filterValue.status,
-    filterValue.isPublish,
-    filterValue.type,
-    user?.uid,
-  ]);
+  }, [filterValue.search, filterValue.status, filterValue.isPublish, type]);
 
   const onClickCardItemHandler = (id: string) => {
-    router.push(getCurrentBoardPathnameByType(filterValue.type) + "/" + id);
+    router.push(getCurrentBoardPathnameByType(type) + "/" + id);
   };
 
   const boardItemData = useMemo(() => {
     const searchValue = filterValue.search || "";
 
-    return data?.filter((item: { id: any; name: any }) => {
+    return data.filter((item: { id: any; name: any }) => {
       const idMatches = fieldMatchesSearch(item?.id || "", searchValue);
       const nameMatches = fieldMatchesSearch(item?.name || "", searchValue);
 
@@ -154,16 +146,6 @@ export default function BoardPage() {
           }
           type="search"
         />
-        <PostTypeSelect
-          isFilter
-          value={filterValue.type}
-          onChange={(type) => {
-            setFilterValue((prev) => ({
-              ...prev,
-              type,
-            }));
-          }}
-        />
         <PostStatusSelect
           isFilter
           value={filterValue.status}
@@ -174,7 +156,7 @@ export default function BoardPage() {
             }));
           }}
         />
-        {user && (
+        {role === Role.SUPER_ADMIN && (
           <PostPublishSelect
             isFilter
             value={filterValue.isPublish}
@@ -194,9 +176,7 @@ export default function BoardPage() {
       ) : error ? (
         <div>
           <p>{error}</p>
-          <Button onClick={() => fetchPost(filterValue.type, filterValue, user?.uid)}>
-            อีกครั้ง
-          </Button>
+          <Button onClick={() => fetchPost(type, filterValue)}>อีกครั้ง</Button>
         </div>
       ) : (
         <BoardPosts
@@ -207,4 +187,6 @@ export default function BoardPage() {
       )}
     </section>
   );
-}
+};
+
+export default Board;

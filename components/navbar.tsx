@@ -8,32 +8,21 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { Button } from "@nextui-org/button";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
-import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
+import { SearchIcon, Logo } from "@/components/icons";
 import { useAuthContext } from "@/contexts/auth-context";
-import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Avatar, CircularProgress } from "@nextui-org/react";
 import AuthSection from "./auth-section";
 
 export const Navbar = () => {
-  const { logout, user, loading } = useAuthContext();
+  const { user } = useAuthContext();
   const pathname = usePathname();
 
   const searchInput = (
@@ -83,7 +72,7 @@ export const Navbar = () => {
               <NavbarItem key={item.href}>
                 <NextLink
                   className={clsx(
-                    pathname === item.href
+                    pathname.includes(item.href) 
                       ? "text-primary-500 border-b-2 border-primary-500 pb-1"
                       : "foreground"
                   )}
@@ -115,11 +104,7 @@ export const Navbar = () => {
           </Link> */}
           <ThemeSwitch />
           {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
-          {loading ? (
-            <CircularProgress aria-label="Loading..." />
-          ) : (
-            <AuthSection />
-          )}
+          <AuthSection />
         </NavbarItem>
         {/* <NavbarItem className="hidden  lg:flex">{searchInput}</NavbarItem> */}
         {/* <NavbarItem className="hidden md:flex">
@@ -141,11 +126,7 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link> */}
         <ThemeSwitch />
-        {loading ? (
-          <CircularProgress aria-label="Loading..." />
-        ) : (
-          <AuthSection />
-        )}
+        <AuthSection />
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -167,7 +148,9 @@ export const Navbar = () => {
             .map((item, index) => (
               <NavbarMenuItem key={`${item}-${index}`}>
                 <Link
-                  color={pathname === item.href ? "primary" : "foreground"}
+                  color={
+                    pathname.includes(item.href) ? "primary" : "foreground"
+                  }
                   href={item.href}
                   size="lg"
                 >

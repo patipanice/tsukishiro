@@ -11,7 +11,7 @@ export const getQuotes = async () => {
       }
     );
     if (res.status !== 200) {
-      throw new Error("Failed to fetch data");
+      throw new Error("Failed to fetch Quotes data");
     }
     return res.json();
   };

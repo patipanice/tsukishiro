@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
@@ -67,11 +66,11 @@ export default function Page({ params }: { params: { slug: string } }) {
       const docRef = doc(db, "inbox", params.slug);
       await updateDoc(docRef, { status });
       formik.setFieldValue("status", status);
-      alert('อัพเดทสำเร็จ')
+      alert("อัพเดทสำเร็จ");
       console.log("Document status updated to 'done'");
     } catch (error) {
       console.error("Error updating document status: ", error);
-      alert('อัพเดทไมสำเร็จ')
+      alert("อัพเดทไมสำเร็จ");
     }
   };
 

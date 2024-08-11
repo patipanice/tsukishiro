@@ -1,90 +1,149 @@
 "use client";
+
 import { Button } from "@nextui-org/button";
 import { Select, SelectItem } from "@nextui-org/select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import { addDoc } from "firebase/firestore";
 import AdviceForm, { colors } from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
 import { serverTimestamp } from "firebase/firestore";
-import { PostStatus } from "@/enums/post.enum";
-import { getCollectionRef } from "@/utils/filebase-util";
+import { PostStatus, PostType } from "@/enums/post.enum";
+import { getCollectionRef } from "@/utils/firebase-util";
 import BlockQuote from "@/components/block-quote";
 import { Link } from "@nextui-org/link";
 import { PinIcon } from "@/components/icons/PinIcon";
 import { useAuthContext } from "@/contexts/auth-context";
 import { collectionName } from "@/config/firebase";
 import { getQuotes } from "./action";
+import TopicForm from "@/components/form/topic-form";
+import { IAdviceForm, TopicFormValues } from "@/types";
+import { User as FirebaseUser } from "firebase/auth";
+import { BackIcon } from "@/components/icons/BackIcon";
 
-enum EMode {
-  "ADVICE" = "advice",
-  "FEEDBACK" = "feedback",
-  "SUGGESTION" = "suggestion",
-  "OTHER" = "other",
-  "TOPIC" = "topic",
+enum Step {
+  SELECT_TYPE = 1,
+  SELECTED_TYPE = 2,
+  SHOW_QUOTE = 3,
 }
 
 const modeOptions = [
   {
-    key: EMode.ADVICE,
+    key: PostType.ADVICE,
     label: "ขอคำปรึกษา",
     icon: <SadButRelievedFace />,
     disabled: false,
   },
   {
-    key: EMode.TOPIC,
+    key: PostType.TOPIC,
     label: "อยากให้พูดคุยในหัวข้อ",
     icon: <Topic />,
-    disabled: true,
+    disabled: false,
   },
 ];
 
+const getFormInitialValues = (postType: PostType | null) => {
+  if (!postType) return {};
+  let values = {};
+  switch (postType) {
+    case PostType.ADVICE:
+      values = {
+        message: "",
+        feeling: 1,
+        period: "",
+        age: "",
+        name: "",
+        gender: undefined,
+        isPublish: true,
+        postColor: colors[0],
+      };
+    case PostType.TOPIC:
+      values = {
+        message: "",
+        age: "",
+        name: "",
+        gender: undefined,
+        isPublish: true,
+        postColor: colors[0],
+      };
+  }
+
+  return values;
+};
+
+const submitAdviceForm = async (
+  values: IAdviceForm,
+  user: FirebaseUser | null
+) => {
+  const docRef = getCollectionRef(collectionName.advice);
+  const res = await addDoc(docRef, {
+    ...values,
+    userId: user?.uid || "",
+    age: Number(values?.age),
+    gender: Number(values?.gender),
+    status: PostStatus.PENDING,
+    createdAt: serverTimestamp(),
+  });
+  if (!res.id) {
+    throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
+  }
+  const responseGetQuotes = await getQuotes();
+  return {
+    postId: res.id,
+    quote: responseGetQuotes?.length > 0 ? responseGetQuotes[0] : "", // todo: default quotes
+  };
+};
+
+const submitTopicForm = async (
+  values: TopicFormValues,
+  user: FirebaseUser | null
+) => {
+  const docRef = getCollectionRef(collectionName.topic);
+  const res = await addDoc(docRef, {
+    ...values,
+    userId: user?.uid || "",
+    age: Number(values?.age),
+    gender: Number(values?.gender),
+    status: PostStatus.PENDING,
+    createdAt: serverTimestamp(),
+    postType: PostType.TOPIC,
+  });
+  if (!res.id) {
+    throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
+  }
+  const responseGetQuotes = await getQuotes();
+  return {
+    postId: res.id,
+    quote: responseGetQuotes?.length > 0 ? responseGetQuotes[0] : "", // todo: default quotes
+  };
+};
+
 export default function Home() {
   const { user } = useAuthContext();
-  const [mode, setMode] = useState<any | undefined>(undefined);
-  const [step, setStep] = useState<number>(1);
+  const [postType, setPostType] = useState<PostType | null>(null);
+  const [step, setStep] = useState<number>(Step.SELECT_TYPE);
   const [loading, setLoading] = useState<boolean>(false);
-  const [id, setId] = useState<string | undefined>(undefined);
+  const [postId, setPostId] = useState<string | undefined>(undefined);
   const [quote, setQuote] = useState<any | undefined>(undefined);
 
-  const increaseStep = () => {
-    setStep(step + 1);
-  };
-
   const formik = useFormik({
-    initialValues: {
-      message: "",
-      feeling: 1,
-      period: "",
-      age: "",
-      name: "",
-      gender: undefined,
-      isPublish: true,
-      postColor: colors[0],
-    },
+    initialValues: getFormInitialValues(postType),
+    enableReinitialize: true,
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        const docRef = getCollectionRef(collectionName.advice);
-        const res = await addDoc(docRef, {
-          ...values,
-          userId: user?.uid || "", // if user is auth send userId : send empty string
-          age: Number(values.age),
-          gender: Number(values.gender),
-          status: PostStatus.PENDING,
-          createdAt: serverTimestamp(),
-        });
-        if (res.id) {
-          setId(res.id);
-          const responseGetQuotes = await getQuotes();
-          if (responseGetQuotes.length > 0) {
-            setQuote(responseGetQuotes[0]);
-            setLoading(false);
-            increaseStep();
-            formik.resetForm();
-          }
-        }
+
+        const { postId, quote } =
+          postType === PostType.ADVICE
+            ? await submitAdviceForm(values as IAdviceForm, user)
+            : await submitTopicForm(values as TopicFormValues, user);
+        setPostId(postId);
+        setQuote(quote);
+
+        setLoading(false);
+        formik.resetForm();
+        setStep(Step.SHOW_QUOTE);
       } catch (error: any) {
         alert(String(error?.message));
         console.error("Error adding document: ", error);
@@ -93,13 +152,13 @@ export default function Home() {
   });
 
   return (
-    <section className="flex flex-col items-center justify-items-center  justify-center text-left h-full -mt-[40px] gap-y-5">
-      {step === 1 && (
+    <section className="flex flex-col items-center justify-items-center justify-center text-left h-full -mt-[35px] gap-y-5">
+      {step === Step.SELECT_TYPE && (
         <div className="flex flex-col items-center justify-items-center gap-y-5 w-full">
           <Select
             label="คุณต้องการ"
             className="max-w-xl"
-            onChange={(e) => setMode(e.target.value)}
+            onChange={(e) => setPostType(e.target.value as PostType | null)}
           >
             {modeOptions.map((option) => (
               <SelectItem
@@ -114,8 +173,8 @@ export default function Home() {
           <Button
             color="primary"
             className="w-full max-w-xl "
-            onClick={() => increaseStep()}
-            isDisabled={!mode}
+            onClick={() => setStep(Step.SELECTED_TYPE)}
+            isDisabled={!postType}
             variant="light"
             endContent={
               <svg
@@ -135,20 +194,42 @@ export default function Home() {
           </Button>
         </div>
       )}
-      {step === 2 && <AdviceForm formik={formik} isLoadingSubmit={loading} />}
-      {step === 3 && id !== undefined && quote !== undefined && (
-        <div className="flex flex-col w-full gap-y-14">
-          <BlockQuote quote={quote.quote} author={quote.author} id={id} />
-          <div className="">
-            <Link href="/board-advice">
-              <p className="text-sm text-secondary-500 flex gap-2 items-center">
-                <PinIcon />
-                ไปดูบอร์ด
-              </p>
-            </Link>
-          </div>
-        </div>
+      {step === Step.SELECTED_TYPE && (
+        <Button
+          variant="light"
+          startContent={<BackIcon />}
+          className="self-start text-primary-500"
+          onClick={() => {
+            setStep(Step.SELECT_TYPE);
+          }}
+          size="lg"
+        >
+          กลับ
+        </Button>
       )}
+      {step === Step.SELECTED_TYPE &&
+        (postType === PostType.ADVICE ? (
+          <AdviceForm formik={formik} isLoadingSubmit={loading} />
+        ) : postType === PostType.TOPIC ? (
+          <TopicForm formik={formik} isLoadingSubmit={loading} />
+        ) : (
+          ""
+        ))}
+      {step === Step.SHOW_QUOTE &&
+        postId !== undefined &&
+        quote !== undefined && (
+          <div className="flex flex-col w-full gap-y-14">
+            <BlockQuote quote={quote.quote} author={quote.author} id={postId} />
+            <div className="">
+              <Link href="/board-advice">
+                <p className="text-sm text-secondary-500 flex gap-2 items-center">
+                  <PinIcon />
+                  ไปดูบอร์ด
+                </p>
+              </Link>
+            </div>
+          </div>
+        )}
     </section>
   );
 }

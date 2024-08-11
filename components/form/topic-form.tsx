@@ -6,6 +6,7 @@ import { Slider } from "@nextui-org/slider";
 
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
+import { FormikProps } from "formik";
 
 export const colors = [
   "#FF6F61", // Coral
@@ -66,117 +67,30 @@ const genderOptions = [
   },
 ];
 
-const markValues = [
-  {
-    value: 1,
-    label: "1",
-  },
-  {
-    value: 2,
-    label: "2",
-  },
-  {
-    value: 3,
-    label: "3",
-  },
-  {
-    value: 4,
-    label: "4",
-  },
-  {
-    value: 5,
-    label: "5",
-  },
-];
-
-interface IAdviceFormProps {
-  formik: any;
+interface ITopicFormProps {
+  formik: FormikProps<any>;
   isDetailPage?: boolean;
   isLoadingSubmit?: boolean;
 }
-const AdviceForm: React.FC<IAdviceFormProps> = ({
+const TopicForm: React.FC<ITopicFormProps> = ({
   formik,
   isDetailPage = false,
   isLoadingSubmit = false,
 }) => {
   return (
-    <section className="flex flex-col gap-6 w-full pb-5">
-      {!isDetailPage && <h1 className="text-lg text-sky-700">ขอคำปรึกษา</h1>}
-      <Textarea
+    <section className="flex flex-col gap-6 w-full py-6">
+      {!isDetailPage && (
+        <h1 className="text-lg text-sky-700">เสนอหัวข้อที่ต้องการให้พูดคุย</h1>
+      )}
+      <Input
         isRequired
-        label="ปัญหาที่ต้องการปรึกษา"
-        placeholder="อธิบายปัญหาที่ต้องการปรึกษา จะพิมพ์ยาวแค่ไหนก็ได้เลยย :)"
+        label="ระบุหัวข้อที่ต้องการให้พูดคุย"
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
         isDisabled={isDetailPage}
       />
-      <Slider
-        color="success"
-        label="ความรู้สึกที่มีต่อปัญหานี้"
-        showTooltip={true}
-        hideValue={true}
-        step={1}
-        value={formik.values.feeling}
-        formatOptions={{ style: "decimal" }}
-        maxValue={5}
-        minValue={1}
-        isDisabled={isDetailPage}
-        classNames={{
-          base: "max-w-md gap-3",
-          track: "border-s-green-100",
-          filler: "bg-gradient-to-r from-green-100 to-green-500",
-        }}
-        startContent={
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill="currentColor"
-              fillRule="evenodd"
-              d="M13.5 8a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0M6.67 9.665a.75.75 0 0 0-1.34.67c.403.809 1.452 1.415 2.67 1.415s2.267-.606 2.67-1.415a.75.75 0 1 0-1.34-.67c-.097.191-.548.585-1.33.585s-1.233-.394-1.33-.585M10 8a.75.75 0 0 1-.75-.75v-1a.75.75 0 0 1 1.5 0v1A.75.75 0 0 1 10 8m-4.75-.75a.75.75 0 0 0 1.5 0v-1a.75.75 0 0 0-1.5 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        }
-        endContent={
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill="currentColor"
-              fillRule="evenodd"
-              d="M13.5 8a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0m-5.67 2.835a.75.75 0 1 0 1.34-.67C10.268 9.356 9.219 8.75 8 8.75s-2.267.606-2.67 1.415a.75.75 0 1 0 1.34.67c.097-.191.548-.585 1.33-.585s1.233.394 1.33.585M10 8a.75.75 0 0 1-.75-.75v-1a.75.75 0 0 1 1.5 0v1A.75.75 0 0 1 10 8m-4.75-.75a.75.75 0 0 0 1.5 0v-1a.75.75 0 0 0-1.5 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        }
-        marks={markValues}
-        defaultValue={0}
-        className="max-w-md"
-        onChange={(value) => formik.setFieldValue("feeling", value)}
-      />
-      <p className="text-sm text-gray-500">
-        <span>1 = เฉยๆคิดว่าไม่กังวลมาก</span> <br /> 2 = มีความกังวลเล็กน้อย
-        <br /> 3 = กังวลและคิดถึงมันบ่อย <br /> 4 =
-        มีความเครียดมาเป็นระยะเวลาหนึ่ง
-        <br /> 5 = มีความเครียดกับปัญหาและกระทบกับสุขภาพจิต
-      </p>
-      <Input
-        label="ระยะเวลาที่เกิดปัญหา"
-        placeholder="ใส่ระยะเวลาที่เกิดปัญหา ถ้าไม่แน่ใจไม่ต้องกรอก"
-        type="text"
-        name="period"
-        onChange={formik.handleChange}
-        value={formik.values.period}
-        isDisabled={isDetailPage}
-      />
+
       <Input
         label="คุณคือใคร"
         placeholder="ถ้าไม่ต้องการระบุชื่อข้ามไปได้เลย"
@@ -213,18 +127,16 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           ))}
         </Select>
       </div>
-      <div className="space-y-2">
-        <p>เลือกสีโพส</p>
-        {!isDetailPage && (
+      {!isDetailPage && (
+        <div className="space-y-2">
+          <p>เลือกสีของโพส</p>
           <CirclePicker
             colors={colors}
             color={formik.values.postColor}
-            onChange={(color) => {
-              if (!isDetailPage) formik.setFieldValue("postColor", color.hex);
-            }}
+            onChange={(color) => formik.setFieldValue("postColor", color.hex)}
           />
-        )}
-      </div>
+        </div>
+      )}
       <PostItCard
         item={{
           id: "id",
@@ -248,7 +160,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         <Button
           color="primary"
           className="w-full max-w-md mt-5"
-          onClick={formik.handleSubmit}
+          onPress={() => formik.handleSubmit()}
           isDisabled={!formik.isValid || formik.values.message === ""}
           isLoading={isLoadingSubmit}
           startContent={
@@ -265,11 +177,11 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
             </svg>
           }
         >
-          ติดปัญหาลงบอร์ด
+          ติดหัวข้อลงในบอร์ด
         </Button>
       )}
     </section>
   );
 };
 
-export default AdviceForm;
+export default TopicForm;

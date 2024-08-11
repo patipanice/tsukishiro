@@ -64,7 +64,7 @@ const PostItCard: React.FC<IPostItCardProps> = ({
       }}
     >
       <CardHeader className="flex gap-3">
-       {isYourPost &&  <PinIcon/>}
+       {/* {isYourPost &&  <PinIcon/>} */}
       </CardHeader>
       <CardBody className="p-3 text-sm text-default-500 h-[150px]">
         <p className="font-light text-gray-800 dark:text-white line-clamp-8">

@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  CircularProgress,
 } from "@nextui-org/react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,7 +14,12 @@ import { useAuthContext } from "@/contexts/auth-context";
 
 const AuthSection = () => {
   const pathname = usePathname();
-  const { user, logout } = useAuthContext();
+  const { user, logout, loading } = useAuthContext();
+
+  if (loading) {
+    return <CircularProgress aria-label="Loading..." />;
+  }
+
   return (
     <div>
       {user ? (
@@ -27,7 +33,9 @@ const AuthSection = () => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
             <DropdownItem key="profile">โปรไฟล์</DropdownItem>
-            <DropdownItem key="my-board"><NextLink href="/my-board">บอร์ดของฉัน</NextLink></DropdownItem>
+            <DropdownItem key="my-board">
+              <NextLink href="/my-board">บอร์ดของฉัน</NextLink>
+            </DropdownItem>
             <DropdownItem
               key="logout"
               className="text-danger"

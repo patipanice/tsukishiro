@@ -1,21 +1,28 @@
-import { PostStatus } from "@/enums/post.enum";
+import { PostStatus, PostType } from "@/enums/post.enum";
 import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export interface IAdviceForm {
-  id: string;
+export interface BasicInformationFormValues {
+  message: string;
   name: string;
   age: number;
-  message: string;
   gender: number;
-  feeling: number;
-  period: number;
-  status: PostStatus
+  status: PostStatus;
   isPublish: boolean;
   createdAt: Date;
-  postColor: string
-  userId?: string
+  postColor: string;
+  userId?: string;
+}
+
+export interface IAdviceForm extends BasicInformationFormValues {
+  id: string;
+  feeling: number;
+  period: number;
+}
+
+export interface TopicFormValues extends BasicInformationFormValues {
+  postType: PostType.TOPIC;
 }
