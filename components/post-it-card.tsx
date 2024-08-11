@@ -52,7 +52,7 @@ const PostItCard: React.FC<IPostItCardProps> = ({
 }) => {
   return (
     <Card
-      className="w-full cursor-pointer"
+      className={`w-full cursor-pointer`}
       isPressable
       key={item.id}
       style={{
@@ -63,9 +63,7 @@ const PostItCard: React.FC<IPostItCardProps> = ({
         onClickCardItemHandler(item.id);
       }}
     >
-      <CardHeader className="flex gap-3">
-       {/* {isYourPost &&  <PinIcon/>} */}
-      </CardHeader>
+      <CardHeader className="">{/* {isYourPost &&  <PinIcon/>} */}</CardHeader>
       <CardBody className="p-3 text-sm text-default-500 h-[150px]">
         <p className="font-light text-gray-800 dark:text-white line-clamp-8">
           {item.message}

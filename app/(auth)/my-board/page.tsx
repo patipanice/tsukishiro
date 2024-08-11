@@ -166,6 +166,7 @@ export default function BoardPage() {
         />
         <PostStatusSelect
           isFilter
+          type={filterValue.type}
           value={filterValue.status}
           onChange={(status) => {
             setFilterValue((prev) => ({

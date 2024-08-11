@@ -54,6 +54,7 @@ export default function BoardPostDetail({
           formik.setFieldValue("status", data?.status || PostStatus.PENDING);
           formik.setFieldValue("createdAt", data?.createdAt);
           formik.setFieldValue("userId", data?.userId);
+          formik.setFieldValue("postColor", data?.postColor)
 
           setLoading(false);
         }
@@ -146,7 +147,7 @@ export default function BoardPostDetail({
   return (
     <section className="w-full flex flex-col justify-center text-left -mt-[40px] gap-y-5 space-y-3">
       <Breadcrumbs>
-        <BreadcrumbItem href="/board-advice">
+        <BreadcrumbItem href={getCurrentBoardPathnameByType(type)}>
           {type === PostType.ADVICE ? "บอร์ดปัญหา" : "บอร์ดหัวข้อ"}
         </BreadcrumbItem>
         <BreadcrumbItem>รายละเอียดโพส</BreadcrumbItem>
@@ -208,6 +209,7 @@ export default function BoardPostDetail({
             <PostStatusSelect
               value={formik.values.status as PostStatus}
               onChange={updateStatusHandler}
+              type={type}
             />
           )}
         </div>
@@ -215,8 +217,6 @@ export default function BoardPostDetail({
       <Divider />
       {type === PostType.ADVICE && <AdviceForm isDetailPage formik={formik} />}
       {type === PostType.TOPIC && <TopicForm isDetailPage formik={formik} />}
-
-      
     </section>
   );
 }

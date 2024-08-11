@@ -56,8 +56,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
       password: "",
     },
     async onSubmit(values) {
-      console.log(values);
-      console.log(authMode);
       const { email, password } = values;
       if (authMode === AuthMode.SIGN_IN) {
         login(email, password);

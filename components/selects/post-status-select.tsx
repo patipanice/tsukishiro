@@ -1,31 +1,38 @@
 "use client";
 import React from "react";
 import { Select, SelectItem } from "@nextui-org/select";
-import { PostStatus } from "@/enums/post.enum";
+import { PostStatus, PostType } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
 
-const postStatusOptions = [
-  {
-    key: PostStatus.PENDING,
-    label: "ยังไม่ได้ให้คำปรึกษา",
-    icon: <HourglassDone />,
-  },
-  {
-    key: PostStatus.DONE,
-    label: "ให้คำปรึกษาแล้ว",
-    icon: <Topic />,
-  },
-];
+const getPostStatusOptions = (type: PostType) => {
+  const postStatusOptions = [
+    {
+      key: PostStatus.PENDING,
+      label:
+        type === PostType.ADVICE ? "ยังไม่ได้ให้คำปรึกษา" : "ยังไม่ได้พูดคุย",
+      icon: <HourglassDone />,
+    },
+    {
+      key: PostStatus.DONE,
+      label: type === PostType.ADVICE ? "ให้คำปรึกษาแล้ว" : "ได้พูดคุยแล้ว",
+      icon: <Topic />,
+    },
+  ];
+
+  return postStatusOptions;
+};
 
 interface IPostStatusSelectProps {
   value?: PostStatus;
+  type: PostType
   onChange: (value: PostStatus) => void;
   isFilter?: boolean;
 }
 
 const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
   value,
+  type,
   onChange,
   isFilter = false,
 }) => {
@@ -44,7 +51,7 @@ const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
         }
       }}
     >
-      {postStatusOptions.map((option) => (
+      {getPostStatusOptions(type).map((option) => (
         <SelectItem key={option.key} selectedIcon={option.icon}>
           {option.label}
         </SelectItem>

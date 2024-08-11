@@ -68,6 +68,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/");
     } catch (error: any) {
+      alert(String(error?.message));
       console.error("Login failed:", error.message);
     }
   };

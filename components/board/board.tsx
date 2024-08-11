@@ -148,6 +148,7 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
         />
         <PostStatusSelect
           isFilter
+          type={type}
           value={filterValue.status}
           onChange={(status) => {
             setFilterValue((prev) => ({

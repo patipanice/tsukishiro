@@ -36,7 +36,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
         placeholder={
           authMode === AuthMode.SIGN_UP
             ? "กรุณากรอกอีเมลให้ถูกต้อง ex. email@email.com"
-            : ""
+            : "กรุณากรอกอีเมล"
         }
       />
       <Input
