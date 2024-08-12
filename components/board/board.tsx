@@ -94,7 +94,7 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
   const [filterValue, setFilterValue] = useState<IFilterValue>({
     search: undefined,
     status: undefined,
-    orderBy: OrderBy.ASCENDING,
+    orderBy: OrderBy.DESCENDING,
     isPublish: PostPublishStatus.PUBLISH,
   });
 
