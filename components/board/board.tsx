@@ -2,20 +2,27 @@
 
 import { Button, Input, Kbd, Spinner } from "@nextui-org/react";
 import { useState, useEffect, useMemo } from "react";
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "@/components/icons";
 import PostStatusSelect from "@/components/selects/post-status-select";
-import { PostPublishStatus, PostStatus, PostType } from "@/enums/post.enum";
+import {
+  OrderBy,
+  PostPublishStatus,
+  PostStatus,
+  PostType,
+} from "@/enums/post.enum";
 import PostPublishSelect from "@/components/selects/post-publish-select";
 import { Role, useAuthContext } from "@/contexts/auth-context";
 import { getCollectionRef } from "@/utils/firebase-util";
 import { getCollectionNameByPostType } from "@/utils";
 import BoardPosts from "./board-posts";
+import PostSortingDate from "../selects/post-sorting-date-select";
 
 interface IFilterValue {
   search?: string;
   status?: PostStatus;
+  orderBy: OrderBy;
   isPublish?: PostPublishStatus;
 }
 
@@ -39,6 +46,7 @@ export const getCurrentBoardPathnameByType = (type: PostType) => {
 };
 
 const fetchPost = async (type: PostType, filterValue: IFilterValue) => {
+  console.log(filterValue);
   let queryRef = query(getCollectionRef(getCollectionNameByPostType(type)));
 
   if (filterValue.status) {
@@ -54,6 +62,10 @@ const fetchPost = async (type: PostType, filterValue: IFilterValue) => {
         filterValue.isPublish === PostPublishStatus.PUBLISH ? true : false
       )
     );
+  }
+
+  if (filterValue.orderBy) {
+    queryRef = query(queryRef, orderBy("createdAt", filterValue.orderBy));
   }
 
   // Fetch the documents
@@ -82,6 +94,7 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
   const [filterValue, setFilterValue] = useState<IFilterValue>({
     search: undefined,
     status: undefined,
+    orderBy: OrderBy.ASCENDING,
     isPublish: PostPublishStatus.PUBLISH,
   });
 
@@ -100,7 +113,13 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
     };
 
     loadPosts();
-  }, [filterValue.search, filterValue.status, filterValue.isPublish, type]);
+  }, [
+    filterValue.search,
+    filterValue.status,
+    filterValue.isPublish,
+    filterValue.orderBy,
+    type,
+  ]);
 
   const onClickCardItemHandler = (id: string) => {
     router.push(getCurrentBoardPathnameByType(type) + "/" + id);
@@ -154,6 +173,15 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
             setFilterValue((prev) => ({
               ...prev,
               status,
+            }));
+          }}
+        />
+        <PostSortingDate
+          value={filterValue.orderBy}
+          onChange={(value) => {
+            setFilterValue((prev) => ({
+              ...prev,
+              orderBy: value,
             }));
           }}
         />

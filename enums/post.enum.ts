@@ -14,4 +14,9 @@ enum PostType {
   QA = "QA",
 }
 
-export { PostStatus, PostPublishStatus, PostType };
+enum OrderBy {
+  ASCENDING = "asc",
+  DESCENDING = "desc",
+}
+
+export { PostStatus, PostPublishStatus, PostType,OrderBy };

@@ -44,7 +44,6 @@ export default function BoardPostDetail({
             formik.setFieldValue("feeling", data?.feeling);
             formik.setFieldValue("period", data?.period);
           }
-
           //?basic information
           formik.setFieldValue("message", data?.message);
           formik.setFieldValue("age", String(data?.age));
