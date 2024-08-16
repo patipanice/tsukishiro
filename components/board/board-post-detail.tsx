@@ -80,17 +80,17 @@ export default function BoardPostDetail({
   };
 
   //?? Temporary function for add userId to post
-  const updateIsMyPost = async () => {
-    try {
-      const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
-      await updateDoc(docRef, { userId: user?.uid });
-      alert("เพิ่มสำเร็จ");
-      console.log("Document status updated to 'done'");
-    } catch (error) {
-      console.error("Error updating document status: ", error);
-      alert("อัพเดทไมสำเร็จ");
-    }
-  };
+  // const updateIsMyPost = async () => {
+  //   try {
+  //     const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
+  //     await updateDoc(docRef, { userId: user?.uid });
+  //     alert("เพิ่มสำเร็จ");
+  //     console.log("Document status updated to 'done'");
+  //   } catch (error) {
+  //     console.error("Error updating document status: ", error);
+  //     alert("อัพเดทไมสำเร็จ");
+  //   }
+  // };
 
   async function deleteDocument(id: string) {
     try {
@@ -177,7 +177,7 @@ export default function BoardPostDetail({
                 : null}
             </p>
           </div>
-          {user && (formik.values.userId === "" || !formik.values.userId) && (
+          {/* {user && (formik.values.userId === "" || !formik.values.userId) && (
             <div>
               <Button
                 onClick={updateIsMyPost}
@@ -191,7 +191,7 @@ export default function BoardPostDetail({
                 และจะไปแสดงที่หน้าบอร์ดของฉัน)
               </p>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center gap-2 ">
