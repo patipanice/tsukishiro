@@ -70,13 +70,17 @@ const genderOptions = [
 interface ITopicFormProps {
   formik: FormikProps<any>;
   isDetailPage?: boolean;
+  canEditPost?: boolean
   isLoadingSubmit?: boolean;
 }
 const TopicForm: React.FC<ITopicFormProps> = ({
   formik,
   isDetailPage = false,
+  canEditPost = false,
   isLoadingSubmit = false,
 }) => {
+  const isDisabled = isDetailPage && !canEditPost
+
   return (
     <section className="flex flex-col gap-6 w-full py-6">
       {!isDetailPage && (
@@ -88,7 +92,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
       />
 
       <Input
@@ -98,7 +102,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
         name="name"
         onChange={formik.handleChange}
         value={formik.values.name}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
         maxLength={20}
       />
       <div className="flex gap-4">
@@ -107,7 +111,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("age", e.target.value)}
           selectedKeys={[formik.values.age]}
-          isDisabled={isDetailPage}
+          isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
           {ageOptions.map((option) => (
@@ -119,7 +123,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("gender", e.target.value)}
           selectedKeys={[formik.values.gender]}
-          isDisabled={isDetailPage}
+          isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
           {genderOptions.map((option) => (
@@ -127,7 +131,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
           ))}
         </Select>
       </div>
-      {!isDetailPage && (
+      {!isDisabled && (
         <div className="space-y-2">
           <p>เลือกสีของโพส</p>
           <CirclePicker
@@ -152,11 +156,11 @@ const TopicForm: React.FC<ITopicFormProps> = ({
       <Checkbox
         isSelected={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
       >
         <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
       </Checkbox>
-      {!isDetailPage && (
+      {!isDisabled && (
         <Button
           color="primary"
           className="w-full max-w-md mt-5"
@@ -177,7 +181,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
             </svg>
           }
         >
-          ติดหัวข้อลงในบอร์ด
+          {isDisabled ? 'ติดหัวข้อลงในบอร์ด' : 'แก้ไข'}
         </Button>
       )}
     </section>

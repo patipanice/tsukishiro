@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { usePathname, useRouter } from "next/navigation";
-import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import AdviceForm from "@/components/form/advice-form";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs";
 import { PostStatus, PostType } from "@/enums/post.enum";
@@ -29,6 +35,9 @@ export default function BoardPostDetail({
   const router = useRouter();
   const { user, role } = useAuthContext();
   const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<IAdviceForm | null>(null);
+
+  const isUserPost = role === Role.MEMBER && user && user?.uid === data?.userId;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +47,9 @@ export default function BoardPostDetail({
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          console.log(data);
-
           if (type === PostType.ADVICE) {
-            formik.setFieldValue("feeling", data?.feeling);
-            formik.setFieldValue("period", data?.period);
+            formik.setFieldValue("feeling", data?.feeling || 1);
+            formik.setFieldValue("period", data?.period || "");
           }
           //?basic information
           formik.setFieldValue("message", data?.message);
@@ -52,9 +59,10 @@ export default function BoardPostDetail({
           formik.setFieldValue("isPublish", data?.isPublish);
           formik.setFieldValue("status", data?.status || PostStatus.PENDING);
           formik.setFieldValue("createdAt", data?.createdAt);
+          formik.setFieldValue("updatedAt", data?.updatedAt);
           formik.setFieldValue("userId", data?.userId);
-          formik.setFieldValue("postColor", data?.postColor)
-
+          formik.setFieldValue("postColor", data?.postColor);
+          setData(data as IAdviceForm);
           setLoading(false);
         }
       } catch (error: any) {
@@ -72,6 +80,37 @@ export default function BoardPostDetail({
       await updateDoc(docRef, { status });
       formik.setFieldValue("status", status);
       alert("อัพเดทสำเร็จ");
+      console.log("Document status updated to 'done'");
+    } catch (error) {
+      console.error("Error updating document status: ", error);
+      alert("อัพเดทไมสำเร็จ");
+    }
+  };
+
+  const updatePostHandler = async (values: IAdviceForm) => {
+    try {
+      let formValues: any = {
+        message: values.message,
+        name: values.name,
+        age: values?.age,
+        gender: values?.gender,
+        isPublish: values.isPublish,
+        postColor: values.postColor,
+        updatedAt: serverTimestamp(),
+      };
+
+      if (type === PostType.ADVICE) {
+        formValues = {
+          ...formValues,
+          feeling: values.feeling,
+          period: values.period,
+        };
+      }
+
+      const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
+      await updateDoc(docRef, formValues);
+      alert("อัพเดทสำเร็จ");
+      router.refresh()
       console.log("Document status updated to 'done'");
     } catch (error) {
       console.error("Error updating document status: ", error);
@@ -119,6 +158,11 @@ export default function BoardPostDetail({
     }
   };
 
+  const canDeletePost = role === Role.SUPER_ADMIN || isUserPost;
+  const canEditPost =
+    (isUserPost && data?.status === PostStatus.PENDING) ||
+    role === Role.SUPER_ADMIN;
+
   const formik = useFormik<IAdviceForm>({
     initialValues: {
       id: "",
@@ -134,13 +178,12 @@ export default function BoardPostDetail({
       postColor: "",
       userId: undefined,
     },
-    onSubmit: async () => {},
+    onSubmit: async (values) => {
+      if (canEditPost) {
+        updatePostHandler(values);
+      }
+    },
   });
-
-  const canDeletePost =
-    role === Role.SUPER_ADMIN ||
-    (role === Role.MEMBER && user && user?.uid === formik.values.userId);
-
   if (loading) return <Spinner />;
 
   return (
@@ -174,6 +217,12 @@ export default function BoardPostDetail({
               วันที่โพส :{" "}
               {formik.values.createdAt
                 ? formattedDate(formik.values.createdAt)
+                : null}
+            </p>
+            <p className="text-xs">
+              วันที่อัพเดท :{" "}
+              {formik.values.updatedAt
+                ? formattedDate(formik.values.updatedAt)
                 : null}
             </p>
           </div>
@@ -214,8 +263,12 @@ export default function BoardPostDetail({
         </div>
       </div>
       <Divider />
-      {type === PostType.ADVICE && <AdviceForm isDetailPage formik={formik} />}
-      {type === PostType.TOPIC && <TopicForm isDetailPage formik={formik} />}
+      {type === PostType.ADVICE && (
+        <AdviceForm isDetailPage formik={formik} canEditPost={canEditPost} />
+      )}
+      {type === PostType.TOPIC && (
+        <TopicForm isDetailPage formik={formik} canEditPost={canEditPost} />
+      )}
     </section>
   );
 }

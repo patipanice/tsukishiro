@@ -58,6 +58,7 @@ const getFormInitialValues = (postType: PostType | null) => {
         isPublish: true,
         postColor: colors[0],
       };
+      break;
     case PostType.TOPIC:
       values = {
         message: "",
@@ -67,6 +68,7 @@ const getFormInitialValues = (postType: PostType | null) => {
         isPublish: true,
         postColor: colors[0],
       };
+      break;
   }
 
   return values;
@@ -83,7 +85,9 @@ const submitAdviceForm = async (
     age: Number(values?.age),
     gender: Number(values?.gender),
     status: PostStatus.PENDING,
+    postType: PostType.ADVICE,
     createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
   if (!res.id) {
     throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
@@ -106,8 +110,9 @@ const submitTopicForm = async (
     age: Number(values?.age),
     gender: Number(values?.gender),
     status: PostStatus.PENDING,
-    createdAt: serverTimestamp(),
     postType: PostType.TOPIC,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
   if (!res.id) {
     throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
@@ -133,7 +138,6 @@ export default function Home() {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-
         const { postId, quote } =
           postType === PostType.ADVICE
             ? await submitAdviceForm(values as IAdviceForm, user)

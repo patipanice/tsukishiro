@@ -12,9 +12,10 @@ export interface BasicInformationFormValues {
   gender: number;
   status: PostStatus;
   isPublish: boolean;
-  createdAt: Date;
   postColor: string;
   userId?: string;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
 export interface IAdviceForm extends BasicInformationFormValues {

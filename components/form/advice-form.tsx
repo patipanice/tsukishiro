@@ -92,13 +92,18 @@ const markValues = [
 interface IAdviceFormProps {
   formik: any;
   isDetailPage?: boolean;
+  canEditPost?: boolean
   isLoadingSubmit?: boolean;
 }
 const AdviceForm: React.FC<IAdviceFormProps> = ({
   formik,
   isDetailPage = false,
   isLoadingSubmit = false,
+  canEditPost = false
 }) => {
+
+  const isDisabled = isDetailPage && !canEditPost
+
   return (
     <section className="flex flex-col gap-6 w-full pb-5">
       {!isDetailPage && <h1 className="text-lg text-sky-700">ขอคำปรึกษา</h1>}
@@ -109,7 +114,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
       />
       <Slider
         color="success"
@@ -121,7 +126,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         formatOptions={{ style: "decimal" }}
         maxValue={5}
         minValue={1}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
         classNames={{
           base: "max-w-md gap-3",
           track: "border-s-green-100",
@@ -175,7 +180,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="period"
         onChange={formik.handleChange}
         value={formik.values.period}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
       />
       <Input
         label="คุณคือใคร"
@@ -184,7 +189,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="name"
         onChange={formik.handleChange}
         value={formik.values.name}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
         maxLength={20}
       />
       <div className="flex gap-4">
@@ -193,7 +198,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("age", e.target.value)}
           selectedKeys={[formik.values.age]}
-          isDisabled={isDetailPage}
+          isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
           {ageOptions.map((option) => (
@@ -205,7 +210,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           className="max-w-sm"
           onChange={(e) => formik.setFieldValue("gender", e.target.value)}
           selectedKeys={[formik.values.gender]}
-          isDisabled={isDetailPage}
+          isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
           {genderOptions.map((option) => (
@@ -215,12 +220,12 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
       </div>
       <div className="space-y-2">
         <p>เลือกสีโพส</p>
-        {!isDetailPage && (
+        {!isDisabled && (
           <CirclePicker
             colors={colors}
             color={formik.values.postColor}
             onChange={(color) => {
-              if (!isDetailPage) formik.setFieldValue("postColor", color.hex);
+              if (!isDisabled) formik.setFieldValue("postColor", color.hex);
             }}
           />
         )}
@@ -240,11 +245,11 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
       <Checkbox
         isSelected={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
-        isDisabled={isDetailPage}
+        isDisabled={isDisabled}
       >
         <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
       </Checkbox>
-      {!isDetailPage && (
+      {!isDisabled && (
         <Button
           color="primary"
           className="w-full max-w-md mt-5"
@@ -265,7 +270,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
             </svg>
           }
         >
-          ติดปัญหาลงบอร์ด
+          {isDisabled ? 'ติดปัญหาลงบอร์ด' : 'แก้ไข'}
         </Button>
       )}
     </section>
