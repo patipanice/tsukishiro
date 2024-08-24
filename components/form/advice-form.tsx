@@ -92,17 +92,16 @@ const markValues = [
 interface IAdviceFormProps {
   formik: any;
   isDetailPage?: boolean;
-  canEditPost?: boolean
+  canEditPost?: boolean;
   isLoadingSubmit?: boolean;
 }
 const AdviceForm: React.FC<IAdviceFormProps> = ({
   formik,
   isDetailPage = false,
   isLoadingSubmit = false,
-  canEditPost = false
+  canEditPost = false,
 }) => {
-
-  const isDisabled = isDetailPage && !canEditPost
+  const isDisabled = isDetailPage && !canEditPost;
 
   return (
     <section className="flex flex-col gap-6 w-full pb-5">
@@ -270,7 +269,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
             </svg>
           }
         >
-          {isDisabled ? 'ติดปัญหาลงบอร์ด' : 'แก้ไข'}
+          {!canEditPost ? "ติดหัวข้อลงในบอร์ด" : "ยืนยันการแก้ไข"}
         </Button>
       )}
     </section>

@@ -181,7 +181,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
             </svg>
           }
         >
-          {isDisabled ? 'ติดหัวข้อลงในบอร์ด' : 'แก้ไข'}
+          {!canEditPost ? 'ติดหัวข้อลงในบอร์ด' : 'ยืนยันการแก้ไข'}
         </Button>
       )}
     </section>
