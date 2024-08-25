@@ -19,7 +19,7 @@ import { collectionName } from "@/config/firebase";
 import { getQuotes } from "./action";
 import TopicForm from "@/components/form/topic-form";
 import { IAdviceForm, TopicFormValues } from "@/types";
-import { User as FirebaseUser } from "firebase/auth";
+import { User as FirebaseUser, User } from "firebase/auth";
 import { BackIcon } from "@/components/icons/BackIcon";
 
 enum Step {
@@ -43,7 +43,7 @@ const modeOptions = [
   },
 ];
 
-const getFormInitialValues = (postType: PostType | null) => {
+const getFormInitialValues = (postType: PostType | null, user: User | null) => {
   if (!postType) return {};
   let values = {};
   switch (postType) {
@@ -53,7 +53,7 @@ const getFormInitialValues = (postType: PostType | null) => {
         feeling: 1,
         period: "",
         age: "",
-        name: "",
+        name: user?.displayName,
         gender: undefined,
         isPublish: true,
         postColor: colors[0],
@@ -63,7 +63,7 @@ const getFormInitialValues = (postType: PostType | null) => {
       values = {
         message: "",
         age: "",
-        name: "",
+        name: user?.displayName,
         gender: undefined,
         isPublish: true,
         postColor: colors[0],
@@ -133,7 +133,7 @@ export default function Home() {
   const [quote, setQuote] = useState<any | undefined>(undefined);
 
   const formik = useFormik({
-    initialValues: getFormInitialValues(postType),
+    initialValues: getFormInitialValues(postType, user),
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {

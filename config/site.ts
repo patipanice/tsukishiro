@@ -16,11 +16,11 @@ export const siteConfig = {
       label: "บอร์ดหัวข้อ",
       href: "/board-topic",
     },
-    {
-      label: "บอร์ดของฉัน",
-      href: "/my-board",
-      isAuth: true,
-    },
+    // {
+    //   label: "บอร์ดของฉัน",
+    //   href: "/my-board",
+    //   isAuth: true,
+    // },
   ],
   navMenuItems: [
     {

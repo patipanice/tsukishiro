@@ -37,7 +37,6 @@ const fetchPost = async (
   userId?: string
 ) => {
   try {
-    console.log(getCollectionNameByPostType(type))
     let queryRef = query(getCollectionRef(getCollectionNameByPostType(type)));
 
     if (userId) {

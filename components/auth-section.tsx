@@ -5,45 +5,56 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Button,
   CircularProgress,
+  User,
 } from "@nextui-org/react";
 import NextLink from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 
 const AuthSection = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout, loading } = useAuthContext();
 
   if (loading) {
     return <CircularProgress aria-label="Loading..." />;
   }
 
+  const userHavePhotoURL = user?.photoURL !== null;
+
   return (
     <div>
       {user ? (
         <Dropdown>
           <DropdownTrigger>
-            <Avatar
-              size="sm"
-              showFallback
-              src="https://images.unsplash.com/broken"
+            <User
+              as="button"
+              avatarProps={{
+                size: "sm",
+                showFallback: !userHavePhotoURL,
+                src: userHavePhotoURL
+                  ? user.photoURL
+                  : "https://images.unsplash.com/broken",
+              }}
+              className="transition-transform"
+              description={user.email}
+              name={user?.displayName}
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Static Actions">
-            <DropdownItem key="profile">โปรไฟล์</DropdownItem>
-            <DropdownItem key="my-board">
-              <NextLink href="/my-board">บอร์ดของฉัน</NextLink>
-            </DropdownItem>
-            <DropdownItem
-              key="logout"
-              className="text-danger"
-              color="danger"
-              onClick={() => {
+          <DropdownMenu
+            aria-label="dropdown-menu-actions"
+            onAction={(key) => {
+              if (key === "logout") {
                 logout();
-              }}
-            >
+              } else {
+                router.push("/" + key);
+              }
+            }}
+          >
+            <DropdownItem key="profile">โปรไฟล์</DropdownItem>
+            <DropdownItem key="my-board">บอร์ดของฉัน</DropdownItem>
+            <DropdownItem key="logout" className="text-danger" color="danger">
               ออกจากระบบ
             </DropdownItem>
           </DropdownMenu>

@@ -20,6 +20,7 @@ import { SearchIcon, Logo } from "@/components/icons";
 import { useAuthContext } from "@/contexts/auth-context";
 import { usePathname } from "next/navigation";
 import AuthSection from "./auth-section";
+import { Divider } from "@nextui-org/react";
 
 export const Navbar = () => {
   const { user } = useAuthContext();
@@ -57,7 +58,7 @@ export const Navbar = () => {
         </NavbarBrand>
         <ul className="hidden sm:flex gap-4 justify-start ml-2">
           {siteConfig.navItems
-            .filter((item) => {
+            .filter((item: any) => {
               if (item.isAuth) {
                 if (user) {
                   return item;
@@ -72,9 +73,9 @@ export const Navbar = () => {
               <NavbarItem key={item.href}>
                 <NextLink
                   className={clsx(
-                    pathname.includes(item.href) 
+                    pathname.includes(item.href)
                       ? "text-primary-500 border-b-2 border-primary-500 pb-1"
-                      : "foreground"
+                      : "foreground hover:text-primary-300"
                   )}
                   href={item.href}
                 >
@@ -104,7 +105,9 @@ export const Navbar = () => {
           </Link> */}
           <ThemeSwitch />
           {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
-          <AuthSection />
+          <div className="">
+            <AuthSection />
+          </div>
         </NavbarItem>
         {/* <NavbarItem className="hidden  lg:flex">{searchInput}</NavbarItem> */}
         {/* <NavbarItem className="hidden md:flex">
@@ -126,13 +129,15 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link> */}
         <ThemeSwitch />
-        <AuthSection />
+        {/* <AuthSection /> */}
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
         {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
+          <AuthSection/>
+          <Divider/>
           {siteConfig.navMenuItems
             .filter((item) => {
               if (item.isAuth) {
@@ -152,7 +157,7 @@ export const Navbar = () => {
                     pathname.includes(item.href) ? "primary" : "foreground"
                   }
                   href={item.href}
-                  size="lg"
+                  size="sm"
                 >
                   {item.label}
                 </Link>

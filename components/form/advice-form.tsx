@@ -6,6 +6,7 @@ import { Slider } from "@nextui-org/slider";
 
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
+import { useAuthContext } from "@/contexts/auth-context";
 
 export const colors = [
   "#FF6F61", // Coral
@@ -101,6 +102,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
   isLoadingSubmit = false,
   canEditPost = false,
 }) => {
+  const { user } = useAuthContext();
   const isDisabled = isDetailPage && !canEditPost;
 
   return (
