@@ -1,14 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AuthForm from "../form/auth-form";
 import { useFormik } from "formik";
 import { useAuthContext } from "@/contexts/auth-context";
-import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  User,
+} from "firebase/auth";
 import { auth, collectionName, db } from "@/config/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { AuthFormValue } from "@/types/auth";
 import { useRouter } from "next/navigation";
+import { AuthMode } from "@/enums/auth.enum";
+
+const resetPassword = async (email: string) => {
+  return await sendPasswordResetEmail(auth, email);
+  // .then(() => {
+  //   confirm("ได้ส่งอีเมลไปเพื่อรีเซ็ทรหัสผ่านแล้ว เช็คอีเมล!");
+  // })
+  // .catch((error) => {
+  //   alert("เกิดข้อผิดพลาด");
+  // });
+};
 
 const createNewUserEmailAndPasswordFirebaseAuth = async (
   email: string,
@@ -18,6 +33,7 @@ const createNewUserEmailAndPasswordFirebaseAuth = async (
     const res = await createUserWithEmailAndPassword(auth, email, password);
     if (res.user) {
       await saveNewUserToFireStoreCollection(res.user);
+      return { status: 200 };
     }
   } catch (err: any) {
     console.error(err);
@@ -33,14 +49,9 @@ const saveNewUserToFireStoreCollection = async (user: User) => {
     phoneNumber: user.phoneNumber,
     displayName: user.displayName,
     creationTime: user.metadata.creationTime,
-    createdAt: serverTimestamp()
+    createdAt: serverTimestamp(),
   });
 };
-
-export enum AuthMode {
-  SIGN_IN = "sign_in",
-  SIGN_UP = "sign_up",
-}
 
 interface AuthPageProps {
   authMode: AuthMode;
@@ -49,19 +60,43 @@ interface AuthPageProps {
 const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
   const { login } = useAuthContext();
   const router = useRouter();
+  const [savedPassword, setSavedPassword] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const password = localStorage.getItem("savedPassword");
+      setSavedPassword(String(password));
+    }
+  }, []);
 
   const formik = useFormik<AuthFormValue>({
     initialValues: {
       email: "",
-      password: "",
+      password:
+        authMode === AuthMode.SIGN_IN && savedPassword ? savedPassword : "",
+      isSavePassword: true,
     },
     async onSubmit(values) {
-      const { email, password } = values;
+      const { email, password, isSavePassword } = values;
+
       if (authMode === AuthMode.SIGN_IN) {
+        if (isSavePassword) {
+          localStorage.setItem("savedPassword", password);
+        }
         login(email, password);
       } else if (authMode === AuthMode.SIGN_UP) {
-        await createNewUserEmailAndPasswordFirebaseAuth(email, password);
-        router.push("/home");
+        await createNewUserEmailAndPasswordFirebaseAuth(email, password).then(
+          (res) => {
+            if (res?.status === 200) {
+              router.push("/home");
+            }
+          }
+        );
+      } else if (authMode === AuthMode.RESET_PASSWORD) {
+        await resetPassword(email).then((res) => {
+          confirm("ได้ส่งอีเมลไปเพื่อรีเซ็ทรหัสผ่านแล้ว เช็คอีเมล!");
+          router.push("/signin");
+        });
       }
     },
   });

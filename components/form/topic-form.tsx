@@ -92,7 +92,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
-        isDisabled={isDisabled}
+        isReadOnly={isDisabled}
       />
 
       <Input
@@ -102,7 +102,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
         name="name"
         onChange={formik.handleChange}
         value={formik.values.name}
-        isDisabled={isDisabled}
+        isReadOnly={isDisabled}
         maxLength={20}
       />
       <div className="flex gap-4">

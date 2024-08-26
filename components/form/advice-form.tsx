@@ -26,10 +26,10 @@ export const colors = [
 ];
 
 const ageOptions = [
-  {
-    key: 0,
-    label: "ไม่ต้องการระบุ",
-  },
+  // {
+  //   key: 0,
+  //   label: "ไม่ต้องการระบุ",
+  // },
   {
     key: 1,
     label: "น้อยกว่า 20 ปี",
@@ -53,10 +53,10 @@ const ageOptions = [
 ];
 
 const genderOptions = [
-  {
-    key: 0,
-    label: "ไม่ต้องการระบุ",
-  },
+  // {
+  //   key: 0,
+  //   label: "ไม่ต้องการระบุ",
+  // },
   {
     key: 1,
     label: "ชาย",
@@ -115,7 +115,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
-        isDisabled={isDisabled}
+        isReadOnly={isDisabled}
       />
       <Slider
         color="success"
@@ -181,7 +181,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="period"
         onChange={formik.handleChange}
         value={formik.values.period}
-        isDisabled={isDisabled}
+        isReadOnly={isDisabled}
       />
       <Input
         label="คุณคือใคร"
@@ -190,7 +190,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         name="name"
         onChange={formik.handleChange}
         value={formik.values.name}
-        isDisabled={isDisabled}
+        isReadOnly={isDisabled}
         maxLength={20}
       />
       <div className="flex gap-4">
