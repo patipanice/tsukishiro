@@ -12,7 +12,6 @@ import "../config/firebase";
 
 import { Kanit } from "next/font/google";
 import { Suspense } from "react";
-import BackToTopButton from "@/components/back-to-top-button";
 
 export const metadata: Metadata = {
   title: {
@@ -58,7 +57,6 @@ export default function RootLayout({
               <Navbar />
               <main className="container mx-auto max-w-7xl pt-12 px-6 flex-grow">
                 {children}
-                <BackToTopButton/>
               </main>
             </Suspense>
             {/* <footer className="w-full flex items-center justify-center py-3">
