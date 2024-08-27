@@ -17,12 +17,6 @@ import { AuthMode } from "@/enums/auth.enum";
 
 const resetPassword = async (email: string) => {
   return await sendPasswordResetEmail(auth, email);
-  // .then(() => {
-  //   confirm("ได้ส่งอีเมลไปเพื่อรีเซ็ทรหัสผ่านแล้ว เช็คอีเมล!");
-  // })
-  // .catch((error) => {
-  //   alert("เกิดข้อผิดพลาด");
-  // });
 };
 
 const createNewUserEmailAndPasswordFirebaseAuth = async (

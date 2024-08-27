@@ -56,7 +56,7 @@ export default function RootLayout({
           <div className="relative flex flex-col h-screen">
             <Suspense fallback={<p>Loading...</p>}>
               <Navbar />
-              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+              <main className="container mx-auto max-w-7xl pt-12 px-6 flex-grow">
                 {children}
                 <BackToTopButton/>
               </main>

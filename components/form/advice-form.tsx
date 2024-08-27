@@ -26,10 +26,6 @@ export const colors = [
 ];
 
 const ageOptions = [
-  // {
-  //   key: 0,
-  //   label: "ไม่ต้องการระบุ",
-  // },
   {
     key: 1,
     label: "น้อยกว่า 20 ปี",
@@ -53,10 +49,6 @@ const ageOptions = [
 ];
 
 const genderOptions = [
-  // {
-  //   key: 0,
-  //   label: "ไม่ต้องการระบุ",
-  // },
   {
     key: 1,
     label: "ชาย",

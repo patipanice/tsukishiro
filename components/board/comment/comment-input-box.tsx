@@ -21,9 +21,10 @@ const CommentInputBox: React.FC<CommentInputBoxProps> = ({ formik, user }) => {
       <div className="w-full space-y-2">
         <Textarea
           name="message"
-          placeholder="แสดงความคิดเห็น..."
+          placeholder={user ?"แสดงความคิดเห็น...": "เข้าสู่ระบบเพื่อแสดงความคิดเห็น"}
           value={formik.values.message}
           onChange={formik.handleChange}
+          isDisabled={!user}
         />
         <div className="float-right flex gap-4">
           <Checkbox
@@ -31,6 +32,7 @@ const CommentInputBox: React.FC<CommentInputBoxProps> = ({ formik, user }) => {
             checked={formik.values.isAnonymous}
             onChange={formik.handleChange}
             size="sm"
+            isDisabled={!user}
           >
             <span className="text-xs md:text-sm">
               แสดงความคิดเห็นแบบไม่ระบุตัวตัน
@@ -40,7 +42,7 @@ const CommentInputBox: React.FC<CommentInputBoxProps> = ({ formik, user }) => {
             size="sm"
             color="primary"
             onClick={() => formik.handleSubmit()}
-            isDisabled={formik.values.message === ""}
+            isDisabled={formik.values.message === "" && !user}
           >
             ส่ง
           </Button>

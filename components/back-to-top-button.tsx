@@ -29,8 +29,8 @@ const BackToTopButton = () => {
 
   return (
     showButton && (
-      <Button onClick={scrollToTop}  className="fixed bottom-5 right-5 z-50">
-        <UploadCircleSolidIcon/>
+      <Button onClick={scrollToTop} color="default" variant="light"  className="fixed bottom-5 right-5 z-50" isIconOnly aria-label="Scroll to top">
+        <UploadCircleSolidIcon className=" text-4xl"/>
       </Button>
     )
   );

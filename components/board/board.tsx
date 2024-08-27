@@ -141,7 +141,6 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
     <section className="space-y-6">
       <div className="flex flex-wrap gap-3 items-center w-full">
         <Input
-          isClearable
           onChange={(e) => {
             setFilterValue((prev) => ({
               ...prev,
@@ -156,11 +155,11 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
             inputWrapper: "bg-default-100",
             input: "text-sm",
           }}
-          endContent={
-            <Kbd className="hidden lg:inline-block" keys={["command"]}>
-              K
-            </Kbd>
-          }
+        //   endContent={
+        //     <Kbd className="hidden lg:inline-block" keys={["command"]}>
+        //       K
+        //     </Kbd>
+        //   }
           startContent={
             <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
           }

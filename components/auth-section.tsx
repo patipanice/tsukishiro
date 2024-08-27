@@ -38,7 +38,7 @@ const AuthSection = () => {
                   : "https://images.unsplash.com/broken",
               }}
               className="transition-transform"
-              description={user.email}
+              description={user.uid.substring(0,6)}
               name={user?.displayName}
             />
           </DropdownTrigger>

@@ -97,7 +97,7 @@ const deleteComment = async (documentId: string, commentId: string) => {
 };
 
 interface CommentProps extends CommentForm {
-  isYourComment: boolean;
+  canDeleteComment: boolean;
   postId: string;
   // replies?: CommentProps[];
   // onReply?: () => void;
@@ -109,7 +109,7 @@ const Comment: React.FC<CommentProps> = ({
   user,
   isAnonymous,
   createdAt,
-  isYourComment,
+  canDeleteComment,
   postId,
   id,
   onClickDeleteComment,
@@ -130,13 +130,13 @@ const Comment: React.FC<CommentProps> = ({
                   size: "sm",
                 }}
               />
-              {/* {isYourComment && (
+              {/* {canDeleteComment && (
                 <Chip variant="flat" radius="sm" size="sm" color="primary">
                   คุณ
                 </Chip>
               )} */}
             </div>
-            {isYourComment && (
+            {canDeleteComment && (
               <Button
                 color="danger"
                 variant="light"
@@ -150,7 +150,7 @@ const Comment: React.FC<CommentProps> = ({
             )}
           </div>
           <div className="mx-10 my-2">
-            <p className="text-xs font-light text-gray-400 ">{message}</p>
+            <p className="text-sm font-light text-gray-400">" {message} "</p>
           </div>
         </div>
         {/* <Avatar src={user?.photoURL || ""} size="sm"/> */}
@@ -217,9 +217,9 @@ const Comments: React.FC<ICommentsProps> = ({
             isAnonymous={comment.isAnonymous}
             message={comment.message}
             user={comment.user}
-            isYourComment={comment.user?.uid === user?.uid}
             id={comment.id}
             postId={postId}
+            canDeleteComment={user ? comment.user?.uid === user?.uid : false}
             onClickDeleteComment={() => {
               deleteComment(postId, comment.id).then(() => {
                 onRefetchHandler();
