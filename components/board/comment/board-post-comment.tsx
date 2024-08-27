@@ -150,7 +150,7 @@ const Comment: React.FC<CommentProps> = ({
             )}
           </div>
           <div className="mx-10 my-2">
-            <p className="text-sm font-light text-gray-400">" {message} "</p>
+            <p className="text-sm font-light text-gray-400">&quot;{message}&quot;</p>
           </div>
         </div>
         {/* <Avatar src={user?.photoURL || ""} size="sm"/> */}
