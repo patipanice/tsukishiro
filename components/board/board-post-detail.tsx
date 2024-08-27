@@ -274,8 +274,14 @@ export default function BoardPostDetail({
       {type === PostType.TOPIC && (
         <TopicForm isDetailPage formik={formik} canEditPost={canEditPost} />
       )}
-      <Divider/>
-      <BoardPostComment postId={params.slug} comments={data?.comments} onRefetchHandler={onRefetchHandler}/>
+      <Divider />
+      {type === PostType.ADVICE && (
+        <BoardPostComment
+          postId={params.slug}
+          comments={data?.comments}
+          onRefetchHandler={onRefetchHandler}
+        />
+      )}
     </section>
   );
 }
