@@ -13,11 +13,12 @@ import {
   PostType,
 } from "@/enums/post.enum";
 import PostPublishSelect from "@/components/selects/post-publish-select";
-import { Role, useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { getCollectionRef } from "@/utils/firebase-util";
 import { getCollectionNameByPostType } from "@/utils";
 import BoardPosts from "./board-posts";
 import PostSortingDate from "../selects/post-sorting-date-select";
+import { Role } from "@/enums/auth.enum";
 
 interface IFilterValue {
   search?: string;

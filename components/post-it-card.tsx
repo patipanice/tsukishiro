@@ -22,17 +22,28 @@ export const getRandomColorWithOpacity = (_color: string) => {
 export const formattedDate = (date: any) => {
   if (!date) return "";
 
+  // Convert Firestore Timestamp to JavaScript Date
   const d = date?.toDate();
 
-  // Helper function to pad single-digit numbers with leading zero
-  const pad = (num: number) => num.toString().padStart(2, "0");
+  // Create a formatter for the Thai locale and timezone
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // Use 24-hour time format
+    timeZone: "Asia/Bangkok", // Thailand time zone
+  };
 
-  const day = pad(d.getUTCDate());
-  const month = pad(d.getUTCMonth() + 1); // Months are zero-based
-  const year = d.getUTCFullYear();
+  const formatter = new Intl.DateTimeFormat("th-TH", options);
+  const formatted = formatter.format(d)
 
-  return `${day}-${month}-${year}`;
+  // Replace default formatting with desired format "dd-mm-yyyy HH:mm"
+  return formatted.replace(/\//g, "/").replace(",", "");
 };
+
+
 
 interface IPostItCardProps {
   item: Pick<

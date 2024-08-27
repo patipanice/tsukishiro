@@ -14,16 +14,12 @@ import {
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { User as FirebaseUser } from "firebase/auth";
+import { Role } from "@/enums/auth.enum";
 
 const isAdmin = (user: FirebaseUser | null) => {
   return user?.uid === process.env.NEXT_PUBLIC_FIREBASE_AUTH_ADMIN_UUID;
 };
 
-//TODO: enum file
-export enum Role {
-  SUPER_ADMIN = 1,
-  MEMBER = 2,
-}
 
 interface AuthContextType {
   user: FirebaseUser | null;

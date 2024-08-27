@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   getDoc,
   doc,
@@ -16,7 +16,7 @@ import { PostStatus, PostType } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import { Button, Spinner } from "@nextui-org/react";
 import { IAdviceForm } from "@/types";
-import { Role, useAuthContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { db } from "@/config/firebase";
 import { formattedDate } from "@/components/post-it-card";
 import { Snippet } from "@nextui-org/snippet";
@@ -24,6 +24,8 @@ import { Divider } from "@nextui-org/divider";
 import { getCollectionNameByPostType } from "@/utils";
 import { getCurrentBoardPathnameByType } from "./board";
 import TopicForm from "../form/topic-form";
+import { Role } from "@/enums/auth.enum";
+import BoardPostComment from "./comment/board-post-comment";
 
 export default function BoardPostDetail({
   params,
@@ -36,6 +38,7 @@ export default function BoardPostDetail({
   const { user, role } = useAuthContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<IAdviceForm | null>(null);
+  const [refetch, setRefetch] = useState(false);
 
   const isUserPost = role === Role.MEMBER && user && user?.uid === data?.userId;
 
@@ -71,7 +74,9 @@ export default function BoardPostDetail({
       }
     };
     fetchData();
-  }, [type, params]);
+  }, [type, params, refetch]);
+
+  const onRefetchHandler = () => setRefetch((prev) => !prev);
 
   // Function to update document status
   const updateStatusHandler = async (status: PostStatus) => {
@@ -110,7 +115,7 @@ export default function BoardPostDetail({
       const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
       await updateDoc(docRef, formValues);
       alert("อัพเดทสำเร็จ");
-      router.refresh()
+      router.refresh();
       console.log("Document status updated to 'done'");
     } catch (error) {
       console.error("Error updating document status: ", error);
@@ -269,6 +274,8 @@ export default function BoardPostDetail({
       {type === PostType.TOPIC && (
         <TopicForm isDetailPage formik={formik} canEditPost={canEditPost} />
       )}
+      <Divider/>
+      <BoardPostComment postId={params.slug} comments={data?.comments} onRefetchHandler={onRefetchHandler}/>
     </section>
   );
 }
