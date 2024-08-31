@@ -14,7 +14,7 @@ const BoardStatDetail = ({ params }: { params: { slug: string } }) => {
         <p className="font-medium text-base md:text-2xl">
           สถิติ TIKTOK LIVE ในเดือนสิงหาคม
         </p>
-        <p className="text-secondary-400 text-sm">3 ส.ค. 2565 - 30 ส.ค. 2565</p>
+        <p className="text-secondary-400 text-sm">3 ส.ค. 2567 - 30 ส.ค. 2567</p>
       </div>
       <div className="w-full text-center space-y-10 mt-10">
         <Overviews />
