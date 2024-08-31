@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { auth, storage } from "@/config/firebase";
+import { auth, collectionName, db, storage } from "@/config/firebase";
 import { updateProfile, User as FirebaseUser } from "firebase/auth";
 import { Avatar, Progress } from "@nextui-org/react";
 import { CameraIcon } from "./icons/CameraIcon";
 import imageCompression from "browser-image-compression";
+import { doc, updateDoc } from "firebase/firestore";
 
 interface ImageUploadProps {
   user: FirebaseUser | null;
@@ -68,11 +69,25 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
     if (user) {
       try {
         await updateProfile(user, { photoURL });
-        refreshRoute();
-        console.log("User photoURL updated successfully:", photoURL);
-      } catch (error) {
-        console.error("Error updating user photoURL:", error);
+        await updateUserProfileFireStore(photoURL).then((res) => {
+          if (res?.status === 200) refreshRoute();
+        });
+      } catch (error) { 
+        //todo: error
+        alert(error);
       }
+    }
+  };
+
+  const updateUserProfileFireStore = async (photoURL: string) => {
+    try {
+      const docRef = doc(db, collectionName.users, String(user?.uid));
+      await updateDoc(docRef, {
+        photoURL,
+      });
+      return { status: 200 };
+    } catch (error) {
+      alert(error);
     }
   };
 

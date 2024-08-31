@@ -29,3 +29,7 @@ export interface IAdviceForm extends BasicInformationFormValues {
 export interface TopicFormValues extends BasicInformationFormValues {
   postType: PostType.TOPIC;
 }
+
+export interface QAFormValues extends BasicInformationFormValues {
+  postType: PostType.QA;
+}

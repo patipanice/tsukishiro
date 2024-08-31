@@ -15,9 +15,10 @@ const getCollectionNameByPostType = (type: PostType) => {
       return collectionName.advice;
     case PostType.TOPIC:
       return collectionName.topic;
+    case PostType.QA:
+      return collectionName.qa;
     default:
       return collectionName.advice;
-    // case PostType.QA: return collectionName.qa,
   }
 };
 
@@ -34,7 +35,7 @@ function formatCreatedAt(createdAt: Timestamp): string {
   if (diffMinutes < 1) {
     return "เพิ่งเกิดขึ้น";
   }
-  
+
   // If the difference is less than 1 hour
   if (diffMinutes < 60) {
     return `${diffMinutes} นาทีก่อน`;
@@ -59,6 +60,5 @@ function formatDate(date: Date): string {
 
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
-
 
 export { getCollectionNameByPostType, formatCreatedAt };

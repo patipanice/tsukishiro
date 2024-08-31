@@ -5,7 +5,7 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { addDoc } from "firebase/firestore";
-import AdviceForm, { colors } from "@/components/form/advice-form";
+import AdviceForm from "@/components/form/advice-form";
 import { SadButRelievedFace } from "@/components/icons/SadButRelievedFace";
 import { Topic } from "@/components/icons/Topic";
 import { serverTimestamp } from "firebase/firestore";
@@ -18,9 +18,12 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { collectionName } from "@/config/firebase";
 import { getQuotes } from "./action";
 import TopicForm from "@/components/form/topic-form";
-import { IAdviceForm, TopicFormValues } from "@/types";
+import { IAdviceForm, QAFormValues, TopicFormValues } from "@/types";
 import { User as FirebaseUser, User } from "firebase/auth";
 import { BackIcon } from "@/components/icons/BackIcon";
+import { AskubuntuIcon } from "@/components/icons/AskIcon";
+import QAForm from "@/components/form/qa-form";
+import { postBackgroundColor } from "@/constants";
 
 enum Step {
   SELECT_TYPE = 1,
@@ -41,6 +44,12 @@ const modeOptions = [
     icon: <Topic />,
     disabled: false,
   },
+  {
+    key: PostType.QA,
+    label: "ถามคำถาม Q&A",
+    icon: <AskubuntuIcon />,
+    disabled: false,
+  },
 ];
 
 const getFormInitialValues = (postType: PostType | null, user: User | null) => {
@@ -56,7 +65,7 @@ const getFormInitialValues = (postType: PostType | null, user: User | null) => {
         name: user?.displayName,
         gender: undefined,
         isPublish: true,
-        postColor: colors[0],
+        postColor: postBackgroundColor[0],
       };
       break;
     case PostType.TOPIC:
@@ -66,9 +75,19 @@ const getFormInitialValues = (postType: PostType | null, user: User | null) => {
         name: user?.displayName,
         gender: undefined,
         isPublish: true,
-        postColor: colors[0],
+        postColor: postBackgroundColor[0],
       };
       break;
+      case PostType.QA:
+        values = {
+          message: "",
+          age: "",
+          name: user?.displayName,
+          gender: undefined,
+          isPublish: true,
+          postColor: postBackgroundColor[0],
+        };
+        break;
   }
 
   return values;
@@ -124,6 +143,31 @@ const submitTopicForm = async (
   };
 };
 
+const submitQAForm = async (
+  values: QAFormValues,
+  user: FirebaseUser | null
+) => {
+  const docRef = getCollectionRef(collectionName.qa);
+  const res = await addDoc(docRef, {
+    ...values,
+    userId: user?.uid || "",
+    age: Number(values?.age),
+    gender: Number(values?.gender),
+    status: PostStatus.PENDING,
+    postType: PostType.QA,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+  if (!res.id) {
+    throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
+  }
+  const responseGetQuotes = await getQuotes();
+  return {
+    postId: res.id,
+    quote: responseGetQuotes?.length > 0 ? responseGetQuotes[0] : "",
+  };
+};
+
 export default function Home() {
   const { user } = useAuthContext();
   const [postType, setPostType] = useState<PostType | null>(null);
@@ -141,6 +185,8 @@ export default function Home() {
         const { postId, quote } =
           postType === PostType.ADVICE
             ? await submitAdviceForm(values as IAdviceForm, user)
+            : postType === PostType.QA
+            ? await submitQAForm(values as QAFormValues, user)
             : await submitTopicForm(values as TopicFormValues, user);
         setPostId(postId);
         setQuote(quote);
@@ -216,9 +262,9 @@ export default function Home() {
           <AdviceForm formik={formik} isLoadingSubmit={loading} />
         ) : postType === PostType.TOPIC ? (
           <TopicForm formik={formik} isLoadingSubmit={loading} />
-        ) : (
-          ""
-        ))}
+        ) : postType === PostType.QA ? (
+          <QAForm formik={formik} isLoadingSubmit={loading} />
+        ) : undefined)}
       {step === Step.SHOW_QUOTE &&
         postId !== undefined &&
         quote !== undefined && (

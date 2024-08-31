@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Kbd, Spinner } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { useState, useEffect, useMemo } from "react";
 import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -41,6 +41,8 @@ export const getCurrentBoardPathnameByType = (type: PostType) => {
       return "/board-advice";
     case PostType.TOPIC:
       return "/board-topic";
+    case PostType.QA:
+      return "/board-qa";
     default:
       return "/home";
   }
@@ -155,11 +157,6 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
             inputWrapper: "bg-default-100",
             input: "text-sm",
           }}
-        //   endContent={
-        //     <Kbd className="hidden lg:inline-block" keys={["command"]}>
-        //       K
-        //     </Kbd>
-        //   }
           startContent={
             <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
           }

@@ -4,21 +4,44 @@ import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
-import { auth } from "@/config/firebase";
+import { auth, collectionName, db } from "@/config/firebase";
 import ImageUpload from "@/components/image-upload";
-import { updateProfile } from "firebase/auth";
+import { updateProfile, User } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 
-const updateUserDisplayName = async (displayNameValue: string) => {
+type UserProfileFields = Partial<Pick<User, "displayName" | "photoURL">>;
+
+const updateUserProfileFirebaseAuth = async (
+  uid: string,
+  fields: UserProfileFields
+) => {
   const user = auth.currentUser;
   if (user) {
     try {
-      await updateProfile(user, { displayName: displayNameValue });
+      await updateProfile(user, { ...fields });
+      await updateUserProfileFireStore(uid, { ...fields });
       alert("อัพเดทเสร็จสิ้น");
     } catch (error) {
       alert("เกิดข้อผิดพลาด");
     }
   }
 };
+
+const updateUserProfileFireStore = async (
+  uid: string,
+  fields: UserProfileFields
+) => {
+  try {
+    const docRef = doc(db, collectionName.users, uid);
+    await updateDoc(docRef, {
+      fields,
+    });
+    return { status: 200 };
+  } catch (error) {
+    alert(error);
+  }
+};
+
 export default function BoardPage() {
   const { user } = useAuthContext();
   const router = useRouter();
@@ -26,11 +49,11 @@ export default function BoardPage() {
     user?.displayName || ""
   );
 
-  const refreshRoute = () => router.refresh()
+  const refreshRoute = () => router.refresh();
 
   return (
     <section className="flex flex-col gap-7 justify-center items-center w-full">
-      <ImageUpload user={user} refreshRoute={refreshRoute}/>
+      <ImageUpload user={user} refreshRoute={refreshRoute} />
       <div className="w-full flex flex-col items-center gap-y-6">
         <Input label="uid" isReadOnly value={user?.uid} className="max-w-xs" />
         <Input
@@ -51,8 +74,10 @@ export default function BoardPage() {
         />
         <Button
           onClick={() =>
-            updateUserDisplayName(displayNameValue).then(() => {
-              refreshRoute()
+            updateUserProfileFirebaseAuth(String(user?.uid), {
+              displayName: displayNameValue,
+            }).then(() => {
+              refreshRoute();
             })
           }
           color="primary"

@@ -3,6 +3,7 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { PostType } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
+import { AskubuntuIcon } from "../icons/AskIcon";
 
 const postTypeOptions = [
   {
@@ -14,6 +15,11 @@ const postTypeOptions = [
     key: PostType.TOPIC,
     label: "เสนอหัวข้อ",
     icon: <Topic />,
+  },
+  {
+    key: PostType.QA,
+    label: "ถามคำถาม Q&A",
+    icon: <AskubuntuIcon />,
   },
 ];
 

@@ -16,6 +16,10 @@ export const siteConfig = {
       label: "บอร์ดหัวข้อ",
       href: "/board-topic",
     },
+    {
+      label: "บอร์ด Q&A",
+      href: "/board-qa",
+    },
     // {
     //   label: "บอร์ดของฉัน",
     //   href: "/my-board",
@@ -34,6 +38,10 @@ export const siteConfig = {
     {
       label: "บอร์ดหัวข้อ",
       href: "/board-topic",
+    },
+    {
+      label: "บอร์ด Q&A",
+      href: "/board-qa",
     },
     {
       label: "บอร์ดของฉัน",

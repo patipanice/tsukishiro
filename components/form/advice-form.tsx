@@ -7,80 +7,7 @@ import { Slider } from "@nextui-org/slider";
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
 import { useAuthContext } from "@/contexts/auth-context";
-
-export const colors = [
-  "#FF6F61", // Coral
-  "#FFCCBC", // Peach
-  "#FFD54F", // Amber
-  "#A5D6A7", // Light Green
-  "#81D4FA", // Light Blue
-  "#B39DDB", // Light Purple
-  "#FFAB91", // Light Salmon
-  "#C5E1A5", // Pale Green
-  "#B3E5FC", // Light Cyan
-  "#DCE775", // Lime
-  "#F48FB1", // Light Pink
-  "#C5CAE9", // Light Blue Grey
-  // "#E57373", // Red
-  // "#F06292"  // Pink
-];
-
-const ageOptions = [
-  {
-    key: 1,
-    label: "น้อยกว่า 20 ปี",
-  },
-  {
-    key: 2,
-    label: "21 - 30 ปี",
-  },
-  {
-    key: 3,
-    label: "31 - 40 ปี",
-  },
-  {
-    key: 4,
-    label: "41 - 50 ปี",
-  },
-  {
-    key: 5,
-    label: "51 - 60 ปี",
-  },
-];
-
-const genderOptions = [
-  {
-    key: 1,
-    label: "ชาย",
-  },
-  {
-    key: 2,
-    label: "หญิง",
-  },
-];
-
-const markValues = [
-  {
-    value: 1,
-    label: "1",
-  },
-  {
-    value: 2,
-    label: "2",
-  },
-  {
-    value: 3,
-    label: "3",
-  },
-  {
-    value: 4,
-    label: "4",
-  },
-  {
-    value: 5,
-    label: "5",
-  },
-];
+import { formOptions, postBackgroundColor } from "@/constants";
 
 interface IAdviceFormProps {
   formik: any;
@@ -155,7 +82,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
             />
           </svg>
         }
-        marks={markValues}
+        marks={formOptions.feeling}
         defaultValue={0}
         className="max-w-md"
         onChange={(value) => formik.setFieldValue("feeling", value)}
@@ -194,7 +121,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
-          {ageOptions.map((option) => (
+          {formOptions.age.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
           ))}
         </Select>
@@ -206,7 +133,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
           isDisabled={isDisabled}
           placeholder="ไม่จำเป็นต้องระบุ"
         >
-          {genderOptions.map((option) => (
+          {formOptions.gender.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
           ))}
         </Select>
@@ -215,7 +142,7 @@ const AdviceForm: React.FC<IAdviceFormProps> = ({
         <p>เลือกสีโพส</p>
         {!isDisabled && (
           <CirclePicker
-            colors={colors}
+            colors={postBackgroundColor}
             color={formik.values.postColor}
             onChange={(color) => {
               if (!isDisabled) formik.setFieldValue("postColor", color.hex);

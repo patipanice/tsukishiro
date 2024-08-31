@@ -26,6 +26,39 @@ import { getCurrentBoardPathnameByType } from "./board";
 import TopicForm from "../form/topic-form";
 import { Role } from "@/enums/auth.enum";
 import BoardPostComment from "./comment/board-post-comment";
+import QAForm from "../form/qa-form";
+
+const getBoardDetailTitleByPostType = (type: PostType) => {
+  switch (type) {
+    case PostType.ADVICE:
+      return "คำปรึกษาปัญหา";
+    case PostType.TOPIC:
+      return "หัวข้อ";
+    case PostType.QA:
+      return "คําถาม Q&A";
+    default:
+      break;
+  }
+};
+
+export const getPostStatusLabel = (type: PostType, status: PostStatus) => {
+  const label = {
+    [PostType.ADVICE]: {
+      [PostStatus.PENDING]: "ยังไม่ได้ให้คำปรึกษา",
+      [PostStatus.DONE]: "ให้คำปรึกษาแล้ว",
+    },
+    [PostType.TOPIC]: {
+      [PostStatus.PENDING]: "ยังไม่ได้พูดคุย",
+      [PostStatus.DONE]: "พูดคุยแล้ว",
+    },
+    [PostType.QA]: {
+      [PostStatus.PENDING]: "ยังไม่ได้ตอบคําถาม",
+      [PostStatus.DONE]: "ตอบคําถามแล้ว",
+    },
+  };
+
+  return label[type][status];
+};
 
 export default function BoardPostDetail({
   params,
@@ -195,28 +228,19 @@ export default function BoardPostDetail({
     <section className="w-full flex flex-col justify-center text-left -mt-[40px] gap-y-5 space-y-3">
       <Breadcrumbs>
         <BreadcrumbItem href={getCurrentBoardPathnameByType(type)}>
-          {type === PostType.ADVICE ? "บอร์ดปัญหา" : "บอร์ดหัวข้อ"}
+          {getBoardDetailTitleByPostType(type)}
         </BreadcrumbItem>
         <BreadcrumbItem>รายละเอียดโพส</BreadcrumbItem>
       </Breadcrumbs>
       <div className="flex items-start justify-between">
         <div className="space-y-3">
-          <p className="text-xl">
-            รหัส{type === PostType.ADVICE ? "คำปรึกษา" : "หัวข้อ"}
-          </p>
+          <p className="text-xl">รหัส{getBoardDetailTitleByPostType(type)}</p>
           <Snippet symbol="id:" size="sm">
             {params.slug}
           </Snippet>
           <div>
             <p className="text-xs">
-              สถานะ :{" "}
-              {formik.values.status === PostStatus.PENDING
-                ? type === PostType.ADVICE
-                  ? "ยังไม่ได้ให้คำปรึกษา"
-                  : "ยังไม่ได้พูดคุย"
-                : type === PostType.ADVICE
-                ? "ให้คำปรึกษาแล้ว"
-                : "พูดคุยแล้ว"}
+              สถานะ : {getPostStatusLabel(type, formik.values.status)}
             </p>
             <p className="text-xs">
               วันที่โพส :{" "}
@@ -274,13 +298,19 @@ export default function BoardPostDetail({
       {type === PostType.TOPIC && (
         <TopicForm isDetailPage formik={formik} canEditPost={canEditPost} />
       )}
-      <Divider />
+      {type === PostType.QA && (
+        <QAForm isDetailPage formik={formik} canEditPost={canEditPost} />
+      )}
+
       {type === PostType.ADVICE && (
-        <BoardPostComment
-          postId={params.slug}
-          comments={data?.comments}
-          onRefetchHandler={onRefetchHandler}
-        />
+        <>
+          <Divider />
+          <BoardPostComment
+            postId={params.slug}
+            comments={data?.comments}
+            onRefetchHandler={onRefetchHandler}
+          />
+        </>
       )}
     </section>
   );

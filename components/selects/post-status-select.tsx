@@ -3,18 +3,20 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { PostStatus, PostType } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
+import { getPostStatusLabel } from "../board/board-post-detail";
 
 const getPostStatusOptions = (type: PostType) => {
   const postStatusOptions = [
     {
       key: PostStatus.PENDING,
       label:
-        type === PostType.ADVICE ? "ยังไม่ได้ให้คำปรึกษา" : "ยังไม่ได้พูดคุย",
+        getPostStatusLabel(type, PostStatus.PENDING) || "ยังไม่ได้ให้คำปรึกษา",
       icon: <HourglassDone />,
     },
     {
       key: PostStatus.DONE,
-      label: type === PostType.ADVICE ? "ให้คำปรึกษาแล้ว" : "ได้พูดคุยแล้ว",
+      label:
+        getPostStatusLabel(type, PostStatus.DONE) || "ยังไม่ได้ให้คำปรึกษา",
       icon: <Topic />,
     },
   ];
@@ -24,7 +26,7 @@ const getPostStatusOptions = (type: PostType) => {
 
 interface IPostStatusSelectProps {
   value?: PostStatus;
-  type: PostType
+  type: PostType;
   onChange: (value: PostStatus) => void;
   isFilter?: boolean;
 }

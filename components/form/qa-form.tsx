@@ -13,7 +13,7 @@ interface ITopicFormProps {
   canEditPost?: boolean;
   isLoadingSubmit?: boolean;
 }
-const TopicForm: React.FC<ITopicFormProps> = ({
+const QAForm: React.FC<ITopicFormProps> = ({
   formik,
   isDetailPage = false,
   canEditPost = false,
@@ -24,11 +24,12 @@ const TopicForm: React.FC<ITopicFormProps> = ({
   return (
     <section className="flex flex-col gap-6 w-full py-6">
       {!isDetailPage && (
-        <h1 className="text-lg text-sky-700">เสนอหัวข้อที่ต้องการให้พูดคุย</h1>
+        <h1 className="text-lg text-sky-700">คำถามที่ต้องการถาม</h1>
       )}
       <Input
         isRequired
-        label="ระบุหัวข้อที่ต้องการให้พูดคุย"
+        label="คำถาม"
+        placeholder="ระบุคำถามที่ต้องการถาม เรื่องส่วนตัวบางเรื่องอาจจะไม่สามารถตอบได้"
         name="message"
         onChange={formik.handleChange}
         value={formik.values.message}
@@ -98,7 +99,7 @@ const TopicForm: React.FC<ITopicFormProps> = ({
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
         isDisabled={isDisabled}
       >
-        <span className="text-sm"> ต้องการให้แสดงปัญหานี้ลงในบอร์ด</span>
+        <span className="text-sm"> ต้องการให้แสดงคำถามในบอร์ด</span>
       </Checkbox>
       {!isDisabled && (
         <Button
@@ -121,11 +122,11 @@ const TopicForm: React.FC<ITopicFormProps> = ({
             </svg>
           }
         >
-          {!canEditPost ? "ติดหัวข้อลงในบอร์ด" : "ยืนยันการแก้ไข"}
+          {!canEditPost ? "ติดคำถามลงในบอร์ด" : "ยืนยันการแก้ไข"}
         </Button>
       )}
     </section>
   );
 };
 
-export default TopicForm;
+export default QAForm;
