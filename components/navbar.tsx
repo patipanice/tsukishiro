@@ -21,6 +21,7 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { usePathname } from "next/navigation";
 import AuthSection from "./auth-section";
 import { Divider } from "@nextui-org/react";
+import { MedalRibbonsStarBoldDuotoneIcon } from "./icons/MedalRibbonsStarBoldDuotoneIcon";
 
 export const Navbar = () => {
   const { user } = useAuthContext();
@@ -90,7 +91,7 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-4">
+        <NavbarItem className="hidden sm:flex gap-4 items-center">
           {/* <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
             <TwitterIcon className="text-default-500" />
           </Link> */}
@@ -103,6 +104,9 @@ export const Navbar = () => {
           {/* <Link isExternal aria-label="Tiktok" href={siteConfig.links.tiktok}>
             <GithubIcon className="text-default-500" />
           </Link> */}
+          <NextLink href={"/board-stat/8"}>
+            <MedalRibbonsStarBoldDuotoneIcon className="mt-1 text-[22px]" />
+          </NextLink>
           <ThemeSwitch />
           {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
           <div className="">
@@ -128,6 +132,9 @@ export const Navbar = () => {
         {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link> */}
+        <NextLink href={"/board-stat/8"}>
+          <MedalRibbonsStarBoldDuotoneIcon className="text-[22px] mt-1" />
+        </NextLink>
         <ThemeSwitch />
         {/* <AuthSection /> */}
         <NavbarMenuToggle />
@@ -136,8 +143,8 @@ export const Navbar = () => {
       <NavbarMenu>
         {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          <AuthSection/>
-          <Divider/>
+          <AuthSection />
+          <Divider />
           {siteConfig.navMenuItems
             .filter((item) => {
               if (item.isAuth) {
