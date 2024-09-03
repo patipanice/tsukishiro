@@ -104,9 +104,11 @@ export const Navbar = () => {
           {/* <Link isExternal aria-label="Tiktok" href={siteConfig.links.tiktok}>
             <GithubIcon className="text-default-500" />
           </Link> */}
-          <NextLink href={"/board-stat/8"}>
-            <MedalRibbonsStarBoldDuotoneIcon className="mt-1 text-[22px]" />
-          </NextLink>
+          {user && (
+            <NextLink href={"/board-stat/1"}>
+              <MedalRibbonsStarBoldDuotoneIcon className="mt-1 text-[22px]" />
+            </NextLink>
+          )}
           <ThemeSwitch />
           {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
           <div className="">
@@ -132,9 +134,11 @@ export const Navbar = () => {
         {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link> */}
-        <NextLink href={"/board-stat/8"}>
-          <MedalRibbonsStarBoldDuotoneIcon className="text-[22px] mt-1" />
-        </NextLink>
+        {user && (
+          <NextLink href={"/board-stat/1"}>
+            <MedalRibbonsStarBoldDuotoneIcon className="text-[22px] mt-1" />
+          </NextLink>
+        )}
         <ThemeSwitch />
         {/* <AuthSection /> */}
         <NavbarMenuToggle />
