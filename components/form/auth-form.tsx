@@ -116,6 +116,35 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
           )}
         </div>
       )}
+      {authMode === AuthMode.SIGN_UP && (
+        <Input
+          label="รหัส"
+          onChange={formik.handleChange}
+          value={formik.values.code}
+          name="code"
+          labelPlacement="outside"
+          placeholder="กรุณากรอกความยาวขั้นต่ำ 6 ตัวอักษร"
+          startContent={
+            <LockFilledIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+          }
+          endContent={
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={toggleVisibility}
+              aria-label="toggle password visibility"
+            >
+              {isVisible ? (
+                <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              ) : (
+                <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              )}
+            </button>
+          }
+          autoComplete="password"
+          type={isVisible ? "text" : "password"}
+        />
+      )}
       <Button
         onClick={() => {
           formik.handleSubmit();
