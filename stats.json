@@ -1,0 +1,38 @@
+[
+  {
+    "monthAndYear": "08-2024",
+    "monthTH": "สิงหาคม",
+    "totalLiveTime": 61.8,
+    "newFollower": 214,
+    "like": 564.6,
+    "share": 105,
+    "topTenUser": {
+      "liveTime": {
+        "oneToFive": "/stat/08-2024/hour-1.jpeg",
+        "sixToTen": "/stat/08-2024/hour-2.jpeg"
+      },
+      "diamond": {
+        "oneToFive": "/stat/08-2024/diamond-1.jpeg",
+        "sixToTen": "/stat/08-2024/diamond-2.jpeg"
+      }
+    }
+  },
+  {
+    "monthAndYear": "09-2024",
+    "monthTH": "กันยายน",
+    "totalLiveTime": 65,
+    "newFollower": 229,
+    "like": 0,
+    "share": 0,
+    "topTenUser": {
+      "liveTime": {
+        "oneToFive": "/stat/09-2024/hour-1.jpeg",
+        "sixToTen": "/stat/09-2024/hour-2.jpeg"
+      },
+      "diamond": {
+        "oneToFive": "/stat/09-2024/diamond-1.jpeg",
+        "sixToTen": "/stat/09-2024/diamond-2.jpeg"
+      }
+    }
+  }
+]

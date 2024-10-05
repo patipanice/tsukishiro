@@ -5,7 +5,7 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
 import { FormikProps } from "formik";
-import { formOptions, postBackgroundColor } from "@/constants";
+import { formOptions, postBackgroundColor } from "@/config/constants";
 
 interface ITopicFormProps {
   formik: FormikProps<any>;

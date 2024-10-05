@@ -105,7 +105,7 @@ export const Navbar = () => {
             <GithubIcon className="text-default-500" />
           </Link> */}
           {user && (
-            <NextLink href={"/board-stat/1"}>
+            <NextLink href={"/board-stat"}>
               <MedalRibbonsStarBoldDuotoneIcon className="mt-1 text-[22px]" />
             </NextLink>
           )}
@@ -135,7 +135,7 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link> */}
         {user && (
-          <NextLink href={"/board-stat/1"}>
+          <NextLink href={"/board-stat"}>
             <MedalRibbonsStarBoldDuotoneIcon className="text-[22px] mt-1" />
           </NextLink>
         )}

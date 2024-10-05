@@ -7,7 +7,7 @@ import { Slider } from "@nextui-org/slider";
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
 import { useAuthContext } from "@/contexts/auth-context";
-import { formOptions, postBackgroundColor } from "@/constants";
+import { formOptions, postBackgroundColor } from "@/config/constants";
 
 interface IAdviceFormProps {
   formik: any;

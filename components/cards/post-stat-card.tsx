@@ -12,7 +12,7 @@ const getRandomColor = () => {
 };
 
 // Function to create solid color with opacity
-export const getRandomColorWithOpacity = (_color: string) => {
+export const getRandomColorWithOpacity = (_color?: string) => {
   const color = _color ? _color : getRandomColor();
   // const opacity = Math.random(); // Opacity between 0 and 1
   return `${color}${Math.round(60).toString(16).padStart(2, "0")}`;
@@ -43,17 +43,14 @@ export const formattedDate = (date: any) => {
 };
 
 interface IPostItCardProps {
-  item: {
-    month: string;
-    id: string;
-  };
+  monthTH: string
   width?: number;
   isYourPost: boolean;
-  onClickCardItemHandler: (id: string) => void;
+  onClickCardItemHandler: () => void;
 }
 
 const PostStatCard: React.FC<IPostItCardProps> = ({
-  item,
+  monthTH,
   width,
   onClickCardItemHandler,
 }) => {
@@ -61,20 +58,20 @@ const PostStatCard: React.FC<IPostItCardProps> = ({
     <Card
       className={`w-full cursor-pointer`}
       isPressable
-      key={item.id}
+      key={monthTH}
       style={{
-        // background: getRandomColorWithOpacity(item.postColor),
+        background: getRandomColorWithOpacity(undefined),
         width: width,
-        backgroundImage: `url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+        // backgroundImage: `url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
       }}
-      //   onPress={() => {
-      //     onClickCardItemHandler(item.id);
-      //   }}
+      onPress={() => {
+        onClickCardItemHandler();
+      }}
     >
       <CardHeader className=""></CardHeader>
       <CardBody className="p-3 text-sm text-default-500 h-[150px] flex items-center justify-center justify-items-center">
         <p className="font-light text-xl text-gray-800 dark:text-white line-clamp-8">
-          {item.month}
+          {monthTH}
         </p>
       </CardBody>
       <CardFooter></CardFooter>

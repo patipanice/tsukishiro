@@ -23,7 +23,7 @@ import { User as FirebaseUser, User } from "firebase/auth";
 import { BackIcon } from "@/components/icons/BackIcon";
 import { AskubuntuIcon } from "@/components/icons/AskIcon";
 import QAForm from "@/components/form/qa-form";
-import { postBackgroundColor } from "@/constants";
+import { postBackgroundColor } from "@/config/constants";
 
 enum Step {
   SELECT_TYPE = 1,
