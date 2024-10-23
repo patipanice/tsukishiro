@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
+  GoogleAuthProvider
 } from "firebase/auth";
 import { getFirestore, Timestamp } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -26,6 +27,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 // const analytics = getAnalytics(app);
 
 const collectionName = {
@@ -40,5 +42,6 @@ export {
   app,
   auth,
   collectionName,
-  storage
+  storage,
+  googleProvider
 };

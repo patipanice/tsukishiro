@@ -6,6 +6,7 @@
     "newFollower": 214,
     "like": 564.6,
     "share": 105,
+    "diamond": "71.2K",
     "topTenUser": {
       "liveTime": {
         "oneToFive": "/stat/08-2024/hour-1.jpeg",
@@ -15,7 +16,8 @@
         "oneToFive": "/stat/08-2024/diamond-1.jpeg",
         "sixToTen": "/stat/08-2024/diamond-2.jpeg"
       }
-    }
+    },
+    "overview": "/stat/08-2024/overview.jpeg"
   },
   {
     "monthAndYear": "09-2024",
@@ -33,6 +35,7 @@
         "oneToFive": "/stat/09-2024/diamond-1.jpeg",
         "sixToTen": "/stat/09-2024/diamond-2.jpeg"
       }
-    }
+    },
+    "overview": "/stat/09-2024/overview.jpeg"
   }
 ]

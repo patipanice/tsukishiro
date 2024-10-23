@@ -20,11 +20,10 @@ export const siteConfig = {
       label: "บอร์ด Q&A",
       href: "/board-qa",
     },
-    // {
-    //   label: "บอร์ดของฉัน",
-    //   href: "/my-board",
-    //   isAuth: true,
-    // },
+    {
+      label: "Tic Tac Toe",
+      href: "/tictactoe",
+    },
   ],
   navMenuItems: [
     {
@@ -47,6 +46,10 @@ export const siteConfig = {
       label: "บอร์ดของฉัน",
       href: "/my-board",
       isAuth: true,
+    },
+    {
+      label: "Tic Tac Toe",
+      href: "/tictactoe",
     },
   ],
   links: {

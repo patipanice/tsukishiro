@@ -52,6 +52,7 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
           </p>
         )}
       </div>
+
       <Input
         label="อีเมล"
         type="email"

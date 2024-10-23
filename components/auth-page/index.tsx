@@ -8,12 +8,17 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   User,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
-import { auth, collectionName, db } from "@/config/firebase";
+import { auth, collectionName, db, googleProvider } from "@/config/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { AuthFormValue } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { AuthMode } from "@/enums/auth.enum";
+import { Button } from "@nextui-org/button";
+import { Divider } from "@nextui-org/react";
+import { GoogleIcon } from "../icons/GoogleIcon";
 
 const resetPassword = async (email: string) => {
   return await sendPasswordResetEmail(auth, email);
@@ -69,7 +74,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
       password:
         authMode === AuthMode.SIGN_IN && savedPassword ? savedPassword : "",
       isSavePassword: true,
-      code: ""
+      code: "",
     },
     async onSubmit(values) {
       const { email, password, isSavePassword } = values;
@@ -96,7 +101,36 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
     },
   });
 
-  return <AuthForm formik={formik} authMode={authMode} />;
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      // The signed-in user info
+      console.log("User Info:", user);
+      // You can also access the user's Google Access Token here
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      console.log("Google Access Token:", token);
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+    }
+  };
+
+  return (
+    <div className="space-y-5">
+      <AuthForm formik={formik} authMode={authMode} />
+      <Divider />
+      <Button
+        onClick={handleGoogleSignIn}
+        size="md"
+        fullWidth
+        startContent={<GoogleIcon />}
+        className="bg-white border border-gray-400"
+      >
+        Login with Google
+      </Button>
+    </div>
+  );
 };
 
 export default AuthPage;

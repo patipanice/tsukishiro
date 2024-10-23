@@ -57,8 +57,10 @@ const BoardStatDetail = ({ params }: { params: { slug: string } }) => {
           3 {monthTH} {year} - 30 {monthTH} {year}
         </p>
       </div>
-      <div className="w-full text-center space-y-10 mt-10">
-        <Overviews {...data} />
+      <div className="w-full text-center space-y-10 mt-10 flex items-center flex-col gap-3">
+        {/* <Overviews {...data} /> */}
+        {/* i want image center  */}
+        <Image alt="overview" src={data.overview} width={500} className="" />
         <div className="flex flex-col md:flex-row justify-around gap-10 items-center justify-items-center">
           <BoardCard
             type="hour"
