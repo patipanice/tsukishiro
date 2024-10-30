@@ -20,10 +20,10 @@ export const siteConfig = {
       label: "บอร์ด Q&A",
       href: "/board-qa",
     },
-    {
-      label: "Tic Tac Toe",
-      href: "/tictactoe",
-    },
+    // {
+    //   label: "Tic Tac Toe",
+    //   href: "/tictactoe",
+    // },
   ],
   navMenuItems: [
     {
@@ -47,10 +47,10 @@ export const siteConfig = {
       href: "/my-board",
       isAuth: true,
     },
-    {
-      label: "Tic Tac Toe",
-      href: "/tictactoe",
-    },
+    // {
+    //   label: "Tic Tac Toe",
+    //   href: "/tictactoe",
+    // },
   ],
   links: {
     github: "https://github.com/patipanice",

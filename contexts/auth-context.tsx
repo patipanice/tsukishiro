@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [role, setRole] = useState<Role>(Role.MEMBER);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
-  console.log(user)
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (isAdmin(user)) {

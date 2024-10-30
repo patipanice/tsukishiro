@@ -34,7 +34,8 @@ const collectionName = {
   advice: "inbox",
   users: "users",
   topic: 'topic',
-  qa: 'qa'
+  qa: 'qa',
+  tictactoe: 'tictactoe'
 };
 
 export {

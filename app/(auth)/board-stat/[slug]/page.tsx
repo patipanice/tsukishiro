@@ -54,13 +54,13 @@ const BoardStatDetail = ({ params }: { params: { slug: string } }) => {
           สถิติ TIKTOK LIVE ในเดือน{monthTH}
         </p>
         <p className="text-secondary-400 text-sm">
-          3 {monthTH} {year} - 30 {monthTH} {year}
+          2 {monthTH} {year} - 29 {monthTH} {year}
         </p>
       </div>
       <div className="w-full text-center space-y-10 mt-10 flex items-center flex-col gap-3">
         {/* <Overviews {...data} /> */}
         {/* i want image center  */}
-        <Image alt="overview" src={data.overview} width={500} className="" />
+        <Image alt="overview" src={data.overview} width={450} className="" />
         <div className="flex flex-col md:flex-row justify-around gap-10 items-center justify-items-center">
           <BoardCard
             type="hour"
