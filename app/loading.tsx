@@ -1,6 +1,9 @@
 import { CircularProgress } from "@nextui-org/progress";
 
 export default function Loading() {
-    // You can add any UI inside Loading, including a Skeleton.
-    return <div><CircularProgress aria-label="Loading..."/></div>
-  }
+  return (
+    <div className="w-full h-screen flex items-center justify-center">
+      <CircularProgress aria-label="Loading..."  label="กำลังโหลด" size="lg"/>
+    </div>
+  );
+}

@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server'
 // import { authenticate } from 'auth-provider'
  
 export function middleware(request: NextRequest) {
-  const isAuthenticated = true
+  const isAuthenticated = false
   // If the user is authenticated, continue as normal
   if (isAuthenticated) {
     return NextResponse.next()
@@ -13,14 +13,15 @@ export function middleware(request: NextRequest) {
 }
  
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/profile/:path*', '/dashboard/:path*'],  // กำหนดเส้นทางที่ middleware ใช้
+  // matcher: [
+  //   /*
+  //    * Match all request paths except for the ones starting with:
+  //    * - api (API routes)
+  //    * - _next/static (static files)
+  //    * - _next/image (image optimization files)
+  //    * - favicon.ico (favicon file)
+  //    */
+  //   '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  // ],
 }
