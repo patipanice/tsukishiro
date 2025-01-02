@@ -59,7 +59,7 @@
   },
   {
     "monthAndYear": "11-2024",
-    "monthTH": "พฤศจิกายน (ล่าสุด)",
+    "monthTH": "พฤศจิกายน",
     "totalLiveTime": 65,
     "newFollower": 229,
     "like": 0,
@@ -75,5 +75,24 @@
       }
     },
     "overview": "/stat/11-2024/overview.jpeg"
+  },
+  {
+    "monthAndYear": "12-2024",
+    "monthTH": "ธันวาคม (ล่าสุด)",
+    "totalLiveTime": 65,
+    "newFollower": 229,
+    "like": 0,
+    "share": 0,
+    "topTenUser": {
+      "liveTime": {
+        "oneToFive": "/stat/12-2024/hour-1.jpeg",
+        "sixToTen": "/stat/12-2024/hour-2.jpeg"
+      },
+      "diamond": {
+        "oneToFive": "/stat/12-2024/diamond-1.jpeg",
+        "sixToTen": "/stat/12-2024/diamond-2.jpeg"
+      }
+    },
+    "overview": "/stat/12-2024/overview.jpeg"
   }
 ]
