@@ -11,16 +11,16 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import AdviceForm from "@/components/form/advice-form";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs";
+import { Breadcrumbs, BreadcrumbItem } from "@heroui/breadcrumbs";
 import { PostStatus, PostType } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Spinner } from "@heroui/react";
 import { IAdviceForm } from "@/types";
 import { useAuthContext } from "@/contexts/auth-context";
 import { db } from "@/config/firebase";
 import { formattedDate } from "@/components/post-it-card";
-import { Snippet } from "@nextui-org/snippet";
-import { Divider } from "@nextui-org/divider";
+import { Snippet } from "@heroui/snippet";
+import { Divider } from "@heroui/divider";
 import { getCollectionNameByPostType } from "@/utils";
 import { getCurrentBoardPathnameByType } from "./board";
 import TopicForm from "../form/topic-form";

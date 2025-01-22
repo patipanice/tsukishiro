@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, SelectItem } from "@nextui-org/select";
+import { Select, SelectItem } from "@heroui/select";
 import { PostType } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";

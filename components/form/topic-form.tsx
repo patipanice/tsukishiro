@@ -1,7 +1,7 @@
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { Checkbox } from "@nextui-org/checkbox";
-import { Select, SelectItem } from "@nextui-org/select";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Select, SelectItem } from "@heroui/select";
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";
 import { FormikProps } from "formik";

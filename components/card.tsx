@@ -7,7 +7,7 @@ import {
   Divider,
   Link,
   Image,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export default function CardComponent() {
   return (

@@ -2,15 +2,15 @@
 import React from "react";
 import NextLink from "next/link";
 import { FormikProps } from "formik";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
 import { AuthFormValue } from "@/types/auth";
 import { AuthMode } from "@/enums/auth.enum";
 import { MailIcon } from "../icons/MailIcon";
 import { LockFilledIcon } from "../icons/LockFilledIcon";
 import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 import { EyeFilledIcon } from "../icons/EyeFilledIcon";
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "@heroui/react";
 import { HeartIcon } from "../icons/HeartIcon";
 
 const getPageTitleFormAuthMode = (authMode: AuthMode) => {

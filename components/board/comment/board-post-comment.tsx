@@ -10,7 +10,7 @@ import {
   CardBody,
   Chip,
   CardFooter,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useAuthContext } from "@/contexts/auth-context";
 import { SendIcon } from "@/components/icons/SendIcon";
 import { useFormik } from "formik";

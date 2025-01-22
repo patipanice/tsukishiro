@@ -7,7 +7,7 @@ import {
   DropdownItem,
   CircularProgress,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";

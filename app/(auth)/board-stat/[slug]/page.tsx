@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 import { Medal } from "@/components/icons/Medal";
 import stats from "@/stats.json";
 

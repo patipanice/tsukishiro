@@ -1,8 +1,8 @@
-import { Input, Textarea } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { Checkbox } from "@nextui-org/checkbox";
-import { Select, SelectItem } from "@nextui-org/select";
-import { Slider } from "@nextui-org/slider";
+import { Input, Textarea } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Select, SelectItem } from "@heroui/select";
+import { Slider } from "@heroui/slider";
 
 import { CirclePicker } from "react-color";
 import PostItCard from "../post-it-card";

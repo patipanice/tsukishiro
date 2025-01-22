@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, collectionName, db, storage } from "@/config/firebase";
 import { updateProfile, User as FirebaseUser } from "firebase/auth";
-import { Avatar, Progress } from "@nextui-org/react";
+import { Avatar, Progress } from "@heroui/react";
 import { CameraIcon } from "./icons/CameraIcon";
 import imageCompression from "browser-image-compression";
 import { doc, updateDoc } from "firebase/firestore";

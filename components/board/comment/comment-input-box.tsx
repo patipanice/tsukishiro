@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Textarea } from "@nextui-org/react";
+import { Avatar, Button, Checkbox, Textarea } from "@heroui/react";
 import { User } from "firebase/auth";
 import { FormikProps, FormikValues } from "formik";
 import React from "react";

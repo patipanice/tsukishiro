@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-// import { Link } from "@nextui-org/link";
+// import { Link } from "@heroui/link";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
@@ -12,6 +12,8 @@ import "../config/firebase";
 
 import { Kanit } from "next/font/google";
 import { Suspense } from "react";
+import Head from "next/head";
+import '../public/main.css'
 
 export const metadata: Metadata = {
   title: {
@@ -44,7 +46,10 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en" className={kanit.className}>
-      <head />
+      {/* <head /> */}
+      {/* <Head>
+        <link  rel="stylesheet" href="/main.css"/>
+      </Head> */}
       <body
         className={clsx(
           "min-h-screen bg-background font-kanit antialiased",
@@ -63,8 +68,8 @@ export default function RootLayout({
               <Link
                 isExternal
                 className="flex items-center gap-1 text-current"
-                href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
-                title="nextui.org homepage"
+                href="https://heroui-docs-v2.vercel.app?utm_source=next-app-template"
+                title="heroui.org homepage"
               >
                 <span className="text-default-600">Powered by</span>
                 <p className="text-primary">EveryOne</p>

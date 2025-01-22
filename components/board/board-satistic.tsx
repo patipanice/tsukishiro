@@ -2,7 +2,7 @@
 import React from "react";
 import BoardPostDetail from "@/components/board/board-post-detail";
 import { PostType } from "@/enums/post.enum";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 import { TrophyIcon } from "@/components/icons/TrophyIcon";
 import { MedalRibbonsStarBoldDuotoneIcon } from "@/components/icons/MedalRibbonsStarBoldDuotoneIcon";
 import { Medal } from "@/components/icons/Medal";

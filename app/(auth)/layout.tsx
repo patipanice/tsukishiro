@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthContext } from "@/contexts/auth-context";
-import { CircularProgress } from "@nextui-org/react";
+import { CircularProgress } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 export default function BoardLayout({

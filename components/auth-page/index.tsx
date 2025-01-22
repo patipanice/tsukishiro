@@ -16,8 +16,8 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { AuthFormValue } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { AuthMode } from "@/enums/auth.enum";
-import { Button } from "@nextui-org/button";
-import { Divider } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Divider } from "@heroui/react";
 import { GoogleIcon } from "../icons/GoogleIcon";
 
 const resetPassword = async (email: string) => {

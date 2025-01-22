@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { IAdviceForm } from "@/types";
 
 // Function to generate random hex color

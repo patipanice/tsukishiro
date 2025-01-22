@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@nextui-org/button";
-import { Select, SelectItem } from "@nextui-org/select";
+import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/select";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { addDoc } from "firebase/firestore";
@@ -12,7 +12,7 @@ import { serverTimestamp } from "firebase/firestore";
 import { PostStatus, PostType } from "@/enums/post.enum";
 import { getCollectionRef } from "@/utils/firebase-util";
 import BlockQuote from "@/components/block-quote";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { PinIcon } from "@/components/icons/PinIcon";
 import { useAuthContext } from "@/contexts/auth-context";
 import { collectionName } from "@/config/firebase";

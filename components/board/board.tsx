@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Spinner } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@heroui/react";
 import { useState, useEffect, useMemo } from "react";
 import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
