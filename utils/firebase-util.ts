@@ -1,5 +1,6 @@
-import { db } from "@/config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+
+import { db } from "@/config/firebase";
 
 // Utility function to get a collection reference
 export const getCollectionRef = (
@@ -9,6 +10,7 @@ export const getCollectionRef = (
   if (pathSegments) {
     return collection(db, collectionName, pathSegments);
   }
+
   return collection(db, collectionName);
 };
 

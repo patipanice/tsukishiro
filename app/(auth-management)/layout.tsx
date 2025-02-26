@@ -1,8 +1,9 @@
 "use client";
 
-import { useAuthContext } from "@/contexts/auth-context";
 import { CircularProgress } from "@heroui/react";
 import { useRouter } from "next/navigation";
+
+import { useAuthContext } from "@/contexts/auth-context";
 export default function AuthManagementLayout({
   children,
 }: {
@@ -17,6 +18,7 @@ export default function AuthManagementLayout({
 
   if (!loading && user) {
     router.push("/");
+
     return;
   }
 

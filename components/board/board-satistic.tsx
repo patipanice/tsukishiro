@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
-import BoardPostDetail from "@/components/board/board-post-detail";
-import { PostType } from "@/enums/post.enum";
 import { Card, CardHeader, CardBody, Image } from "@heroui/react";
+
 import { TrophyIcon } from "@/components/icons/TrophyIcon";
-import { MedalRibbonsStarBoldDuotoneIcon } from "@/components/icons/MedalRibbonsStarBoldDuotoneIcon";
 import { Medal } from "@/components/icons/Medal";
 
 const BoardStatDetail = ({ params }: { params: { slug: string } }) => {
@@ -36,10 +34,10 @@ export default BoardStatDetail;
 const Overviews = () => {
   return (
     <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <Overview value="618 ชม." type="ระยะเวลา LIVE" />
-      <Overview value="214 คน" type="ผู้ติดตามใหม่" />
-      <Overview value="564.6 K" type="ถูกใจ" />
-      <Overview value="105" type="แชร์" />
+      <Overview type="ระยะเวลา LIVE" value="618 ชม." />
+      <Overview type="ผู้ติดตามใหม่" value="214 คน" />
+      <Overview type="ถูกใจ" value="564.6 K" />
+      <Overview type="แชร์" value="105" />
     </div>
   );
 };

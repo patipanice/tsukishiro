@@ -4,17 +4,20 @@ import NextLink from "next/link";
 import { FormikProps } from "formik";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { AuthFormValue } from "@/types/auth";
-import { AuthMode } from "@/enums/auth.enum";
+import { Checkbox } from "@heroui/react";
+
 import { MailIcon } from "../icons/MailIcon";
 import { LockFilledIcon } from "../icons/LockFilledIcon";
 import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 import { EyeFilledIcon } from "../icons/EyeFilledIcon";
-import { Checkbox } from "@heroui/react";
 import { HeartIcon } from "../icons/HeartIcon";
+
+import { AuthMode } from "@/enums/auth.enum";
+import { AuthFormValue } from "@/types/auth";
 
 const getPageTitleFormAuthMode = (authMode: AuthMode) => {
   let title = "";
+
   switch (authMode) {
     case AuthMode.SIGN_UP:
       title = "สร้างผู้ใช้งาน";
@@ -28,6 +31,7 @@ const getPageTitleFormAuthMode = (authMode: AuthMode) => {
     default:
       break;
   }
+
   return title;
 };
 
@@ -54,13 +58,10 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
       </div>
 
       <Input
-        label="อีเมล"
-        type="email"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-        name="email"
-        labelPlacement="outside"
         autoComplete="email"
+        label="อีเมล"
+        labelPlacement="outside"
+        name="email"
         placeholder={
           authMode === AuthMode.SIGN_UP
             ? "กรุณากรอกอีเมลให้ถูกต้อง ex. email@email.com"
@@ -69,25 +70,20 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
         startContent={
           <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
+        type="email"
+        value={formik.values.email}
+        onChange={formik.handleChange}
       />
       {authMode !== AuthMode.RESET_PASSWORD && (
         <div className="space-y-2 w-full">
           <Input
-            label="รหัสผ่าน"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            name="password"
-            labelPlacement="outside"
-            placeholder="กรุณากรอกความยาวขั้นต่ำ 6 ตัวอักษร"
-            startContent={
-              <LockFilledIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
+            autoComplete="password"
             endContent={
               <button
+                aria-label="toggle password visibility"
                 className="focus:outline-none"
                 type="button"
                 onClick={toggleVisibility}
-                aria-label="toggle password visibility"
               >
                 {isVisible ? (
                   <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
@@ -96,21 +92,29 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
                 )}
               </button>
             }
-            autoComplete="password"
+            label="รหัสผ่าน"
+            labelPlacement="outside"
+            name="password"
+            placeholder="กรุณากรอกความยาวขั้นต่ำ 6 ตัวอักษร"
+            startContent={
+              <LockFilledIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+            }
             type={isVisible ? "text" : "password"}
+            value={formik.values.password}
+            onChange={formik.handleChange}
           />
           {authMode === AuthMode.SIGN_IN && (
             <div className="flex justify-between">
               <Checkbox
                 defaultSelected
-                size="sm"
-                icon={<HeartIcon />}
                 checked={formik.values.isSavePassword}
+                icon={<HeartIcon />}
+                size="sm"
                 onChange={formik.handleChange}
               >
                 <span className="text-xs">จดจำรหัสผ่าน</span>
               </Checkbox>
-              <NextLink href="/reset-password" className="float-right">
+              <NextLink className="float-right" href="/reset-password">
                 <span className="text-xs text-primary-500">ลืมรหัสผ่าน?</span>
               </NextLink>
             </div>
@@ -119,21 +123,13 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
       )}
       {authMode === AuthMode.SIGN_UP && (
         <Input
-          label="รหัส"
-          onChange={formik.handleChange}
-          value={formik.values.code}
-          name="code"
-          labelPlacement="outside"
-          placeholder="กรุณากรอกความยาวขั้นต่ำ 6 ตัวอักษร"
-          startContent={
-            <LockFilledIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-          }
+          autoComplete="password"
           endContent={
             <button
+              aria-label="toggle password visibility"
               className="focus:outline-none"
               type="button"
               onClick={toggleVisibility}
-              aria-label="toggle password visibility"
             >
               {isVisible ? (
                 <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
@@ -142,15 +138,23 @@ const AuthForm: React.FC<IAuthFormProps> = ({ formik, authMode }) => {
               )}
             </button>
           }
-          autoComplete="password"
+          label="รหัส"
+          labelPlacement="outside"
+          name="code"
+          placeholder="กรุณากรอกความยาวขั้นต่ำ 6 ตัวอักษร"
+          startContent={
+            <LockFilledIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+          }
           type={isVisible ? "text" : "password"}
+          value={formik.values.code}
+          onChange={formik.handleChange}
         />
       )}
       <Button
+        color="primary"
         onClick={() => {
           formik.handleSubmit();
         }}
-        color="primary"
       >
         {getPageTitleFormAuthMode(authMode)}
       </Button>

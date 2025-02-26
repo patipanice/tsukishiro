@@ -1,6 +1,8 @@
-import { PostStatus, PostType } from "@/enums/post.enum";
 import { SVGProps } from "react";
+
 import { CommentForm } from "./comment.interface";
+
+import { PostStatus, PostType } from "@/enums/post.enum";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;

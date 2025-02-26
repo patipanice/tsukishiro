@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
+
 import { UploadCircleSolidIcon } from "./icons/UploadCircleSolidIcon";
 
 const BackToTopButton = () => {
@@ -26,20 +27,22 @@ const BackToTopButton = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   if (showButton) {
     return (
       <Button
-        onClick={scrollToTop}
-        color="default"
-        variant="light"
-        className="fixed bottom-5 right-5 z-50"
         isIconOnly
         aria-label="Scroll to top"
+        className="fixed bottom-5 right-5 z-50"
+        color="default"
+        variant="light"
+        onClick={scrollToTop}
       >
         <UploadCircleSolidIcon className=" text-4xl" />
       </Button>
     );
   }
+
   return <></>;
 };
 

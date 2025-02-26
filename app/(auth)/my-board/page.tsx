@@ -4,12 +4,12 @@ import { Button, Input, Kbd, Spinner } from "@heroui/react";
 import { useState, useEffect, useMemo } from "react";
 import { getDocs, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+
 import { SearchIcon } from "@/components/icons";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import { PostPublishStatus, PostStatus, PostType } from "@/enums/post.enum";
 import PostPublishSelect from "@/components/selects/post-publish-select";
 import { useAuthContext } from "@/contexts/auth-context";
-import { collectionName, db } from "@/config/firebase";
 import { getCollectionRef } from "@/utils/firebase-util";
 import BoardPosts from "@/components/board/board-posts";
 import PostTypeSelect from "@/components/selects/post-type-select";
@@ -72,6 +72,7 @@ const fetchPost = async (
     console.error("Error fetching data: ", error);
   }
 };
+
 export default function BoardPage() {
   const { user } = useAuthContext();
   const [data, setData] = useState<any>([]);
@@ -92,6 +93,7 @@ export default function BoardPage() {
       setError(null);
       try {
         const posts = await fetchPost(filterValue.type, filterValue, user?.uid);
+
         setData(posts);
       } catch (err: any) {
         setError(err.message);
@@ -129,16 +131,8 @@ export default function BoardPage() {
       <div className="flex flex-wrap gap-3 items-center w-full">
         <Input
           isClearable
-          onChange={(e) => {
-            setFilterValue((prev) => ({
-              ...prev,
-              search: e.target.value,
-            }));
-          }}
-          className="w-full md:max-w-52"
           aria-label="Search"
-          label="ค้นหาด้วยรหัสหรือชื่อ"
-          size="sm"
+          className="w-full md:max-w-52"
           classNames={{
             inputWrapper: "bg-default-100",
             input: "text-sm",
@@ -148,10 +142,18 @@ export default function BoardPage() {
               K
             </Kbd>
           }
+          label="ค้นหาด้วยรหัสหรือชื่อ"
+          size="sm"
           startContent={
             <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
           }
           type="search"
+          onChange={(e) => {
+            setFilterValue((prev) => ({
+              ...prev,
+              search: e.target.value,
+            }));
+          }}
         />
         <PostTypeSelect
           isFilter
@@ -189,7 +191,7 @@ export default function BoardPage() {
       </div>
       {loading ? (
         <div className="w-full min-h-[400px] flex justify-center items-center justify-items-center">
-          <Spinner label="กำลังโหลด..." color="primary" labelColor="primary" />
+          <Spinner color="primary" label="กำลังโหลด..." labelColor="primary" />
         </div>
       ) : error ? (
         <div>

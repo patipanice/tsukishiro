@@ -10,23 +10,28 @@ import {
   deleteDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import AdviceForm from "@/components/form/advice-form";
 import { Breadcrumbs, BreadcrumbItem } from "@heroui/breadcrumbs";
+import { Button, Spinner } from "@heroui/react";
+import { Snippet } from "@heroui/snippet";
+import { Divider } from "@heroui/divider";
+
+import TopicForm from "../form/topic-form";
+import QAForm from "../form/qa-form";
+
+import { getCurrentBoardPathnameByType } from "./board";
+import BoardPostComment from "./comment/board-post-comment";
+
+import AdviceForm from "@/components/form/advice-form";
 import { PostStatus, PostType } from "@/enums/post.enum";
 import PostStatusSelect from "@/components/selects/post-status-select";
-import { Button, Spinner } from "@heroui/react";
 import { IAdviceForm } from "@/types";
 import { useAuthContext } from "@/contexts/auth-context";
 import { db } from "@/config/firebase";
 import { formattedDate } from "@/components/post-it-card";
-import { Snippet } from "@heroui/snippet";
-import { Divider } from "@heroui/divider";
 import { getCollectionNameByPostType } from "@/utils";
-import { getCurrentBoardPathnameByType } from "./board";
-import TopicForm from "../form/topic-form";
 import { Role } from "@/enums/auth.enum";
-import BoardPostComment from "./comment/board-post-comment";
-import QAForm from "../form/qa-form";
+
+
 
 const getBoardDetailTitleByPostType = (type: PostType) => {
   switch (type) {
@@ -83,6 +88,7 @@ export default function BoardPostDetail({
 
         if (docSnap.exists()) {
           const data = docSnap.data();
+
           if (type === PostType.ADVICE) {
             formik.setFieldValue("feeling", data?.feeling || 1);
             formik.setFieldValue("period", data?.period || "");
@@ -106,6 +112,7 @@ export default function BoardPostDetail({
         console.error("Error fetching data: ", error);
       }
     };
+
     fetchData();
   }, [type, params, refetch]);
 
@@ -115,6 +122,7 @@ export default function BoardPostDetail({
   const updateStatusHandler = async (status: PostStatus) => {
     try {
       const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
+
       await updateDoc(docRef, { status });
       formik.setFieldValue("status", status);
       alert("อัพเดทสำเร็จ");
@@ -146,6 +154,7 @@ export default function BoardPostDetail({
       }
 
       const docRef = doc(db, getCollectionNameByPostType(type), params.slug);
+
       await updateDoc(docRef, formValues);
       alert("อัพเดทสำเร็จ");
       router.refresh();
@@ -176,6 +185,7 @@ export default function BoardPostDetail({
 
       // Optionally, check if the document exists
       const docSnap = await getDoc(docRef);
+
       if (!docSnap.exists()) {
         throw new Error("ไม่พบโพสของคุณในระบบ");
       }
@@ -222,6 +232,7 @@ export default function BoardPostDetail({
       }
     },
   });
+
   if (loading) return <Spinner />;
 
   return (
@@ -235,7 +246,7 @@ export default function BoardPostDetail({
       <div className="flex items-start justify-between">
         <div className="space-y-3">
           <p className="text-xl">รหัส{getBoardDetailTitleByPostType(type)}</p>
-          <Snippet symbol="id:" size="sm">
+          <Snippet size="sm" symbol="id:">
             {params.slug}
           </Snippet>
           <div>
@@ -275,39 +286,39 @@ export default function BoardPostDetail({
         <div className="flex items-center gap-2 ">
           {canDeletePost && (
             <Button
-              onClick={onClickDeletePostButtonHandler}
               color="danger"
               variant="ghost"
+              onClick={onClickDeletePostButtonHandler}
             >
               ลบ
             </Button>
           )}
           {role === Role.SUPER_ADMIN && (
             <PostStatusSelect
+              type={type}
               value={formik.values.status as PostStatus}
               onChange={updateStatusHandler}
-              type={type}
             />
           )}
         </div>
       </div>
       <Divider />
       {type === PostType.ADVICE && (
-        <AdviceForm isDetailPage formik={formik} canEditPost={canEditPost} />
+        <AdviceForm isDetailPage canEditPost={canEditPost} formik={formik} />
       )}
       {type === PostType.TOPIC && (
-        <TopicForm isDetailPage formik={formik} canEditPost={canEditPost} />
+        <TopicForm isDetailPage canEditPost={canEditPost} formik={formik} />
       )}
       {type === PostType.QA && (
-        <QAForm isDetailPage formik={formik} canEditPost={canEditPost} />
+        <QAForm isDetailPage canEditPost={canEditPost} formik={formik} />
       )}
 
       {type === PostType.ADVICE && (
         <>
           <Divider />
           <BoardPostComment
-            postId={params.slug}
             comments={data?.comments}
+            postId={params.slug}
             onRefetchHandler={onRefetchHandler}
           />
         </>

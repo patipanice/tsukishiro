@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 // import { Link } from "@heroui/link";
 import clsx from "clsx";
+import { Suspense } from "react";
+import { Kanit } from "next/font/google";
 
 import { Providers } from "./providers";
 
@@ -10,9 +12,6 @@ import { fontKanit } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import "../config/firebase";
 
-import { Kanit } from "next/font/google";
-import { Suspense } from "react";
-import Head from "next/head";
 import '../public/main.css'
 
 export const metadata: Metadata = {
@@ -45,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en" className={kanit.className}>
+    <html suppressHydrationWarning className={kanit.className} lang="en">
       {/* <head /> */}
       {/* <Head>
         <link  rel="stylesheet" href="/main.css"/>

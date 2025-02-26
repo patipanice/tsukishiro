@@ -1,8 +1,9 @@
 "use client";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { createInvoice } from "./action";
 import { useFormState, useFormStatus } from "react-dom";
+
+import { createInvoice } from "./action";
 
 interface Post {
   id: string;
@@ -45,13 +46,15 @@ const initialState = {
 export default  function Page() {
   const [state, formAction] = useFormState(createInvoice, initialState);
   const { pending } = useFormStatus()
+
   console.log(pending)
+
   return (
     <form action={formAction} >
-      <Input type="text" name="customerId" />
-      <Input type="text" name="amount" />
-      <Input type="text" name="status" />
-      <Button type="submit" isDisabled={pending}>Create Invoice</Button>
+      <Input name="customerId" type="text" />
+      <Input name="amount" type="text" />
+      <Input name="status" type="text" />
+      <Button isDisabled={pending} type="submit">Create Invoice</Button>
       <p aria-live="polite">{state?.message}</p>
     </form>
   );

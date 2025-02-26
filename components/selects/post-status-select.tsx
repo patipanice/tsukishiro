@@ -1,9 +1,11 @@
 import React from "react";
 import { Select, SelectItem } from "@heroui/select";
-import { PostStatus, PostType } from "@/enums/post.enum";
+
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
 import { getPostStatusLabel } from "../board/board-post-detail";
+
+import { PostStatus, PostType } from "@/enums/post.enum";
 
 const getPostStatusOptions = (type: PostType) => {
   const postStatusOptions = [
@@ -41,8 +43,8 @@ const PostStatusSelect: React.FC<IPostStatusSelectProps> = ({
     <Select
       className="w-full md:max-w-56"
       label="สถานะ"
-      size="sm"
       selectedKeys={value ? [value] : []}
+      size="sm"
       onChange={(e) => {
         if (e.target.value && !isFilter) {
           onChange(e.target.value as PostStatus);

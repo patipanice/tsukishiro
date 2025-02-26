@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { auth, collectionName, db, storage } from "@/config/firebase";
 import { updateProfile, User as FirebaseUser } from "firebase/auth";
 import { Avatar, Progress } from "@heroui/react";
-import { CameraIcon } from "./icons/CameraIcon";
 import imageCompression from "browser-image-compression";
 import { doc, updateDoc } from "firebase/firestore";
+
+import { CameraIcon } from "./icons/CameraIcon";
+
+import { auth, collectionName, db, storage } from "@/config/firebase";
 
 interface ImageUploadProps {
   user: FirebaseUser | null;
@@ -28,6 +30,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
+
     if (file) {
       setIsUploading(true);
       const options = {
@@ -46,6 +49,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
           setProgress(progress);
           console.log("Upload is " + progress + "% done");
         },
@@ -66,6 +70,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
 
   const updateUserProfile = async (photoURL: string) => {
     const user = auth.currentUser;
+
     if (user) {
       try {
         await updateProfile(user, { photoURL });
@@ -82,9 +87,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
   const updateUserProfileFireStore = async (photoURL: string) => {
     try {
       const docRef = doc(db, collectionName.users, String(user?.uid));
+
       await updateDoc(docRef, {
         photoURL,
       });
+
       return { status: 200 };
     } catch (error) {
       alert(error);
@@ -93,48 +100,48 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ user, refreshRoute }) => {
 
   return (
     <div
-      className="relative w-32 h-32"
-      onClick={handleAvatarClick}
-      style={{ cursor: "pointer" }}
-      role="button"
-      tabIndex={0}
       aria-label="Click to upload avatar"
+      className="relative w-32 h-32"
+      role="button"
+      style={{ cursor: "pointer" }}
+      tabIndex={0}
+      onClick={handleAvatarClick}
     >
       <Avatar
-        src={image || ""}
+        className="w-32 h-32 text-large"
         fallback={
           <CameraIcon
             className="animate-pulse w-20 h-20 text-default-500"
             fill="currentColor"
-            size={60}
             height={undefined}
+            size={60}
             width={undefined}
           />
         }
-        className="w-32 h-32 text-large"
+        src={image || ""}
       />
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity rounded-full">
         <CameraIcon
           className="w-10 h-10 text-white"
           fill={undefined}
-          size={undefined}
           height={undefined}
+          size={undefined}
           width={undefined}
         />
       </div>
       <input
         ref={fileInputRef}
-        type="file"
         accept="image/*"
         style={{ display: "none" }}
+        type="file"
         onChange={handleFileChange}
       />
       {isUploading && (
         <Progress
-          color="danger"
           aria-label="Loading..."
-          value={progress}
           className="my-2"
+          color="danger"
+          value={progress}
         />
       )}
     </div>

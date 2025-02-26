@@ -45,8 +45,10 @@ async function getPost(id: string) {
     cache: 'force-cache',
   })
   let post: Post = await res.json()
+
   console.log(post)
   if (!post) notFound()
+
   return post
 }
  
@@ -70,6 +72,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
  
 export default async function Page({ params }: { params: { id: string } }) {
   let post = await getPost(params.id)
+
   return (
     <article>
       <h1>{post.title}</h1>

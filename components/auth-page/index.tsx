@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import AuthForm from "../form/auth-form";
 import { useFormik } from "formik";
-import { useAuthContext } from "@/contexts/auth-context";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -11,14 +9,18 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, collectionName, db, googleProvider } from "@/config/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { AuthFormValue } from "@/types/auth";
 import { useRouter } from "next/navigation";
-import { AuthMode } from "@/enums/auth.enum";
 import { Button } from "@heroui/button";
 import { Divider } from "@heroui/react";
+
+import AuthForm from "../form/auth-form";
 import { GoogleIcon } from "../icons/GoogleIcon";
+
+import { AuthMode } from "@/enums/auth.enum";
+import { AuthFormValue } from "@/types/auth";
+import { auth, collectionName, db, googleProvider } from "@/config/firebase";
+import { useAuthContext } from "@/contexts/auth-context";
 
 const resetPassword = async (email: string) => {
   return await sendPasswordResetEmail(auth, email);
@@ -30,8 +32,10 @@ const createNewUserEmailAndPasswordFirebaseAuth = async (
 ) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
+
     if (res.user) {
       await saveNewUserToFireStoreCollection(res.user);
+
       return { status: 200 };
     }
   } catch (err: any) {
@@ -42,6 +46,7 @@ const createNewUserEmailAndPasswordFirebaseAuth = async (
 
 const saveNewUserToFireStoreCollection = async (user: User) => {
   const docRef = doc(db, collectionName.users, user.uid);
+
   await setDoc(docRef, {
     id: user.uid,
     email: user.email,
@@ -64,6 +69,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const password = localStorage.getItem("savedPassword");
+
       setSavedPassword(String(password));
     }
   }, []);
@@ -105,11 +111,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+
       // The signed-in user info
       console.log("User Info:", user);
       // You can also access the user's Google Access Token here
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
+
       console.log("Google Access Token:", token);
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
@@ -118,14 +126,14 @@ const AuthPage: React.FC<AuthPageProps> = ({ authMode }) => {
 
   return (
     <div className="space-y-5">
-      <AuthForm formik={formik} authMode={authMode} />
+      <AuthForm authMode={authMode} formik={formik} />
       <Divider />
       <Button
-        onClick={handleGoogleSignIn}
-        size="md"
         fullWidth
-        startContent={<GoogleIcon />}
         className="bg-white border border-gray-400"
+        size="md"
+        startContent={<GoogleIcon />}
+        onClick={handleGoogleSignIn}
       >
         Login with Google
       </Button>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useAuthContext } from "@/contexts/auth-context";
 import { CircularProgress } from "@heroui/react";
 import { useRouter } from "next/navigation";
+
+import { useAuthContext } from "@/contexts/auth-context";
 
 export default function BoardLayout({
   children,
@@ -18,6 +19,7 @@ export default function BoardLayout({
 
   if (!loading && !user) {
     router.push("/signin");
+
     return;
   }
 

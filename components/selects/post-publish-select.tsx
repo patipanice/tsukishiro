@@ -1,9 +1,10 @@
 import React from "react";
 import { Select, SelectItem } from "@heroui/select";
 
-import { PostPublishStatus } from "@/enums/post.enum";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
+
+import { PostPublishStatus } from "@/enums/post.enum";
 
 const postStatusOptions = [
   {
@@ -33,8 +34,8 @@ const PostPublishSelect: React.FC<IPostStatusSelectProps> = ({
     <Select
       className="w-full md:max-w-44"
       label="สถานะ"
-      size="sm"
       selectedKeys={value ? [value] : []}
+      size="sm"
       onChange={(e) => {
         if (e.target.value && !isFilter) {
           onChange(e.target.value as PostPublishStatus);

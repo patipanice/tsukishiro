@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Avatar,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -10,6 +9,7 @@ import {
 } from "@heroui/react";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 import { useAuthContext } from "@/contexts/auth-context";
 
 const AuthSection = () => {

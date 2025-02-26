@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Card, CardHeader, CardBody, Image } from "@heroui/react";
+
 import { Medal } from "@/components/icons/Medal";
 import stats from "@/stats.json";
 
@@ -60,17 +61,17 @@ const BoardStatDetail = ({ params }: { params: { slug: string } }) => {
       <div className="w-full text-center space-y-10 mt-10 flex items-center flex-col gap-3">
         {/* <Overviews {...data} /> */}
         {/* i want image center  */}
-        <Image alt="overview" src={data.overview} width={450} className="" />
+        <Image alt="overview" className="" src={data.overview} width={450} />
         <div className="flex flex-col md:flex-row justify-around gap-10 items-center justify-items-center">
           <BoardCard
-            type="hour"
             image1={data.topTenUser.liveTime.oneToFive}
             image2={data.topTenUser.liveTime.sixToTen}
+            type="hour"
           />
           <BoardCard
-            type="diamond"
             image1={data.topTenUser.diamond.oneToFive}
             image2={data.topTenUser.diamond.sixToTen}
+            type="diamond"
           />
         </div>
       </div>
@@ -96,13 +97,13 @@ const Overviews: React.FC<OverviewProps> = ({
   return (
     <div className="w-full grid grid-cols-2 gap-4">
       <Overview
-        value={`${totalLiveTime} ชม.`}
         type="ระยะเวลา LIVE"
+        value={`${totalLiveTime} ชม.`}
         valueColor="text-primary-500"
       />
       <Overview
-        value={`${newFollower} คน`}
         type="ผู้ติดตามใหม่"
+        value={`${newFollower} คน`}
         valueColor="text-yellow-500"
       />
       {/* <Overview value={`${like} K`} type="ถูกใจ" valueColor="text-green-500" />
