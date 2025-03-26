@@ -81,16 +81,16 @@ const getFormInitialValues = (postType: PostType | null, user: User | null) => {
         postColor: postBackgroundColor[0],
       };
       break;
-      case PostType.QA:
-        values = {
-          message: "",
-          age: "",
-          name: user?.displayName,
-          gender: undefined,
-          isPublish: true,
-          postColor: postBackgroundColor[0],
-        };
-        break;
+    case PostType.QA:
+      values = {
+        message: "",
+        age: "",
+        name: user?.displayName,
+        gender: undefined,
+        isPublish: true,
+        postColor: postBackgroundColor[0],
+      };
+      break;
   }
 
   return values;
@@ -195,8 +195,8 @@ export default function Home() {
           postType === PostType.ADVICE
             ? await submitAdviceForm(values as IAdviceForm, user)
             : postType === PostType.QA
-            ? await submitQAForm(values as QAFormValues, user)
-            : await submitTopicForm(values as TopicFormValues, user);
+              ? await submitQAForm(values as QAFormValues, user)
+              : await submitTopicForm(values as TopicFormValues, user);
 
         setPostId(postId);
         setQuote(quote);

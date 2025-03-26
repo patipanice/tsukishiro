@@ -43,18 +43,28 @@ const initialState = {
   message: "",
 };
 
-export default  function Page() {
+export default function Page() {
   const [state, formAction] = useFormState(createInvoice, initialState);
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
-  console.log(pending)
+  const testLoopArray = () => {
+    const arr = [1, 2, 3, 4, 5];
+    arr.forEach((item) => {
+      console.log;
+    });
+    return arr;
+  };
+
+  testLoopArray();
 
   return (
-    <form action={formAction} >
+    <form action={formAction}>
       <Input name="customerId" type="text" />
       <Input name="amount" type="text" />
       <Input name="status" type="text" />
-      <Button isDisabled={pending} type="submit">Create Invoice</Button>
+      <Button isDisabled={pending} type="submit">
+        Create Invoice
+      </Button>
       <p aria-live="polite">{state?.message}</p>
     </form>
   );
