@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, SelectItem } from "@heroui/select";
+
 import { OrderBy } from "@/enums/post.enum";
 
 const options = [
@@ -28,8 +29,8 @@ const PostSortingDate: React.FC<IPostStatusSelectProps> = ({
     <Select
       className="w-full md:max-w-44"
       label="เรียงโดย"
-      size="sm"
       selectedKeys={value ? [value] : []}
+      size="sm"
       onChange={(e) => {
         if (e.target.value && !isFilter) {
           onChange(e.target.value as OrderBy);

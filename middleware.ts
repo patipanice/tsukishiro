@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from 'next/server'
  
 export function middleware(request: NextRequest) {
   const isAuthenticated = false
+
   // If the user is authenticated, continue as normal
   if (isAuthenticated) {
     return NextResponse.next()
@@ -10,7 +11,7 @@ export function middleware(request: NextRequest) {
  
   // Redirect to login page if not authenticated
   return NextResponse.redirect(new URL('/signin', request.url))
-}
+} 
  
 export const config = {
   matcher: ['/profile/:path*', '/dashboard/:path*'],  // กำหนดเส้นทางที่ middleware ใช้

@@ -3,8 +3,10 @@ import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
 import { Select, SelectItem } from "@heroui/select";
 import { CirclePicker } from "react-color";
-import PostItCard from "../post-it-card";
 import { FormikProps } from "formik";
+
+import PostItCard from "../post-it-card";
+
 import { formOptions, postBackgroundColor } from "@/config/constants";
 
 interface ITopicFormProps {
@@ -28,44 +30,44 @@ const QAForm: React.FC<ITopicFormProps> = ({
       )}
       <Input
         isRequired
-        label="คำถาม"
-        placeholder="ระบุคำถามที่ต้องการถาม เรื่องส่วนตัวบางเรื่องอาจจะไม่สามารถตอบได้"
-        name="message"
-        onChange={formik.handleChange}
-        value={formik.values.message}
         isReadOnly={isDisabled}
+        label="คำถาม"
+        name="message"
+        placeholder="ระบุคำถามที่ต้องการถาม เรื่องส่วนตัวบางเรื่องอาจจะไม่สามารถตอบได้"
+        value={formik.values.message}
+        onChange={formik.handleChange}
       />
 
       <Input
+        isReadOnly={isDisabled}
         label="คุณคือใคร"
+        maxLength={20}
+        name="name"
         placeholder="ถ้าไม่ต้องการระบุชื่อข้ามไปได้เลย"
         type="text"
-        name="name"
-        onChange={formik.handleChange}
         value={formik.values.name}
-        isReadOnly={isDisabled}
-        maxLength={20}
+        onChange={formik.handleChange}
       />
       <div className="flex gap-4">
         <Select
-          label="อายุ"
           className="max-w-sm"
-          onChange={(e) => formik.setFieldValue("age", e.target.value)}
-          selectedKeys={[formik.values.age]}
           isDisabled={isDisabled}
+          label="อายุ"
           placeholder="ไม่จำเป็นต้องระบุ"
+          selectedKeys={[formik.values.age]}
+          onChange={(e) => formik.setFieldValue("age", e.target.value)}
         >
           {formOptions.age.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
           ))}
         </Select>
         <Select
-          label="เพศ"
           className="max-w-sm"
-          onChange={(e) => formik.setFieldValue("gender", e.target.value)}
-          selectedKeys={[formik.values.gender]}
           isDisabled={isDisabled}
+          label="เพศ"
           placeholder="ไม่จำเป็นต้องระบุ"
+          selectedKeys={[formik.values.gender]}
+          onChange={(e) => formik.setFieldValue("gender", e.target.value)}
         >
           {formOptions.gender.map((option) => (
             <SelectItem key={option.key}>{option.label}</SelectItem>
@@ -76,13 +78,14 @@ const QAForm: React.FC<ITopicFormProps> = ({
         <div className="space-y-2">
           <p>เลือกสีของโพส</p>
           <CirclePicker
-            colors={postBackgroundColor}
             color={formik.values.postColor}
+            colors={postBackgroundColor}
             onChange={(color) => formik.setFieldValue("postColor", color.hex)}
           />
         </div>
       )}
       <PostItCard
+        isYourPost={false}
         item={{
           id: "id",
           postColor: formik.values.postColor,
@@ -92,35 +95,34 @@ const QAForm: React.FC<ITopicFormProps> = ({
         }}
         width={260}
         onClickCardItemHandler={() => {}}
-        isYourPost={false}
       />
       <Checkbox
+        isDisabled={isDisabled}
         isSelected={formik.values.isPublish}
         onChange={(e) => formik.setFieldValue("isPublish", e.target.checked)}
-        isDisabled={isDisabled}
       >
         <span className="text-sm"> ต้องการให้แสดงคำถามในบอร์ด</span>
       </Checkbox>
       {!isDisabled && (
         <Button
-          color="primary"
           className="w-full max-w-md mt-5"
-          onPress={() => formik.handleSubmit()}
+          color="primary"
           isDisabled={!formik.isValid || formik.values.message === ""}
           isLoading={isLoadingSubmit}
           startContent={
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
               height="20"
               viewBox="0 0 1024 1023"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill="currentColor"
                 d="m896 800l128 223l-224-128l-1-6l-168-167l-152 151q-42 42-95-10V684L126 416l-13 12q-19 20-46.5 20t-47-19.5t-19.5-47T19 334L335 19q20-19 47.5-19t47 19T449 65.5T429 113l-13 13l269 258l179 1q52 52 9 94L722 630l168 168z"
+                fill="currentColor"
               />
             </svg>
           }
+          onPress={() => formik.handleSubmit()}
         >
           {!canEditPost ? "ติดคำถามลงในบอร์ด" : "ยืนยันการแก้ไข"}
         </Button>

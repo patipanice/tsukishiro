@@ -12,8 +12,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "@/config/firebase";
 import { User as FirebaseUser } from "firebase/auth";
+
+import { auth } from "@/config/firebase";
 import { Role } from "@/enums/auth.enum";
 
 const isAdmin = (user: FirebaseUser | null) => {
@@ -99,8 +100,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useAuthContext = (): AuthContextType => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 };

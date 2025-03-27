@@ -3,11 +3,12 @@
 import { Button, Input } from "@heroui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { updateProfile, User } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
+
 import { useAuthContext } from "@/contexts/auth-context";
 import { auth, collectionName, db } from "@/config/firebase";
 import ImageUpload from "@/components/image-upload";
-import { updateProfile, User } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
 
 type UserProfileFields = Partial<Pick<User, "displayName" | "photoURL">>;
 
@@ -16,6 +17,7 @@ const updateUserProfileFirebaseAuth = async (
   fields: UserProfileFields
 ) => {
   const user = auth.currentUser;
+
   if (user) {
     try {
       await updateProfile(user, { ...fields });
@@ -33,9 +35,11 @@ const updateUserProfileFireStore = async (
 ) => {
   try {
     const docRef = doc(db, collectionName.users, uid);
+
     await updateDoc(docRef, {
       fields,
     });
+
     return { status: 200 };
   } catch (error) {
     alert(error);
@@ -53,26 +57,27 @@ export default function BoardPage() {
 
   return (
     <section className="flex flex-col gap-7 justify-center items-center w-full">
-      <ImageUpload user={user} refreshRoute={refreshRoute} />
+      <ImageUpload refreshRoute={refreshRoute} user={user} />
       <div className="w-full flex flex-col items-center gap-y-6">
-        <Input label="uid" isReadOnly value={user?.uid} className="max-w-xs" />
+        <Input isReadOnly className="max-w-xs" label="uid" value={user?.uid} />
         <Input
-          label="อีเมล"
           isReadOnly
-          value={user?.email || ""}
           className="max-w-xs"
+          label="อีเมล"
+          value={user?.email || ""}
         />
         <Input
-          label="ชื่อที่แสดง"
           className="max-w-xs"
           defaultValue={user?.displayName || ""}
-          value={displayNameValue}
+          label="ชื่อที่แสดง"
           placeholder="ชื่อนี้ผู้ใช้สามารถเลือกที่จะแสดงในโพสได้"
+          value={displayNameValue}
           onChange={(e) => {
             setDisplayNameValue(e.target.value);
           }}
         />
         <Button
+          color="primary"
           onClick={() =>
             updateUserProfileFirebaseAuth(String(user?.uid), {
               displayName: displayNameValue,
@@ -80,7 +85,6 @@ export default function BoardPage() {
               refreshRoute();
             })
           }
-          color="primary"
         >
           บันทึกชื่อที่แสดง
         </Button>

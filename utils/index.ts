@@ -3,9 +3,10 @@
 //     return localStorage.getItem("isAdminMode") === "true";
 // };
 
+import { Timestamp } from "firebase/firestore";
+
 import { collectionName } from "@/config/firebase";
 import { PostType } from "@/enums/post.enum";
-import { Timestamp } from "firebase/firestore";
 
 // export { isAdminMode };
 

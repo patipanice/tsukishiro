@@ -13,15 +13,18 @@ import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
+import { Divider } from "@heroui/react";
+
+import AuthSection from "./auth-section";
+import { MedalRibbonsStarBoldDuotoneIcon } from "./icons/MedalRibbonsStarBoldDuotoneIcon";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon, Logo } from "@/components/icons";
 import { useAuthContext } from "@/contexts/auth-context";
-import { usePathname } from "next/navigation";
-import AuthSection from "./auth-section";
-import { Divider } from "@heroui/react";
-import { MedalRibbonsStarBoldDuotoneIcon } from "./icons/MedalRibbonsStarBoldDuotoneIcon";
+
+
 
 export const Navbar = () => {
   const { user } = useAuthContext();

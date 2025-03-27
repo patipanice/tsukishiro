@@ -1,6 +1,7 @@
+import React from "react";
+
 import PostItCard from "@/components/post-it-card";
 import { IAdviceForm } from "@/types";
-import React from "react";
 
 interface BoardPostsProps {
   data?: IAdviceForm[];
@@ -18,10 +19,10 @@ const BoardPosts: React.FC<BoardPostsProps> = ({
       {data?.length > 0 ? (
         data?.map((item: IAdviceForm) => (
           <PostItCard
-            item={item}
-            onClickCardItemHandler={onClickCardItemHandler}
             key={item.id}
             isYourPost={item.userId === userId}
+            item={item}
+            onClickCardItemHandler={onClickCardItemHandler}
           />
         ))
       ) : (

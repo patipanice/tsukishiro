@@ -3,5 +3,8 @@
   "cSpell.words": [
     "nextui",
     "Pressable"
+  ],
+  "conventionalCommits.scopes": [
+    "new feat"
   ]
 }

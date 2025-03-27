@@ -1,4 +1,5 @@
 import React from "react";
+
 import BoardPostDetail from "@/components/board/board-post-detail";
 import { PostType } from "@/enums/post.enum";
 
@@ -8,7 +9,8 @@ const AdvicePostDetailPage = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const slug = (await params);
-  return <BoardPostDetail type={PostType.ADVICE} params={slug} />;
+
+  return <BoardPostDetail params={slug} type={PostType.ADVICE} />;
 };
 
 export default AdvicePostDetailPage;

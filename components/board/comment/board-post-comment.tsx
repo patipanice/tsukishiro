@@ -1,38 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
-  Textarea,
   Button,
-  Avatar,
-  Checkbox,
-  Divider,
   User,
   CardBody,
-  Chip,
-  CardFooter,
 } from "@heroui/react";
-import { useAuthContext } from "@/contexts/auth-context";
-import { SendIcon } from "@/components/icons/SendIcon";
 import { useFormik } from "formik";
 import {
   arrayRemove,
   arrayUnion,
   doc,
-  FieldValue,
   getDoc,
-  serverTimestamp,
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { collectionName, db } from "@/config/firebase";
 import { User as FirebaseUser } from "firebase/auth";
-import { CommentForm } from "@/types/comment.interface";
 import { v4 as uuidv4 } from "uuid";
-import { HeartFilledIcon } from "@/components/icons";
-import { BinIcon } from "@/components/icons/BinIcon";
-import { formatCreatedAt } from "@/utils";
-import { formattedDate } from "@/components/post-it-card";
+
 import CommentInputBox from "./comment-input-box";
+
+import { useAuthContext } from "@/contexts/auth-context";
+import { collectionName, db } from "@/config/firebase";
+import { CommentForm } from "@/types/comment.interface";
+import { BinIcon } from "@/components/icons/BinIcon";
+import { formattedDate } from "@/components/post-it-card";
+
 
 function isValidUser(
   user: FirebaseUser | undefined | null
@@ -43,9 +35,11 @@ function isValidUser(
 const addComment = async (postId: string, comment: CommentForm) => {
   try {
     const docRef = doc(db, collectionName.advice, postId);
+
     await updateDoc(docRef, {
       comments: arrayUnion(comment),
     });
+
     return { status: 200 };
   } catch (error) {
     alert(error);
@@ -60,6 +54,7 @@ const fetchDocument = async (documentId: string) => {
     return docSnap.data();
   } else {
     console.log("No such document!");
+
     return null;
   }
 };
@@ -123,12 +118,12 @@ const Comment: React.FC<CommentProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-x-3">
               <User
-                name={!isAnonymous && user ? user?.displayName : "ไม่ระบุตัวตน"}
-                description={formattedDate(createdAt)}
                 avatarProps={{
                   src: user?.photoURL || "",
                   size: "sm",
                 }}
+                description={formattedDate(createdAt)}
+                name={!isAnonymous && user ? user?.displayName : "ไม่ระบุตัวตน"}
               />
               {/* {canDeleteComment && (
                 <Chip variant="flat" radius="sm" size="sm" color="primary">
@@ -138,11 +133,11 @@ const Comment: React.FC<CommentProps> = ({
             </div>
             {canDeleteComment && (
               <Button
-                color="danger"
-                variant="light"
-                aria-label="Bin"
-                size="sm"
                 isIconOnly
+                aria-label="Bin"
+                color="danger"
+                size="sm"
+                variant="light"
                 onClick={onClickDeleteComment}
               >
                 <BinIcon />
@@ -195,6 +190,7 @@ const Comments: React.FC<ICommentsProps> = ({
           : null,
         createdAt: Timestamp.fromDate(new Date()),
       };
+
       addComment(postId, comment)
         .then(() => {
           formik.resetForm();
@@ -213,13 +209,13 @@ const Comments: React.FC<ICommentsProps> = ({
         {comments?.map((comment) => (
           <Comment
             key={comment.id}
+            canDeleteComment={user ? comment.user?.uid === user?.uid : false}
             createdAt={comment.createdAt}
+            id={comment.id}
             isAnonymous={comment.isAnonymous}
             message={comment.message}
-            user={comment.user}
-            id={comment.id}
             postId={postId}
-            canDeleteComment={user ? comment.user?.uid === user?.uid : false}
+            user={comment.user}
             onClickDeleteComment={() => {
               deleteComment(postId, comment.id).then(() => {
                 onRefetchHandler();

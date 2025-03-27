@@ -4,6 +4,11 @@ import { Button, Input, Spinner } from "@heroui/react";
 import { useState, useEffect, useMemo } from "react";
 import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+
+import PostSortingDate from "../selects/post-sorting-date-select";
+
+import BoardPosts from "./board-posts";
+
 import { SearchIcon } from "@/components/icons";
 import PostStatusSelect from "@/components/selects/post-status-select";
 import {
@@ -16,8 +21,6 @@ import PostPublishSelect from "@/components/selects/post-publish-select";
 import { useAuthContext } from "@/contexts/auth-context";
 import { getCollectionRef } from "@/utils/firebase-util";
 import { getCollectionNameByPostType } from "@/utils";
-import BoardPosts from "./board-posts";
-import PostSortingDate from "../selects/post-sorting-date-select";
 import { Role } from "@/enums/auth.enum";
 
 interface IFilterValue {
@@ -107,6 +110,7 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
       setError(null);
       try {
         const posts = await fetchPost(type, filterValue);
+
         setData(posts);
       } catch (err: any) {
         setError(err.message);
@@ -143,24 +147,24 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
     <section className="space-y-6">
       <div className="flex flex-wrap gap-3 items-center w-full">
         <Input
+          aria-label="Search"
+          className="w-full md:max-w-52"
+          classNames={{
+            inputWrapper: "bg-default-100",
+            input: "text-sm",
+          }}
+          label="ค้นหาด้วยรหัสหรือชื่อ"
+          size="sm"
+          startContent={
+            <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+          }
+          type="search"
           onChange={(e) => {
             setFilterValue((prev) => ({
               ...prev,
               search: e.target.value,
             }));
           }}
-          className="w-full md:max-w-52"
-          aria-label="Search"
-          label="ค้นหาด้วยรหัสหรือชื่อ"
-          size="sm"
-          classNames={{
-            inputWrapper: "bg-default-100",
-            input: "text-sm",
-          }}
-          startContent={
-            <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-          }
-          type="search"
         />
         <PostStatusSelect
           isFilter
@@ -197,7 +201,7 @@ export const Board: React.FC<BoardProps> = ({ type }) => {
       </div>
       {loading ? (
         <div className="w-full min-h-[400px] flex justify-center items-center justify-items-center">
-          <Spinner label="กำลังโหลด..." color="primary" labelColor="primary" />
+          <Spinner color="primary" label="กำลังโหลด..." labelColor="primary" />
         </div>
       ) : error ? (
         <div>
