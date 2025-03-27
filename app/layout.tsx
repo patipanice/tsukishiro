@@ -1,6 +1,5 @@
-import "@/styles/globals.css";
+import "./globals.css";
 import { Metadata, Viewport } from "next";
-// import { Link } from "@heroui/link";
 import clsx from "clsx";
 import { Suspense } from "react";
 import { Kanit } from "next/font/google";
