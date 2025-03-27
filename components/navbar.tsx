@@ -1,3 +1,4 @@
+"use client";
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -6,27 +7,29 @@ import {
   NavbarBrand,
   NavbarItem,
   NavbarMenuItem,
-} from "@nextui-org/navbar";
-import { Button } from "@nextui-org/button";
-import { Kbd } from "@nextui-org/kbd";
-import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
-import { link as linkStyles } from "@nextui-org/theme";
+} from "@heroui/navbar";
+import { Kbd } from "@heroui/kbd";
+import { Link } from "@heroui/link";
+import { Input } from "@heroui/input";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
+import { Divider } from "@heroui/react";
+
+import AuthSection from "./auth-section";
+import { MedalRibbonsStarBoldDuotoneIcon } from "./icons/MedalRibbonsStarBoldDuotoneIcon";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
+import { SearchIcon, Logo } from "@/components/icons";
+import { useAuthContext } from "@/contexts/auth-context";
+
+
 
 export const Navbar = () => {
+  const { user } = useAuthContext();
+  const pathname = usePathname();
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -57,41 +60,65 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">TSUKISHIRO</p>
           </NextLink>
         </NavbarBrand>
-        {/* <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul> */}
+        <ul className="hidden sm:flex gap-4 justify-start ml-2">
+          {siteConfig.navItems
+            .filter((item: any) => {
+              if (item.isAuth) {
+                if (user) {
+                  return item;
+                } else {
+                  return false;
+                }
+              } else {
+                return item;
+              }
+            })
+            .map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    pathname.includes(item.href)
+                      ? "text-primary-500 border-b-2 border-primary-500 pb-1"
+                      : "foreground hover:text-primary-300"
+                  )}
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
+        </ul>
       </NavbarContent>
 
       <NavbarContent
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
+        <NavbarItem className="hidden sm:flex gap-4 items-center">
           {/* <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
             <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
+          </Link> */}
+          {/* <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal aria-label="Github" href={siteConfig.links.github}>
+          </Link> */}
+          {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
             <GithubIcon className="text-default-500" />
           </Link> */}
+          {/* <Link isExternal aria-label="Tiktok" href={siteConfig.links.tiktok}>
+            <GithubIcon className="text-default-500" />
+          </Link> */}
+          {user && (
+            <NextLink href={"/board-stat"}>
+              <MedalRibbonsStarBoldDuotoneIcon className="mt-1 text-[22px]" />
+            </NextLink>
+          )}
           <ThemeSwitch />
+          {/* <Avatar className="" size="sm" showFallback src="https://images.unsplash.com/broken" /> */}
+          <div className="">
+            <AuthSection />
+          </div>
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        {/* <NavbarItem className="hidden  lg:flex">{searchInput}</NavbarItem> */}
         {/* <NavbarItem className="hidden md:flex">
           <Button
             isExternal
@@ -110,32 +137,48 @@ export const Navbar = () => {
         {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link> */}
+        {user && (
+          <NextLink href={"/board-stat"}>
+            <MedalRibbonsStarBoldDuotoneIcon className="text-[22px] mt-1" />
+          </NextLink>
+        )}
         <ThemeSwitch />
+        {/* <AuthSection /> */}
         <NavbarMenuToggle />
       </NavbarContent>
 
-      {/* <NavbarMenu>
-        {searchInput}
+      <NavbarMenu>
+        {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
+          <AuthSection />
+          <Divider />
+          {siteConfig.navMenuItems
+            .filter((item) => {
+              if (item.isAuth) {
+                if (user) {
+                  return item;
+                } else {
+                  return false;
                 }
-                href="#"
-                size="lg"
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
+              } else {
+                return item;
+              }
+            })
+            .map((item, index) => (
+              <NavbarMenuItem key={`${item}-${index}`}>
+                <Link
+                  color={
+                    pathname.includes(item.href) ? "primary" : "foreground"
+                  }
+                  href={item.href}
+                  size="sm"
+                >
+                  {item.label}
+                </Link>
+              </NavbarMenuItem>
+            ))}
         </div>
-      </NavbarMenu> */}
+      </NavbarMenu>
     </NextUINavbar>
   );
 };

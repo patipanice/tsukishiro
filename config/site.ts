@@ -5,63 +5,56 @@ export const siteConfig = {
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
-      label: "Home",
-      href: "/",
+      label: "หน้าหลัก",
+      href: "/home",
     },
     {
-      label: "Docs",
-      href: "/docs",
+      label: "บอร์ดปัญหา",
+      href: "/board-advice",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "บอร์ดหัวข้อ",
+      href: "/board-topic",
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "บอร์ด Q&A",
+      href: "/board-qa",
     },
-    {
-      label: "About",
-      href: "/about",
-    },
+    // {
+    //   label: "Tic Tac Toe",
+    //   href: "/tictactoe",
+    // },
   ],
   navMenuItems: [
     {
-      label: "Profile",
-      href: "/profile",
+      label: "หน้าหลัก",
+      href: "/home",
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "บอร์ดปัญหา",
+      href: "/board-advice",
     },
     {
-      label: "Projects",
-      href: "/projects",
+      label: "บอร์ดหัวข้อ",
+      href: "/board-topic",
     },
     {
-      label: "Team",
-      href: "/team",
+      label: "บอร์ด Q&A",
+      href: "/board-qa",
     },
     {
-      label: "Calendar",
-      href: "/calendar",
+      label: "บอร์ดของฉัน",
+      href: "/my-board",
+      isAuth: true,
     },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
-    },
+    // {
+    //   label: "Tic Tac Toe",
+    //   href: "/tictactoe",
+    // },
   ],
   links: {
-    github: "https://github.com/nextui-org/nextui",
-    twitter: "https://twitter.com/getnextui",
+    github: "https://github.com/patipanice",
+    tiktok: "https://www.tiktok.com/@ice_.pr",
     docs: "https://nextui.org",
     discord: "https://discord.gg/9b6yyZKmH4",
     sponsor: "https://patreon.com/jrgarciadev",

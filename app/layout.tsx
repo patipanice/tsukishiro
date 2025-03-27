@@ -1,14 +1,18 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Link } from "@nextui-org/link";
+// import { Link } from "@heroui/link";
 import clsx from "clsx";
+import { Suspense } from "react";
+import { Kanit } from "next/font/google";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontKanit } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-import '../config/firebase'
+import "../config/firebase";
+
+import '../public/main.css'
 
 export const metadata: Metadata = {
   title: {
@@ -20,6 +24,12 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
 };
+
+const kanit = Kanit({
+  subsets: ["latin", "thai", "latin-ext"],
+  display: "swap",
+  weight: "300",
+});
 
 export const viewport: Viewport = {
   themeColor: [
@@ -34,31 +44,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
-      <head />
+    <html suppressHydrationWarning className={kanit.className} lang="en">
+      {/* <head /> */}
+      {/* <Head>
+        <link  rel="stylesheet" href="/main.css"/>
+      </Head> */}
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          "min-h-screen bg-background font-kanit antialiased",
+          fontKanit.variable
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-              {children}
-            </main>
-            <footer className="w-full flex items-center justify-center py-3">
+            <Suspense fallback={<p>Loading...</p>}>
+              <Navbar />
+              <main className="container mx-auto max-w-7xl pt-12 px-6 flex-grow">
+                {children}
+              </main>
+            </Suspense>
+            {/* <footer className="w-full flex items-center justify-center py-3">
               <Link
                 isExternal
                 className="flex items-center gap-1 text-current"
-                href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
-                title="nextui.org homepage"
+                href="https://heroui-docs-v2.vercel.app?utm_source=next-app-template"
+                title="heroui.org homepage"
               >
                 <span className="text-default-600">Powered by</span>
-                <p className="text-primary">NextUI</p>
+                <p className="text-primary">EveryOne</p>
               </Link>
-            </footer>
+            </footer> */}
           </div>
         </Providers>
       </body>
