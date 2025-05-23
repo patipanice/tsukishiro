@@ -1,72 +1,61 @@
 import { Input, Textarea } from "@nextui-org/input";
 import { Slider } from "@nextui-org/react";
-interface IAdviceFormProps {
-  formik: any;
+import { FormikProps } from "formik";
+
+import { InboxFormValues } from "@/hooks/useInboxForm";
+
+interface AdviceFormProps {
+  formik: FormikProps<InboxFormValues>;
 }
-const AdviceForm: React.FC<IAdviceFormProps> = ({ formik }) => {
+
+const marks = Array.from({ length: 5 }, (_, i) => ({
+  value: i + 1,
+  label: `${i + 1}`,
+}));
+
+const AdviceForm: React.FC<AdviceFormProps> = ({ formik }) => {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex gap-x-6">
         <Input
           label="คุณคือใคร"
           labelPlacement="outside"
+          name="name"
           placeholder="ถ้าไม่ต้องการระบุชื่อผู้ส่งข้ามไปได้เลยย"
           type="text"
-          name="name"
-          onChange={formik.handleChange}
           value={formik.values.name}
+          onChange={formik.handleChange}
         />
         <Input
+          className="max-w-24"
           label="อายุ ?"
           labelPlacement="outside"
+          name="age"
           placeholder="ข้ามได้เหมือนกัน"
           type="number"
-          name="age"
-          onChange={formik.handleChange}
           value={formik.values.age}
-          className="max-w-24"
+          onChange={formik.handleChange}
         />
       </div>
       <Textarea
         isRequired
         label="ปัญหาที่ต้องการปรึกษา"
         labelPlacement="outside"
-        placeholder="อธิบายปัญหาที่ต้องการปรึกษา จะพิมพ์ยาวแค่ไหนก็ได้เลยย :)"
         name="message"
-        onChange={formik.handleChange}
+        placeholder="อธิบายปัญหาที่ต้องการปรึกษา จะพิมพ์ยาวแค่ไหนก็ได้เลยย :)"
         value={formik.values.message}
+        onChange={formik.handleChange}
       />
       <Slider
-        label="ความรู้สึกที่มีต่อปัญหานี้"
-        showTooltip={true}
-        step={1}
+        className="max-w-md"
+        defaultValue={0}
         formatOptions={{ style: "decimal" }}
+        label="ความรู้สึกที่มีต่อปัญหานี้"
+        marks={marks}
         maxValue={5}
         minValue={1}
-        marks={[
-          {
-            value: 1,
-            label: "1",
-          },
-          {
-            value: 2,
-            label: "2",
-          },
-          {
-            value: 3,
-            label: "3",
-          },
-          {
-            value: 4,
-            label: "4",
-          },
-          {
-            value: 5,
-            label: "5",
-          },
-        ]}
-        defaultValue={0}
-        className="max-w-md"
+        showTooltip={true}
+        step={1}
       />
       <p>
         1 = เฉยๆคิดว่าไม่กังวลมาก <br /> 2 = มีความกังวลเล็กน้อย <br /> 3 =

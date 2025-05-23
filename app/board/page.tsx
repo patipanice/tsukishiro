@@ -9,12 +9,11 @@ import {
   CardFooter,
   Divider,
   Link,
-  Image,
 } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
-import { Mode } from "../page";
+import { collection, getDocs } from "firebase/firestore";
+import { Mode } from "@/hooks/useInboxForm";
 
 const modeToLabel = (mode: Mode) => {
   switch (mode) {
