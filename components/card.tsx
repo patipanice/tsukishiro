@@ -7,14 +7,14 @@ import {
   Divider,
   Link,
   Image,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export default function CardComponent() {
   return (
     <Card className="max-w-[400px]">
       <CardHeader className="flex gap-3">
         <Image
-          alt="nextui logo"
+          alt="heroui logo"
           height={40}
           radius="sm"
           src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
@@ -22,7 +22,7 @@ export default function CardComponent() {
         />
         <div className="flex flex-col">
           <p className="text-md">NextUI</p>
-          <p className="text-small text-default-500">nextui.org</p>
+          <p className="text-small text-default-500">heroui.org</p>
         </div>
       </CardHeader>
       <Divider />
@@ -34,7 +34,7 @@ export default function CardComponent() {
         <Link
           isExternal
           showAnchorIcon
-          href="https://github.com/nextui-org/nextui"
+          href="https://github.com/heroui/heroui"
         >
           Visit source code on GitHub.
         </Link>

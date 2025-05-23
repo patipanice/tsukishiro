@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@nextui-org/button";
-import { Select, SelectItem } from "@nextui-org/select";
+import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/select";
 
 import AdviceForm from "@/components/form/advice-form";
 import { modeOptions, Mode, useInboxForm } from "@/hooks/useInboxForm";

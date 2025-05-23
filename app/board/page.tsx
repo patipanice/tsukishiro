@@ -9,7 +9,7 @@ import {
   CardFooter,
   Divider,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
