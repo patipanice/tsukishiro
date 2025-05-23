@@ -12,6 +12,7 @@ enum PostType {
   ADVICE = "ADVICE",
   TOPIC = "TOPIC",
   QA = "QA",
+  REQUEST_MUSIC = "REQUEST_MUSIC",
 }
 
 enum OrderBy {

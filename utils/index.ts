@@ -18,6 +18,8 @@ const getCollectionNameByPostType = (type: PostType) => {
       return collectionName.topic;
     case PostType.QA:
       return collectionName.qa;
+    case PostType.REQUEST_MUSIC:
+      return collectionName.requestMusic;
     default:
       return collectionName.advice;
   }

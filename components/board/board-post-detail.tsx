@@ -41,6 +41,8 @@ const getBoardDetailTitleByPostType = (type: PostType) => {
       return "หัวข้อ";
     case PostType.QA:
       return "คําถาม Q&A";
+    case PostType.REQUEST_MUSIC:
+      return "ขอเพลง";
     default:
       break;
   }
@@ -59,6 +61,10 @@ export const getPostStatusLabel = (type: PostType, status: PostStatus) => {
     [PostType.QA]: {
       [PostStatus.PENDING]: "ยังไม่ได้ตอบคําถาม",
       [PostStatus.DONE]: "ตอบคําถามแล้ว",
+    },
+    [PostType.REQUEST_MUSIC]: {
+      [PostStatus.PENDING]: "ยังไม่ได้เปิดเพลง",
+      [PostStatus.DONE]: "เปิดเพลงแล้ว",
     },
   };
 

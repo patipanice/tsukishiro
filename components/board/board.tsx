@@ -46,6 +46,8 @@ export const getCurrentBoardPathnameByType = (type: PostType) => {
       return "/board-topic";
     case PostType.QA:
       return "/board-qa";
+    case PostType.REQUEST_MUSIC:
+      return "/board-request-music";
     default:
       return "/home";
   }
