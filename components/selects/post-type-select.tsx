@@ -4,6 +4,7 @@ import { Select, SelectItem } from "@heroui/select";
 import { HourglassDone } from "../icons/HourGlassIcon";
 import { Topic } from "../icons/Topic";
 import { AskubuntuIcon } from "../icons/AskIcon";
+import { MusicNoteIcon } from "../icons/MusicNoteIcon";
 
 import { PostType } from "@/enums/post.enum";
 
@@ -22,6 +23,11 @@ const postTypeOptions = [
     key: PostType.QA,
     label: "ถามคำถาม Q&A",
     icon: <AskubuntuIcon />,
+  },
+  {
+    key: PostType.REQUEST_MUSIC,
+    label: "ขอเพลง",
+    icon: <MusicNoteIcon />,
   },
 ];
 

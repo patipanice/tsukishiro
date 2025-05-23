@@ -35,3 +35,7 @@ export interface TopicFormValues extends BasicInformationFormValues {
 export interface QAFormValues extends BasicInformationFormValues {
   postType: PostType.QA;
 }
+
+export interface RequestMusicFormValues extends BasicInformationFormValues {
+  postType: PostType.REQUEST_MUSIC;
+}

@@ -21,10 +21,17 @@ import { PinIcon } from "@/components/icons/PinIcon";
 import { useAuthContext } from "@/contexts/auth-context";
 import { collectionName } from "@/config/firebase";
 import TopicForm from "@/components/form/topic-form"; 
-import { IAdviceForm, QAFormValues, TopicFormValues } from "@/types";
+import {
+  IAdviceForm,
+  QAFormValues,
+  TopicFormValues,
+  RequestMusicFormValues,
+} from "@/types";
 import { BackIcon } from "@/components/icons/BackIcon";
 import { AskubuntuIcon } from "@/components/icons/AskIcon";
+import { MusicNoteIcon } from "@/components/icons/MusicNoteIcon";
 import QAForm from "@/components/form/qa-form";
+import RequestMusicForm from "@/components/form/request-music-form";
 import { postBackgroundColor } from "@/config/constants";
 
 enum Step {
@@ -50,6 +57,12 @@ const modeOptions = [
     key: PostType.QA,
     label: "ถามคำถาม Q&A",
     icon: <AskubuntuIcon />,
+    disabled: false,
+  },
+  {
+    key: PostType.REQUEST_MUSIC,
+    label: "ขอเพลง",
+    icon: <MusicNoteIcon />,
     disabled: false,
   },
 ];
@@ -82,6 +95,16 @@ const getFormInitialValues = (postType: PostType | null, user: User | null) => {
       };
       break;
     case PostType.QA:
+      values = {
+        message: "",
+        age: "",
+        name: user?.displayName,
+        gender: undefined,
+        isPublish: true,
+        postColor: postBackgroundColor[0],
+      };
+      break;
+    case PostType.REQUEST_MUSIC:
       values = {
         message: "",
         age: "",
@@ -177,6 +200,33 @@ const submitQAForm = async (
   };
 };
 
+const submitRequestMusicForm = async (
+  values: RequestMusicFormValues,
+  user: FirebaseUser | null
+) => {
+  const docRef = getCollectionRef(collectionName.requestMusic);
+  const res = await addDoc(docRef, {
+    ...values,
+    userId: user?.uid || "",
+    age: Number(values?.age),
+    gender: Number(values?.gender),
+    status: PostStatus.PENDING,
+    postType: PostType.REQUEST_MUSIC,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+
+  if (!res.id) {
+    throw new Error("สร้างโพสไม่สำเร็จ โปรดลองอีกครั้ง");
+  }
+  const responseGetQuotes = await getQuotes();
+
+  return {
+    postId: res.id,
+    quote: responseGetQuotes?.length > 0 ? responseGetQuotes[0] : "",
+  };
+};
+
 export default function Home() {
   const { user } = useAuthContext();
   const [postType, setPostType] = useState<PostType | null>(null);
@@ -196,7 +246,9 @@ export default function Home() {
             ? await submitAdviceForm(values as IAdviceForm, user)
             : postType === PostType.QA
               ? await submitQAForm(values as QAFormValues, user)
-              : await submitTopicForm(values as TopicFormValues, user);
+              : postType === PostType.REQUEST_MUSIC
+                ? await submitRequestMusicForm(values as RequestMusicFormValues, user)
+                : await submitTopicForm(values as TopicFormValues, user);
 
         setPostId(postId);
         setQuote(quote);
@@ -274,6 +326,8 @@ export default function Home() {
           <TopicForm formik={formik} isLoadingSubmit={loading} />
         ) : postType === PostType.QA ? (
           <QAForm formik={formik} isLoadingSubmit={loading} />
+        ) : postType === PostType.REQUEST_MUSIC ? (
+          <RequestMusicForm formik={formik} isLoadingSubmit={loading} />
         ) : undefined)}
       {step === Step.SHOW_QUOTE &&
         postId !== undefined &&
