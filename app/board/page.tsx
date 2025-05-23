@@ -1,6 +1,5 @@
 "use client";
 
-import { title } from "@/components/primitives";
 import {
   Button,
   Card,
@@ -9,10 +8,13 @@ import {
   CardFooter,
   Divider,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState, useEffect } from "react";
-import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
+
+import { db } from "../../config/firebase";
+
+import { title } from "@/components/primitives";
 import { Mode } from "@/hooks/useInboxForm";
 
 const modeToLabel = (mode: Mode) => {
@@ -38,6 +40,7 @@ export default function BoardPage() {
         id: doc.id,
         ...doc.data(),
       }));
+
       setData(dataArray);
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -66,10 +69,10 @@ export default function BoardPage() {
             <div className="w-full grid grid-cols-4 gap-6">
               {data.length > 0 ? (
                 data.map((item) => (
-                  <Card className="max-w-[400px]" key={item.id}>
+                  <Card key={item.id} className="max-w-[400px]">
                     <CardHeader className="flex gap-3">
                       {/* <Image
-                        alt="nextui logo"
+                        alt="heroui logo"
                         height={40}
                         radius="sm"
                         src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"

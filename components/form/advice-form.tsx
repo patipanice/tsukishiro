@@ -1,5 +1,5 @@
-import { Input, Textarea } from "@nextui-org/input";
-import { Slider } from "@nextui-org/react";
+import { Input, Textarea } from "@heroui/input";
+import { Slider } from "@heroui/react";
 import { FormikProps } from "formik";
 
 import { InboxFormValues } from "@/hooks/useInboxForm";
